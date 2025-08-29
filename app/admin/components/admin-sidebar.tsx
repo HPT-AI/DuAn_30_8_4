@@ -34,37 +34,37 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
 
   const navigation = [
     {
-      name: "Dashboard",
+      name: isHydrated ? t("admin.sidebar.dashboard") : "Dashboard",
       href: "/admin",
       icon: LayoutDashboard,
     },
     {
-      name: "Quản lý người dùng",
+      name: isHydrated ? t("admin.sidebar.users") : "Quản lý người dùng",
       href: "/admin/users",
       icon: Users,
     },
     {
-      name: "Quản lý gói dịch vụ",
+      name: isHydrated ? t("admin.sidebar.subscriptions") : "Quản lý gói dịch vụ",
       href: "/admin/subscriptions",
       icon: CreditCard,
     },
     {
-      name: "Báo cáo & Thống kê",
+      name: isHydrated ? t("admin.sidebar.analytics") : "Báo cáo & Thống kê",
       href: "/admin/analytics",
       icon: BarChart3,
     },
     {
-      name: "Quản lý Thương hiệu",
+      name: isHydrated ? t("admin.sidebar.branding") : "Quản lý Thương hiệu",
       href: "/admin/branding",
       icon: Palette,
     },
     {
-      name: "Bảo mật",
+      name: isHydrated ? t("admin.sidebar.security") : "Bảo mật",
       href: "/admin/security",
       icon: Shield,
     },
     {
-      name: "Cài đặt hệ thống",
+      name: isHydrated ? t("admin.sidebar.settings") : "Cài đặt hệ thống",
       href: "/admin/settings",
       icon: Settings,
     },

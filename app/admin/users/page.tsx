@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search, Plus, Edit, Trash2, Users, UserCheck, UserX } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 interface User {
   id: string
@@ -23,6 +24,7 @@ interface User {
 }
 
 export default function AdminUsersPage() {
+  const { t, isHydrated } = useLanguage()
   const [users, setUsers] = useState<User[]>([
     {
       id: "1",
@@ -69,13 +71,19 @@ export default function AdminUsersPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "active":
-        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Hoạt động</Badge>
+        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+          {isHydrated ? t("admin.users.status_active") : "Hoạt động"}
+        </Badge>
       case "inactive":
-        return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Không hoạt động</Badge>
+        return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">
+          {isHydrated ? t("admin.users.status_inactive") : "Không hoạt động"}
+        </Badge>
       case "suspended":
-        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Tạm khóa</Badge>
+        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">
+          {isHydrated ? t("admin.users.status_suspended") : "Tạm khóa"}
+        </Badge>
       default:
-        return <Badge>Không xác định</Badge>
+        return <Badge>{isHydrated ? t("admin.users.status_unknown") : "Không xác định"}</Badge>
     }
   }
 
@@ -88,7 +96,7 @@ export default function AdminUsersPage() {
       case "Free":
         return <Badge className="bg-gray-500/20 text-gray-400 border-gray-500/30">Free</Badge>
       default:
-        return <Badge>Không xác định</Badge>
+        return <Badge>{isHydrated ? t("admin.users.status_unknown") : "Không xác định"}</Badge>
     }
   }
 
@@ -98,7 +106,7 @@ export default function AdminUsersPage() {
   }
 
   const handleDeleteUser = (userId: string) => {
-    if (confirm("Bạn có chắc chắn muốn xóa người dùng này?")) {
+    if (confirm(isHydrated ? t("admin.users.delete_confirm") : "Bạn có chắc chắn muốn xóa người dùng này?")) {
       setUsers(users.filter((user) => user.id !== userId))
     }
   }
@@ -112,12 +120,16 @@ export default function AdminUsersPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Quản lý Người dùng</h1>
-          <p className="text-slate-400 mt-2">Quản lý tài khoản và thông tin người dùng</p>
+          <h1 className="text-3xl font-bold text-white">
+            {isHydrated ? t("admin.users.title") : "Quản lý Người dùng"}
+          </h1>
+          <p className="text-slate-400 mt-2">
+            {isHydrated ? t("admin.users.subtitle") : "Quản lý tài khoản và thông tin người dùng"}
+          </p>
         </div>
         <Button className="bg-red-600 hover:bg-red-700">
           <Plus className="w-4 h-4 mr-2" />
-          Thêm người dùng
+          {isHydrated ? t("admin.users.add_user") : "Thêm người dùng"}
         </Button>
       </div>
 
@@ -125,45 +137,61 @@ export default function AdminUsersPage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card className="bg-slate-800 border-slate-700">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-slate-200">Tổng người dùng</CardTitle>
+            <CardTitle className="text-sm font-medium text-slate-200">
+              {isHydrated ? t("admin.users.total_users") : "Tổng người dùng"}
+            </CardTitle>
             <Users className="h-4 w-4 text-slate-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white">{users.length}</div>
-            <p className="text-xs text-slate-400">+12% so với tháng trước</p>
+            <p className="text-xs text-slate-400">
+              +12% {isHydrated ? t("admin.users.vs_last_month") : "so với tháng trước"}
+            </p>
           </CardContent>
         </Card>
 
         <Card className="bg-slate-800 border-slate-700">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-slate-200">Đang hoạt động</CardTitle>
+            <CardTitle className="text-sm font-medium text-slate-200">
+              {isHydrated ? t("admin.users.active_users") : "Đang hoạt động"}
+            </CardTitle>
             <UserCheck className="h-4 w-4 text-green-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white">{users.filter((u) => u.status === "active").length}</div>
-            <p className="text-xs text-slate-400">+5% so với tuần trước</p>
+            <p className="text-xs text-slate-400">
+              +5% {isHydrated ? t("admin.users.vs_last_week") : "so với tuần trước"}
+            </p>
           </CardContent>
         </Card>
 
         <Card className="bg-slate-800 border-slate-700">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-slate-200">Không hoạt động</CardTitle>
+            <CardTitle className="text-sm font-medium text-slate-200">
+              {isHydrated ? t("admin.users.inactive_users") : "Không hoạt động"}
+            </CardTitle>
             <UserX className="h-4 w-4 text-yellow-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white">{users.filter((u) => u.status === "inactive").length}</div>
-            <p className="text-xs text-slate-400">-2% so với tuần trước</p>
+            <p className="text-xs text-slate-400">
+              -2% {isHydrated ? t("admin.users.vs_last_week") : "so với tuần trước"}
+            </p>
           </CardContent>
         </Card>
 
         <Card className="bg-slate-800 border-slate-700">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-slate-200">Người dùng trả phí</CardTitle>
+            <CardTitle className="text-sm font-medium text-slate-200">
+              {isHydrated ? t("admin.users.paid_users") : "Người dùng trả phí"}
+            </CardTitle>
             <UserCheck className="h-4 w-4 text-purple-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white">{users.filter((u) => u.subscription !== "Free").length}</div>
-            <p className="text-xs text-slate-400">+8% so với tháng trước</p>
+            <p className="text-xs text-slate-400">
+              +8% {isHydrated ? t("admin.users.vs_last_month") : "so với tháng trước"}
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -171,15 +199,19 @@ export default function AdminUsersPage() {
       {/* Search and Filters */}
       <Card className="bg-slate-800 border-slate-700">
         <CardHeader>
-          <CardTitle className="text-white">Danh sách Người dùng</CardTitle>
-          <CardDescription className="text-slate-400">Quản lý và theo dõi thông tin người dùng</CardDescription>
+          <CardTitle className="text-white">
+            {isHydrated ? t("admin.users.user_list") : "Danh sách Người dùng"}
+          </CardTitle>
+          <CardDescription className="text-slate-400">
+            {isHydrated ? t("admin.users.user_list_desc") : "Quản lý và theo dõi thông tin người dùng"}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center space-x-4 mb-6">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
               <Input
-                placeholder="Tìm kiếm theo tên hoặc email..."
+                placeholder={isHydrated ? t("admin.users.search_placeholder") : "Tìm kiếm theo tên hoặc email..."}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 bg-slate-700 border-slate-600 text-white"
@@ -190,12 +222,24 @@ export default function AdminUsersPage() {
           <Table>
             <TableHeader>
               <TableRow className="border-slate-700">
-                <TableHead className="text-slate-300">Người dùng</TableHead>
-                <TableHead className="text-slate-300">Gói dịch vụ</TableHead>
-                <TableHead className="text-slate-300">Trạng thái</TableHead>
-                <TableHead className="text-slate-300">Ngày tham gia</TableHead>
-                <TableHead className="text-slate-300">Đăng nhập cuối</TableHead>
-                <TableHead className="text-slate-300">Thao tác</TableHead>
+                <TableHead className="text-slate-300">
+                  {isHydrated ? t("admin.users.user") : "Người dùng"}
+                </TableHead>
+                <TableHead className="text-slate-300">
+                  {isHydrated ? t("admin.users.service_package") : "Gói dịch vụ"}
+                </TableHead>
+                <TableHead className="text-slate-300">
+                  {isHydrated ? t("admin.users.status") : "Trạng thái"}
+                </TableHead>
+                <TableHead className="text-slate-300">
+                  {isHydrated ? t("admin.users.join_date") : "Ngày tham gia"}
+                </TableHead>
+                <TableHead className="text-slate-300">
+                  {isHydrated ? t("admin.users.last_login") : "Đăng nhập cuối"}
+                </TableHead>
+                <TableHead className="text-slate-300">
+                  {isHydrated ? t("admin.users.actions") : "Thao tác"}
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -243,39 +287,55 @@ export default function AdminUsersPage() {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="bg-slate-800 border-slate-700">
           <DialogHeader>
-            <DialogTitle className="text-white">Chỉnh sửa người dùng</DialogTitle>
+            <DialogTitle className="text-white">
+              {isHydrated ? t("admin.users.edit_user") : "Chỉnh sửa người dùng"}
+            </DialogTitle>
             <DialogDescription className="text-slate-400">
-              Cập nhật thông tin và trạng thái người dùng
+              {isHydrated ? t("admin.users.edit_user_desc") : "Cập nhật thông tin và trạng thái người dùng"}
             </DialogDescription>
           </DialogHeader>
           {selectedUser && (
             <div className="space-y-4">
               <div>
-                <Label className="text-slate-300">Tên</Label>
+                <Label className="text-slate-300">
+                  {isHydrated ? t("admin.users.name") : "Tên"}
+                </Label>
                 <Input defaultValue={selectedUser.name} className="bg-slate-700 border-slate-600 text-white" />
               </div>
               <div>
-                <Label className="text-slate-300">Email</Label>
+                <Label className="text-slate-300">
+                  {isHydrated ? t("admin.users.email") : "Email"}
+                </Label>
                 <Input defaultValue={selectedUser.email} className="bg-slate-700 border-slate-600 text-white" />
               </div>
               <div>
-                <Label className="text-slate-300">Trạng thái</Label>
+                <Label className="text-slate-300">
+                  {isHydrated ? t("admin.users.status") : "Trạng thái"}
+                </Label>
                 <Select defaultValue={selectedUser.status}>
                   <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-slate-700 border-slate-600">
-                    <SelectItem value="active">Hoạt động</SelectItem>
-                    <SelectItem value="inactive">Không hoạt động</SelectItem>
-                    <SelectItem value="suspended">Tạm khóa</SelectItem>
+                    <SelectItem value="active">
+                      {isHydrated ? t("admin.users.status_active") : "Hoạt động"}
+                    </SelectItem>
+                    <SelectItem value="inactive">
+                      {isHydrated ? t("admin.users.status_inactive") : "Không hoạt động"}
+                    </SelectItem>
+                    <SelectItem value="suspended">
+                      {isHydrated ? t("admin.users.status_suspended") : "Tạm khóa"}
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="flex justify-end space-x-2">
                 <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
-                  Hủy
+                  {isHydrated ? t("admin.users.cancel") : "Hủy"}
                 </Button>
-                <Button className="bg-red-600 hover:bg-red-700">Lưu thay đổi</Button>
+                <Button className="bg-red-600 hover:bg-red-700">
+                  {isHydrated ? t("admin.users.save_changes") : "Lưu thay đổi"}
+                </Button>
               </div>
             </div>
           )}

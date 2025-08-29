@@ -8,8 +8,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Upload, Save, RotateCcw } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function BrandingPage() {
+  const { t, isHydrated } = useLanguage()
   const [logoUrl, setLogoUrl] = useState(
     "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Thi%E1%BA%BFt%20k%E1%BA%BF%20ch%C6%B0a%20c%C3%B3%20t%C3%AAn-2hrKzlEBNUsowunq4hgLzKZdV6sHWg.png",
   )
@@ -91,8 +93,12 @@ export default function BrandingPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-white">Quản lý Thương hiệu</h1>
-        <p className="text-slate-400 mt-2">Thay đổi logo và tên thương hiệu của website</p>
+        <h1 className="text-3xl font-bold text-white">
+          {isHydrated ? t("admin.branding.title") : "Quản lý Thương hiệu"}
+        </h1>
+        <p className="text-slate-400 mt-2">
+          {isHydrated ? t("admin.branding.subtitle") : "Thay đổi logo và tên thương hiệu của website"}
+        </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

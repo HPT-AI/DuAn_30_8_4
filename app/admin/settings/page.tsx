@@ -10,8 +10,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Shield, Mail, Database, Globe } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function AdminSettingsPage() {
+  const { t, isHydrated } = useLanguage()
   const [settings, setSettings] = useState({
     siteName: "ConstructVN",
     siteDescription: "Nền tảng quản lý thi công xây dựng",
@@ -38,8 +40,12 @@ export default function AdminSettingsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Cài đặt Hệ thống</h1>
-          <p className="text-slate-400 mt-2">Quản lý cấu hình và thiết lập hệ thống</p>
+          <h1 className="text-3xl font-bold text-white">
+            {isHydrated ? t("admin.settings.title") : "Cài đặt Hệ thống"}
+          </h1>
+          <p className="text-slate-400 mt-2">
+            {isHydrated ? t("admin.settings.subtitle") : "Quản lý cấu hình và thiết lập hệ thống"}
+          </p>
         </div>
         <Button onClick={handleSaveSettings} className="bg-red-600 hover:bg-red-700">
           Lưu tất cả cài đặt

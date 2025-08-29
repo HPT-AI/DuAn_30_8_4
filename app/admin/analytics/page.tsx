@@ -4,15 +4,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { TrendingUp, TrendingDown, Users, DollarSign, FileText, UserCheck } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function AdminAnalyticsPage() {
+  const { t, isHydrated } = useLanguage()
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Báo cáo & Thống kê</h1>
-          <p className="text-slate-400 mt-2">Theo dõi hiệu suất và phân tích dữ liệu hệ thống</p>
+          <h1 className="text-3xl font-bold text-white">
+            {isHydrated ? t("admin.analytics.title") : "Báo cáo & Thống kê"}
+          </h1>
+          <p className="text-slate-400 mt-2">
+            {isHydrated ? t("admin.analytics.subtitle") : "Theo dõi hiệu suất và phân tích dữ liệu hệ thống"}
+          </p>
         </div>
       </div>
 

@@ -8,12 +8,14 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Users, CreditCard, TrendingUp, Activity, DollarSign, UserCheck, Lock } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
+  const { t, isHydrated } = useLanguage()
 
   useEffect(() => {
     setIsAuthenticated(localStorage.getItem("admin_authenticated") === "true")
@@ -28,7 +30,7 @@ export default function AdminDashboard() {
       localStorage.setItem("admin_authenticated", "true")
       window.dispatchEvent(new Event("admin_auth_changed"))
     } else {
-      setError("Tài khoản hoặc mật khẩu không đúng")
+      setError(isHydrated ? t("admin.dashboard.login_error") : "Tài khoản hoặc mật khẩu không đúng")
     }
   }
 
@@ -40,14 +42,18 @@ export default function AdminDashboard() {
             <div className="mx-auto w-12 h-12 bg-red-500/10 rounded-lg flex items-center justify-center mb-4">
               <Lock className="h-6 w-6 text-red-500" />
             </div>
-            <CardTitle className="text-2xl font-bold text-white">Đăng nhập Admin</CardTitle>
-            <p className="text-slate-400">Truy cập hệ thống quản trị ConstructVN</p>
+            <CardTitle className="text-2xl font-bold text-white">
+              {isHydrated ? t("admin.dashboard.login_title") : "Đăng nhập Admin"}
+            </CardTitle>
+            <p className="text-slate-400">
+              {isHydrated ? t("admin.dashboard.login_subtitle") : "Truy cập hệ thống quản trị ConstructVN"}
+            </p>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="username" className="text-slate-300">
-                  Tài khoản
+                  {isHydrated ? t("admin.dashboard.username") : "Tài khoản"}
                 </Label>
                 <Input
                   id="username"
@@ -55,13 +61,13 @@ export default function AdminDashboard() {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-400"
-                  placeholder="Nhập tài khoản"
+                  placeholder={isHydrated ? t("admin.dashboard.username_placeholder") : "Nhập tài khoản"}
                   required
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-slate-300">
-                  Mật khẩu
+                  {isHydrated ? t("admin.dashboard.password") : "Mật khẩu"}
                 </Label>
                 <Input
                   id="password"
@@ -69,13 +75,13 @@ export default function AdminDashboard() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-400"
-                  placeholder="Nhập mật khẩu"
+                  placeholder={isHydrated ? t("admin.dashboard.password_placeholder") : "Nhập mật khẩu"}
                   required
                 />
               </div>
               {error && <div className="text-red-400 text-sm text-center bg-red-500/10 p-2 rounded">{error}</div>}
               <Button type="submit" className="w-full bg-red-600 hover:bg-red-700 text-white">
-                Đăng nhập
+                {isHydrated ? t("admin.dashboard.login_button") : "Đăng nhập"}
               </Button>
             </form>
           </CardContent>
@@ -86,28 +92,28 @@ export default function AdminDashboard() {
 
   const stats = [
     {
-      title: "Tổng người dùng",
+      title: isHydrated ? t("admin.dashboard.total_users") : "Tổng người dùng",
       value: "2,847",
       change: "+12%",
       icon: Users,
       color: "text-blue-500",
     },
     {
-      title: "Doanh thu tháng",
+      title: isHydrated ? t("admin.dashboard.monthly_revenue") : "Doanh thu tháng",
       value: "₫45,230,000",
       change: "+8%",
       icon: DollarSign,
       color: "text-green-500",
     },
     {
-      title: "Gói đăng ký",
+      title: isHydrated ? t("admin.dashboard.subscriptions") : "Gói đăng ký",
       value: "1,234",
       change: "+23%",
       icon: CreditCard,
       color: "text-orange-500",
     },
     {
-      title: "Người dùng hoạt động",
+      title: isHydrated ? t("admin.dashboard.active_users") : "Người dùng hoạt động",
       value: "892",
       change: "+5%",
       icon: Activity,
@@ -119,8 +125,12 @@ export default function AdminDashboard() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-white mb-2">Dashboard Quản trị</h1>
-        <p className="text-slate-400">Tổng quan hệ thống ConstructVN</p>
+        <h1 className="text-3xl font-bold text-white mb-2">
+          {isHydrated ? t("admin.dashboard.title") : "Dashboard Quản trị"}
+        </h1>
+        <p className="text-slate-400">
+          {isHydrated ? t("admin.dashboard.subtitle") : "Tổng quan hệ thống ConstructVN"}
+        </p>
       </div>
 
       {/* Stats Grid */}
@@ -133,7 +143,9 @@ export default function AdminDashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">{stat.value}</div>
-              <p className="text-xs text-green-500 mt-1">{stat.change} so với tháng trước</p>
+              <p className="text-xs text-green-500 mt-1">
+                {stat.change} {isHydrated ? t("admin.dashboard.vs_last_month") : "so với tháng trước"}
+              </p>
             </CardContent>
           </Card>
         ))}
@@ -144,12 +156,14 @@ export default function AdminDashboard() {
         {/* Revenue Chart */}
         <Card className="bg-slate-900 border-slate-800">
           <CardHeader>
-            <CardTitle className="text-white">Doanh thu theo tháng</CardTitle>
+            <CardTitle className="text-white">
+              {isHydrated ? t("admin.dashboard.revenue_chart") : "Doanh thu theo tháng"}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-64 flex items-center justify-center text-slate-400">
               <TrendingUp className="h-8 w-8 mr-2" />
-              Biểu đồ doanh thu
+              {isHydrated ? t("admin.dashboard.revenue_chart_placeholder") : "Biểu đồ doanh thu"}
             </div>
           </CardContent>
         </Card>
@@ -157,7 +171,9 @@ export default function AdminDashboard() {
         {/* Recent Users */}
         <Card className="bg-slate-900 border-slate-800">
           <CardHeader>
-            <CardTitle className="text-white">Người dùng mới</CardTitle>
+            <CardTitle className="text-white">
+              {isHydrated ? t("admin.dashboard.new_users") : "Người dùng mới"}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -167,7 +183,9 @@ export default function AdminDashboard() {
                     <UserCheck className="h-4 w-4 text-slate-400" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-white">Người dùng {i}</p>
+                    <p className="text-sm font-medium text-white">
+                      {isHydrated ? t("admin.dashboard.user_placeholder") : "Người dùng"} {i}
+                    </p>
                     <p className="text-xs text-slate-400">user{i}@example.com</p>
                   </div>
                 </div>

@@ -7,8 +7,10 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Badge } from "@/components/ui/badge"
 import { AlertTriangle, CheckCircle, Eye, EyeOff } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function SecurityPage() {
+  const { t, isHydrated } = useLanguage()
   const [showApiKey, setShowApiKey] = useState(false)
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(true)
   const [loginNotifications, setLoginNotifications] = useState(true)
@@ -45,8 +47,12 @@ export default function SecurityPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-white">Bảo mật hệ thống</h1>
-        <p className="text-slate-400 mt-1">Quản lý cài đặt bảo mật và giám sát hoạt động</p>
+        <h1 className="text-3xl font-bold text-white">
+          {isHydrated ? t("admin.security.title") : "Bảo mật hệ thống"}
+        </h1>
+        <p className="text-slate-400 mt-1">
+          {isHydrated ? t("admin.security.subtitle") : "Quản lý cài đặt bảo mật và giám sát hoạt động"}
+        </p>
       </div>
 
       {/* Security Status */}
