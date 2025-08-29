@@ -108,20 +108,20 @@ export default function SubscribePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-900">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200">
+      <header className="bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center space-x-2">
+            <Link href="/" className="flex items-center space-x-2 text-slate-300 hover:text-cyan-400 transition-colors">
               <ArrowLeft className="w-5 h-5" />
-              <span className="font-medium">Quay lại</span>
+              <span className="font-medium">Quay về trang chủ</span>
             </Link>
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-slate-900 rounded flex items-center justify-center">
+              <div className="w-8 h-8 bg-cyan-500 rounded flex items-center justify-center">
                 <span className="text-white font-bold text-sm">C</span>
               </div>
-              <span className="font-bold text-xl text-slate-900">ConstructVN</span>
+              <span className="font-bold text-xl text-white">ConstructVN</span>
             </div>
           </div>
         </div>
@@ -129,26 +129,26 @@ export default function SubscribePage() {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-slate-900 mb-4">Đăng ký gói dịch vụ</h1>
-          <p className="text-lg text-gray-600">Hoàn tất thông tin để bắt đầu sử dụng ConstructVN</p>
+          <h1 className="text-3xl font-bold text-white mb-4">Đăng ký gói dịch vụ</h1>
+          <p className="text-lg text-slate-300">Hoàn tất thông tin để bắt đầu sử dụng ConstructVN</p>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <Card>
+            <Card className="bg-slate-800 border-slate-700">
               <CardContent className="p-6">
                 <div className="space-y-6">
                   {/* Header */}
                   <div>
-                    <h2 className="text-lg font-medium text-gray-900 mb-2">
+                    <h2 className="text-lg font-medium text-white mb-2">
                       Đăng ký {plans[formData.plan as keyof typeof plans]?.name}
                     </h2>
                     <div className="text-center">
-                      <div className="text-3xl font-bold text-gray-900">
+                      <div className="text-3xl font-bold text-white">
                         {plans[formData.plan as keyof typeof plans]?.price}
                       </div>
-                      <div className="text-sm text-gray-600 mt-1">mỗi tháng</div>
+                      <div className="text-sm text-slate-300 mt-1">mỗi tháng</div>
                     </div>
                   </div>
 
@@ -158,31 +158,31 @@ export default function SubscribePage() {
                   <div className="space-y-3">
                     <div className="flex justify-between items-start">
                       <div>
-                        <div className="font-medium text-gray-900">
+                        <div className="font-medium text-white">
                           {plans[formData.plan as keyof typeof plans]?.name}
                         </div>
-                        <div className="text-sm text-gray-600">Thanh toán hàng tháng</div>
+                        <div className="text-sm text-slate-300">Thanh toán hàng tháng</div>
                       </div>
-                      <div className="font-medium text-gray-900">
+                      <div className="font-medium text-white">
                         {plans[formData.plan as keyof typeof plans]?.price}
                       </div>
                     </div>
 
                     <div className="flex justify-between items-center">
-                      <div className="text-gray-700">Tổng phụ</div>
-                      <div className="font-medium text-gray-900">
+                      <div className="text-slate-300">Tổng phụ</div>
+                      <div className="font-medium text-white">
                         {plans[formData.plan as keyof typeof plans]?.price}
                       </div>
                     </div>
 
                     <div className="flex justify-between items-center">
                       <div className="flex items-center space-x-1">
-                        <span className="text-gray-700">Thuế</span>
+                        <span className="text-slate-300">Thuế</span>
                         <div className="w-4 h-4 rounded-full border border-gray-400 flex items-center justify-center">
-                          <span className="text-xs text-gray-600">i</span>
+                          <span className="text-xs text-slate-300">i</span>
                         </div>
                       </div>
-                      <div className="font-medium text-gray-500">₫0</div>
+                      <div className="font-medium text-slate-400">₫0</div>
                     </div>
                   </div>
 
@@ -190,8 +190,8 @@ export default function SubscribePage() {
 
                   {/* Total */}
                   <div className="flex justify-between items-center">
-                    <div className="font-semibold text-gray-900">Tổng tiền phải trả hôm nay</div>
-                    <div className="text-xl font-bold text-gray-900">
+                    <div className="font-semibold text-white">Tổng tiền phải trả hôm nay</div>
+                    <div className="text-xl font-bold text-white">
                       {plans[formData.plan as keyof typeof plans]?.price}
                     </div>
                   </div>
@@ -204,15 +204,15 @@ export default function SubscribePage() {
           <div className="lg:col-span-2">
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Personal Information */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Thông tin cá nhân</CardTitle>
+              <Card className="bg-slate-800 border-slate-700">
+                <CardHeader className="text-white">
+                  <CardTitle className="text-white">Thông tin cá nhân</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="fullName">Họ và tên *</Label>
-                      <Input
+                      <Label className="text-slate-300" htmlFor="fullName">Họ và tên *</Label>
+                      <Input className="bg-slate-700 border-slate-600 text-white"
                         id="fullName"
                         value={formData.fullName}
                         onChange={(e) => handleInputChange("fullName", e.target.value)}
@@ -220,8 +220,8 @@ export default function SubscribePage() {
                       />
                     </div>
                     <div>
-                      <Label htmlFor="email">Email *</Label>
-                      <Input
+                      <Label className="text-slate-300" htmlFor="email">Email *</Label>
+                      <Input className="bg-slate-700 border-slate-600 text-white"
                         id="email"
                         type="email"
                         value={formData.email}
@@ -232,8 +232,8 @@ export default function SubscribePage() {
                   </div>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="phone">Số điện thoại *</Label>
-                      <Input
+                      <Label className="text-slate-300" htmlFor="phone">Số điện thoại *</Label>
+                      <Input className="bg-slate-700 border-slate-600 text-white"
                         id="phone"
                         value={formData.phone}
                         onChange={(e) => handleInputChange("phone", e.target.value)}
@@ -241,8 +241,8 @@ export default function SubscribePage() {
                       />
                     </div>
                     <div>
-                      <Label htmlFor="company">Tên công ty</Label>
-                      <Input
+                      <Label className="text-slate-300" htmlFor="company">Tên công ty</Label>
+                      <Input className="bg-slate-700 border-slate-600 text-white"
                         id="company"
                         value={formData.company}
                         onChange={(e) => handleInputChange("company", e.target.value)}
@@ -253,9 +253,9 @@ export default function SubscribePage() {
               </Card>
 
               {/* Plan Selection */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Chọn gói dịch vụ</CardTitle>
+              <Card className="bg-slate-800 border-slate-700">
+                <CardHeader className="text-white">
+                  <CardTitle className="text-white">Chọn gói dịch vụ</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Select value={formData.plan} onValueChange={(value) => handleInputChange("plan", value)}>
@@ -274,8 +274,8 @@ export default function SubscribePage() {
 
               {/* Payment Method Selection */}
               {formData.plan !== "free" && (
-                <Card>
-                  <CardHeader>
+                <Card className="bg-slate-800 border-slate-700">
+                  <CardHeader className="text-white">
                     <CardTitle className="flex items-center space-x-2">
                       <CreditCard className="w-5 h-5" />
                       <span>Phương thức thanh toán</span>
@@ -286,16 +286,16 @@ export default function SubscribePage() {
                       <div
                         className={`p-4 border-2 rounded-lg cursor-pointer transition-colors ${
                           formData.mainPaymentMethod === "online"
-                            ? "border-slate-900 bg-slate-50"
-                            : "border-gray-200 hover:border-gray-300"
+                            ? "border-cyan-500 bg-slate-700"
+                            : "border-slate-700 hover:border-slate-600"
                         }`}
                         onClick={() => handleInputChange("mainPaymentMethod", "online")}
                       >
                         <div className="flex items-center space-x-3">
-                          <CreditCard className="w-6 h-6 text-slate-700" />
+                          <CreditCard className="w-6 h-6 text-slate-300" />
                           <div>
-                            <h3 className="font-medium">Thanh toán trực tuyến</h3>
-                            <p className="text-sm text-gray-600">Thẻ tín dụng</p>
+                            <h3 className="font-medium text-white">Thanh toán trực tuyến</h3>
+                            <p className="text-sm text-slate-300">Thẻ tín dụng</p>
                           </div>
                         </div>
                       </div>
@@ -303,16 +303,16 @@ export default function SubscribePage() {
                       <div
                         className={`p-4 border-2 rounded-lg cursor-pointer transition-colors ${
                           formData.mainPaymentMethod === "qr_transfer"
-                            ? "border-slate-900 bg-slate-50"
-                            : "border-gray-200 hover:border-gray-300"
+                            ? "border-cyan-500 bg-slate-700"
+                            : "border-slate-700 hover:border-slate-600"
                         }`}
                         onClick={() => handleInputChange("mainPaymentMethod", "qr_transfer")}
                       >
                         <div className="flex items-center space-x-3">
-                          <QrCode className="w-6 h-6 text-slate-700" />
+                          <QrCode className="w-6 h-6 text-slate-300" />
                           <div>
-                            <h3 className="font-medium">Chuyển khoản QR</h3>
-                            <p className="text-sm text-gray-600">Quét mã, chuyển khoản</p>
+                            <h3 className="font-medium text-white">Chuyển khoản QR</h3>
+                            <p className="text-sm text-slate-300">Quét mã, chuyển khoản</p>
                           </div>
                         </div>
                       </div>
@@ -323,8 +323,8 @@ export default function SubscribePage() {
                     {formData.mainPaymentMethod === "online" && (
                       <div className="space-y-4">
                         <div>
-                          <Label htmlFor="cardNumber">Số thẻ *</Label>
-                          <Input
+                          <Label className="text-slate-300" htmlFor="cardNumber">Số thẻ *</Label>
+                          <Input className="bg-slate-700 border-slate-600 text-white"
                             id="cardNumber"
                             placeholder="1234 5678 9012 3456"
                             value={formData.cardNumber}
@@ -334,8 +334,8 @@ export default function SubscribePage() {
                         </div>
                         <div className="grid md:grid-cols-2 gap-4">
                           <div>
-                            <Label htmlFor="expiryDate">Ngày hết hạn *</Label>
-                            <Input
+                            <Label className="text-slate-300" htmlFor="expiryDate">Ngày hết hạn *</Label>
+                            <Input className="bg-slate-700 border-slate-600 text-white"
                               id="expiryDate"
                               placeholder="MM/YY"
                               value={formData.expiryDate}
@@ -344,8 +344,8 @@ export default function SubscribePage() {
                             />
                           </div>
                           <div>
-                            <Label htmlFor="cvv">CVV *</Label>
-                            <Input
+                            <Label className="text-slate-300" htmlFor="cvv">CVV *</Label>
+                            <Input className="bg-slate-700 border-slate-600 text-white"
                               id="cvv"
                               placeholder="123"
                               value={formData.cvv}
@@ -360,8 +360,8 @@ export default function SubscribePage() {
                         <div className="space-y-4">
                           <h4 className="font-medium">Địa chỉ thanh toán</h4>
                           <div>
-                            <Label htmlFor="billingAddress">Địa chỉ *</Label>
-                            <Input
+                            <Label className="text-slate-300" htmlFor="billingAddress">Địa chỉ *</Label>
+                            <Input className="bg-slate-700 border-slate-600 text-white"
                               id="billingAddress"
                               value={formData.billingAddress}
                               onChange={(e) => handleInputChange("billingAddress", e.target.value)}
@@ -370,8 +370,8 @@ export default function SubscribePage() {
                           </div>
                           <div className="grid md:grid-cols-2 gap-4">
                             <div>
-                              <Label htmlFor="city">Thành phố *</Label>
-                              <Input
+                              <Label className="text-slate-300" htmlFor="city">Thành phố *</Label>
+                              <Input className="bg-slate-700 border-slate-600 text-white"
                                 id="city"
                                 value={formData.city}
                                 onChange={(e) => handleInputChange("city", e.target.value)}
@@ -379,8 +379,8 @@ export default function SubscribePage() {
                               />
                             </div>
                             <div>
-                              <Label htmlFor="zipCode">Mã bưu điện</Label>
-                              <Input
+                              <Label className="text-slate-300" htmlFor="zipCode">Mã bưu điện</Label>
+                              <Input className="bg-slate-700 border-slate-600 text-white"
                                 id="zipCode"
                                 value={formData.zipCode}
                                 onChange={(e) => handleInputChange("zipCode", e.target.value)}
@@ -409,31 +409,31 @@ export default function SubscribePage() {
                         <div className="grid md:grid-cols-2 gap-6">
                           {/* QR Code */}
                           <div className="text-center">
-                            <div className="bg-white p-4 rounded-lg border-2 border-dashed border-gray-300 inline-block">
+                            <div className="bg-slate-800 p-4 rounded-lg border-2 border-dashed border-slate-600 inline-block">
                               <div className="w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center">
                                 <QrCode className="w-24 h-24 text-gray-400" />
                               </div>
-                              <p className="text-sm text-gray-600 mt-2">Quét mã để chuyển khoản</p>
+                              <p className="text-sm text-slate-300 mt-2">Quét mã để chuyển khoản</p>
                             </div>
                           </div>
 
                           {/* Bank Info */}
                           <div className="space-y-4">
                             <div>
-                              <Label className="text-sm font-medium text-gray-700">Ngân hàng</Label>
+                              <Label className="text-slate-300" className="text-sm font-medium text-slate-300">Ngân hàng</Label>
                               <p className="text-lg font-semibold">Vietcombank</p>
                             </div>
                             <div>
-                              <Label className="text-sm font-medium text-gray-700">Số tài khoản</Label>
+                              <Label className="text-slate-300" className="text-sm font-medium text-slate-300">Số tài khoản</Label>
                               <p className="text-lg font-semibold">1234567890</p>
                             </div>
                             <div>
-                              <Label className="text-sm font-medium text-gray-700">Chủ tài khoản</Label>
+                              <Label className="text-slate-300" className="text-sm font-medium text-slate-300">Chủ tài khoản</Label>
                               <p className="text-lg font-semibold">CONSTRUCTVN JSC</p>
                             </div>
                             <div>
-                              <Label className="text-sm font-medium text-gray-700">Số tiền</Label>
-                              <p className="text-2xl font-bold text-slate-900">
+                              <Label className="text-slate-300" className="text-sm font-medium text-slate-300">Số tiền</Label>
+                              <p className="text-2xl font-bold text-white">
                                 {plans[formData.plan as keyof typeof plans]?.price}
                               </p>
                             </div>
@@ -442,9 +442,9 @@ export default function SubscribePage() {
 
                         {/* Transfer Content */}
                         <div>
-                          <Label className="text-sm font-medium text-gray-700">Nội dung chuyển khoản (bắt buộc)</Label>
+                          <Label className="text-slate-300" className="text-sm font-medium text-slate-300">Nội dung chuyển khoản (bắt buộc)</Label>
                           <div className="flex items-center space-x-2 mt-1">
-                            <Input value={transferContent} readOnly className="bg-gray-50" />
+                            <Input className="bg-slate-700 border-slate-600 text-white" value={transferContent} readOnly className="bg-gray-50" />
                             <Button
                               type="button"
                               variant="outline"
@@ -456,7 +456,7 @@ export default function SubscribePage() {
                               <span>{copied ? "Đã copy" : "Copy"}</span>
                             </Button>
                           </div>
-                          <p className="text-xs text-gray-600 mt-1">
+                          <p className="text-xs text-slate-300 mt-1">
                             Mã đơn hàng: <strong>{orderId}</strong>
                           </p>
                         </div>
@@ -490,7 +490,7 @@ export default function SubscribePage() {
                   <Link href="/">
                     <Button variant="outline">Hủy</Button>
                   </Link>
-                  <Button type="submit" size="lg" className="bg-slate-900 hover:bg-slate-800 text-white">
+                  <Button type="submit" size="lg" className="bg-cyan-500 hover:bg-cyan-600 text-white">
                     {formData.plan === "free" ? "Đăng ký miễn phí" : "Xác nhận đăng ký"}
                   </Button>
                 </div>
@@ -502,7 +502,7 @@ export default function SubscribePage() {
 
       {showPhoneVerification && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+          <div className="bg-slate-800 rounded-lg p-6 w-full max-w-md mx-4">
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center space-x-2">
                 <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
@@ -510,14 +510,14 @@ export default function SubscribePage() {
                 </div>
                 <span className="font-medium">link</span>
               </div>
-              <button onClick={() => setShowPhoneVerification(false)} className="text-gray-400 hover:text-gray-600">
+              <button onClick={() => setShowPhoneVerification(false)} className="text-gray-400 hover:text-slate-300">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="text-center mb-6">
               <h2 className="text-xl font-semibold mb-2">Vui lòng xác minh số điện thoại của bạn</h2>
-              <p className="text-gray-600 text-sm">
+              <p className="text-slate-300 text-sm">
                 Trước khi có thể gửi mã đến email của bạn, chúng tôi cần xác minh thêm thông tin về bạn. Vui lòng nhập
                 số điện thoại của bạn có số đuôi +64.
               </p>
@@ -560,7 +560,7 @@ export default function SubscribePage() {
 
       {showCodeVerification && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+          <div className="bg-slate-800 rounded-lg p-6 w-full max-w-md mx-4">
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center space-x-2">
                 <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
@@ -568,14 +568,14 @@ export default function SubscribePage() {
                 </div>
                 <span className="font-medium">link</span>
               </div>
-              <button onClick={() => setShowCodeVerification(false)} className="text-gray-400 hover:text-gray-600">
+              <button onClick={() => setShowCodeVerification(false)} className="text-gray-400 hover:text-slate-300">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="text-center mb-6">
               <h2 className="text-xl font-semibold mb-2">Xác nhận đó là bạn</h2>
-              <p className="text-gray-600 text-sm">
+              <p className="text-slate-300 text-sm">
                 Nhập mã đã được gửi đến <br />
                 <strong>{formData.email}</strong> để sử dụng thông tin đã lưu của mình.
               </p>
@@ -591,17 +591,17 @@ export default function SubscribePage() {
                   value={digit}
                   onChange={(e) => handleCodeInput(index, e.target.value)}
                   className={`w-12 h-12 text-center text-xl font-semibold border-2 rounded-lg outline-none ${
-                    index === 0 && digit ? "border-green-500 bg-green-50" : "border-gray-300"
+                    index === 0 && digit ? "border-green-500 bg-green-50" : "border-slate-600"
                   }`}
                 />
               ))}
             </div>
 
             <div className="text-center mb-4">
-              <p className="text-sm text-gray-600">Đã gửi mã, vui lòng kiểm tra email của bạn.</p>
+              <p className="text-sm text-slate-300">Đã gửi mã, vui lòng kiểm tra email của bạn.</p>
             </div>
 
-            <div className="text-center text-sm text-gray-500">
+            <div className="text-center text-sm text-slate-400">
               <p>Đang nhập với {formData.email}. Thiết bị của bạn sẽ được lưu lại cho lần sau.</p>
             </div>
 

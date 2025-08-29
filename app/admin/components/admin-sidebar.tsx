@@ -83,8 +83,8 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
     { name: "Hero Section", href: "/admin/content/homepage/hero" },
     { name: "Tính năng nổi bật", href: "/admin/content/homepage/features" },
     { name: "Tại sao chọn chúng tôi", href: "/admin/content/homepage/why-choose-us" },
-    { name: "CTA - Sẵn sàng bắt đầu", href: "/admin/content/homepage#cta" },
-    { name: "Footer", href: "/admin/content/homepage#footer" },
+    { name: "CTA - Sẵn sàng bắt đầu", href: "/admin/content/homepage/cta" },
+    { name: "Footer", href: "/admin/content/homepage/footer" },
   ]
 
   return (

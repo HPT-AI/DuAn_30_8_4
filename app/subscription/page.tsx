@@ -16,7 +16,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { CreditCard, Calendar, TrendingUp, Wallet, History, Check, QrCode, Copy, Shield } from "lucide-react"
+import { CreditCard, Calendar, TrendingUp, Wallet, History, Check, QrCode, Copy, Shield, ArrowLeft } from "lucide-react"
+import Link from "next/link"
 
 export default function SubscriptionPage() {
   const [customAmount, setCustomAmount] = useState("")
@@ -250,135 +251,154 @@ export default function SubscriptionPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-6xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Quản lý gói dịch vụ</h1>
-        <p className="text-gray-600">Quản lý subscription, nâng cấp gói và nạp tiền</p>
-      </div>
-
-      <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="overview">Tổng quan</TabsTrigger>
-          <TabsTrigger value="upgrade">Nâng cấp</TabsTrigger>
-          <TabsTrigger value="topup">Nạp tiền</TabsTrigger>
-          <TabsTrigger value="history">Lịch sử</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="overview" className="space-y-6">
-          <div className="grid gap-6 md:grid-cols-3">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Gói hiện tại</CardTitle>
-                <CreditCard className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{currentSubscription.planName}</div>
-                <p className="text-xs text-muted-foreground">{formatCurrency(currentSubscription.price)}/tháng</p>
-                <Badge variant="secondary" className="mt-2">
-                  {currentSubscription.status === "active" ? "Đang hoạt động" : "Không hoạt động"}
-                </Badge>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Số dư tài khoản</CardTitle>
-                <Wallet className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{formatCurrency(currentSubscription.balance)}</div>
-                <p className="text-xs text-muted-foreground">Có thể sử dụng để thanh toán</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Thanh toán tiếp theo</CardTitle>
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">15/02</div>
-                <p className="text-xs text-muted-foreground">{formatCurrency(currentSubscription.price)}</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Thông tin gói dịch vụ</CardTitle>
-              <CardDescription>Chi tiết về gói {currentSubscription.planName} hiện tại</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span>Tên gói:</span>
-                  <Badge variant="outline">{currentSubscription.planName}</Badge>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>Giá:</span>
-                  <span className="font-semibold">{formatCurrency(currentSubscription.price)}/tháng</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>Trạng thái:</span>
-                  <Badge variant="secondary">Đang hoạt động</Badge>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>Ngày gia hạn:</span>
-                  <span>{currentSubscription.nextBilling}</span>
-                </div>
+    <div className="min-h-screen bg-slate-900 text-white">
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <Link href="/" className="flex items-center space-x-2 text-slate-300 hover:text-cyan-400 transition-colors">
+              <ArrowLeft className="w-5 h-5" />
+              <span className="font-medium">Quay về trang chủ</span>
+            </Link>
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-cyan-500 rounded flex items-center justify-center">
+                <span className="text-white font-bold text-sm">C</span>
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="upgrade" className="space-y-6">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold mb-2">Nâng cấp gói dịch vụ</h2>
-            <p className="text-gray-600">Chọn gói phù hợp với nhu cầu của bạn</p>
+              <span className="font-bold text-xl text-white">ConstructVN</span>
+            </div>
           </div>
+        </div>
+      </header>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {plans.map((plan) => (
-              <Card
-                key={plan.id}
-                className={`relative ${plan.current ? "ring-2 ring-blue-500" : ""} ${plan.popular ? "border-orange-200" : ""}`}
-              >
-                {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                    <Badge className="bg-orange-500 text-white">Phổ biến nhất</Badge>
-                  </div>
-                )}
-                {plan.current && (
-                  <div className="absolute -top-3 right-3">
-                    <Badge variant="secondary">Hiện tại</Badge>
-                  </div>
-                )}
-                <CardHeader className="text-center">
-                  <CardTitle className="text-lg">{plan.name}</CardTitle>
-                  <div className="text-3xl font-bold">{plan.price === 0 ? "Miễn phí" : formatCurrency(plan.price)}</div>
-                  {plan.price > 0 && <p className="text-sm text-gray-600">/tháng</p>}
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2">Quản lý gói dịch vụ</h1>
+          <p className="text-slate-300">Quản lý subscription, nâng cấp gói và nạp tiền</p>
+        </div>
+
+        <Tabs defaultValue="overview" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-4 bg-slate-800 border-slate-700">
+            <TabsTrigger value="overview" className="data-[state=active]:bg-slate-700 data-[state=active]:text-white text-slate-300">Tổng quan</TabsTrigger>
+            <TabsTrigger value="upgrade" className="data-[state=active]:bg-slate-700 data-[state=active]:text-white text-slate-300">Nâng cấp</TabsTrigger>
+            <TabsTrigger value="topup" className="data-[state=active]:bg-slate-700 data-[state=active]:text-white text-slate-300">Nạp tiền</TabsTrigger>
+            <TabsTrigger value="history" className="data-[state=active]:bg-slate-700 data-[state=active]:text-white text-slate-300">Lịch sử</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="overview" className="space-y-6">
+            <div className="grid gap-6 md:grid-cols-3">
+              <Card className="bg-slate-800 border-slate-700">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-white">Gói hiện tại</CardTitle>
+                  <CreditCard className="h-4 w-4 text-slate-400" />
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <ul className="space-y-2">
-                    {plan.features.map((feature, index) => (
-                      <li key={index} className="flex items-center text-sm">
-                        <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                  <Button
-                    className="w-full"
-                    variant={plan.current ? "secondary" : "default"}
-                    disabled={plan.current}
-                    onClick={() => handlePlanUpgrade(plan)}
-                  >
-                    {plan.current ? "Gói hiện tại" : "Chọn gói này"}
-                  </Button>
+                <CardContent>
+                  <div className="text-2xl font-bold text-white">{currentSubscription.planName}</div>
+                  <p className="text-xs text-slate-400">{formatCurrency(currentSubscription.price)}/tháng</p>
+                  <Badge variant="secondary" className="mt-2 bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
+                    {currentSubscription.status === "active" ? "Đang hoạt động" : "Không hoạt động"}
+                  </Badge>
                 </CardContent>
               </Card>
-            ))}
-          </div>
+
+              <Card className="bg-slate-800 border-slate-700">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-white">Số dư tài khoản</CardTitle>
+                  <Wallet className="h-4 w-4 text-slate-400" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-white">{formatCurrency(currentSubscription.balance)}</div>
+                  <p className="text-xs text-slate-400">Có thể sử dụng để thanh toán</p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-slate-800 border-slate-700">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-white">Thanh toán tiếp theo</CardTitle>
+                  <Calendar className="h-4 w-4 text-slate-400" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-white">15/02</div>
+                  <p className="text-xs text-slate-400">{formatCurrency(currentSubscription.price)}</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            <Card className="bg-slate-800 border-slate-700">
+              <CardHeader>
+                <CardTitle className="text-white">Thông tin gói dịch vụ</CardTitle>
+                <CardDescription className="text-slate-400">Chi tiết về gói {currentSubscription.planName} hiện tại</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-300">Tên gói:</span>
+                    <Badge variant="outline" className="border-slate-600 text-slate-300">{currentSubscription.planName}</Badge>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-300">Giá:</span>
+                    <span className="font-semibold text-white">{formatCurrency(currentSubscription.price)}/tháng</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-300">Trạng thái:</span>
+                    <Badge variant="secondary" className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">Đang hoạt động</Badge>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-300">Ngày gia hạn:</span>
+                    <span className="text-white">{currentSubscription.nextBilling}</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+        </TabsContent>
+
+          <TabsContent value="upgrade" className="space-y-6">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold mb-2 text-white">Nâng cấp gói dịch vụ</h2>
+              <p className="text-slate-300">Chọn gói phù hợp với nhu cầu của bạn</p>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+              {plans.map((plan) => (
+                <Card
+                  key={plan.id}
+                  className={`relative bg-slate-800 border-slate-700 ${plan.current ? "ring-2 ring-cyan-500" : ""} ${plan.popular ? "border-orange-500" : ""}`}
+                >
+                  {plan.popular && (
+                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                      <Badge className="bg-orange-500 text-white">Phổ biến nhất</Badge>
+                    </div>
+                  )}
+                  {plan.current && (
+                    <div className="absolute -top-3 right-3">
+                      <Badge variant="secondary" className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">Hiện tại</Badge>
+                    </div>
+                  )}
+                  <CardHeader className="text-center">
+                    <CardTitle className="text-lg text-white">{plan.name}</CardTitle>
+                    <div className="text-3xl font-bold text-white">{plan.price === 0 ? "Miễn phí" : formatCurrency(plan.price)}</div>
+                    {plan.price > 0 && <p className="text-sm text-slate-400">/tháng</p>}
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <ul className="space-y-2">
+                      {plan.features.map((feature, index) => (
+                        <li key={index} className="flex items-center text-sm text-slate-300">
+                          <Check className="h-4 w-4 text-cyan-400 mr-2 flex-shrink-0" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                    <Button
+                      className={`w-full ${plan.current ? "bg-slate-700 text-slate-300" : "bg-cyan-500 hover:bg-cyan-600 text-white"}`}
+                      variant={plan.current ? "secondary" : "default"}
+                      disabled={plan.current}
+                      onClick={() => handlePlanUpgrade(plan)}
+                    >
+                      {plan.current ? "Gói hiện tại" : "Chọn gói này"}
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
 
           <Dialog open={showUpgradePaymentDialog} onOpenChange={setShowUpgradePaymentDialog}>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -389,14 +409,14 @@ export default function SubscriptionPage() {
 
               <div className="space-y-6">
                 {upgradeSelectedPlan && (
-                  <Card className="bg-gray-50">
+                  <Card className="bg-slate-800">
                     <CardContent className="pt-6">
                       <div className="space-y-3">
                         <div className="text-center mb-4">
                           <h3 className="text-lg font-semibold">Nâng cấp lên {upgradeSelectedPlan.name}</h3>
                           <div className="text-3xl font-bold text-blue-600">
                             {formatCurrency(upgradeSelectedPlan.price)}
-                            <span className="text-sm font-normal text-gray-600"> mỗi tháng</span>
+                            <span className="text-sm font-normal text-slate-300"> mỗi tháng</span>
                           </div>
                         </div>
                         <Separator />
@@ -405,7 +425,7 @@ export default function SubscriptionPage() {
                             <span>{upgradeSelectedPlan.name}</span>
                             <span>{formatCurrency(upgradeSelectedPlan.price)}</span>
                           </div>
-                          <div className="flex justify-between items-center text-sm text-gray-600">
+                          <div className="flex justify-between items-center text-sm text-slate-300">
                             <span>Thanh toán hàng tháng</span>
                             <span></span>
                           </div>
@@ -435,7 +455,7 @@ export default function SubscriptionPage() {
                       className={`p-4 border-2 rounded-lg cursor-pointer transition-colors ${
                         paymentMethodType === "online"
                           ? "border-slate-900 bg-slate-50"
-                          : "border-gray-200 hover:border-gray-300"
+                          : "border-slate-700 hover:border-slate-600"
                       }`}
                       onClick={() => setPaymentMethodType("online")}
                     >
@@ -443,7 +463,7 @@ export default function SubscriptionPage() {
                         <CreditCard className="w-6 h-6 text-slate-700" />
                         <div>
                           <h3 className="font-medium">Thanh toán trực tuyến</h3>
-                          <p className="text-sm text-gray-600">Thẻ tín dụng, ví điện tử</p>
+                          <p className="text-sm text-slate-300">Thẻ tín dụng, ví điện tử</p>
                         </div>
                       </div>
                     </div>
@@ -452,7 +472,7 @@ export default function SubscriptionPage() {
                       className={`p-4 border-2 rounded-lg cursor-pointer transition-colors ${
                         paymentMethodType === "qr_transfer"
                           ? "border-slate-900 bg-slate-50"
-                          : "border-gray-200 hover:border-gray-300"
+                          : "border-slate-700 hover:border-slate-600"
                       }`}
                       onClick={() => setPaymentMethodType("qr_transfer")}
                     >
@@ -460,7 +480,7 @@ export default function SubscriptionPage() {
                         <QrCode className="w-6 h-6 text-slate-700" />
                         <div>
                           <h3 className="font-medium">Chuyển khoản QR</h3>
-                          <p className="text-sm text-gray-600">Quét mã, chuyển khoản</p>
+                          <p className="text-sm text-slate-300">Quét mã, chuyển khoản</p>
                         </div>
                       </div>
                     </div>
@@ -534,29 +554,29 @@ export default function SubscriptionPage() {
 
                     <div className="grid md:grid-cols-2 gap-6">
                       <div className="text-center">
-                        <div className="bg-white p-4 rounded-lg border-2 border-dashed border-gray-300 inline-block">
+                        <div className="bg-white p-4 rounded-lg border-2 border-dashed border-slate-600 inline-block">
                           <div className="w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center">
                             <QrCode className="w-24 h-24 text-gray-400" />
                           </div>
-                          <p className="text-sm text-gray-600 mt-2">Quét mã để chuyển khoản</p>
+                          <p className="text-sm text-slate-300 mt-2">Quét mã để chuyển khoản</p>
                         </div>
                       </div>
 
                       <div className="space-y-4">
                         <div>
-                          <Label className="text-sm font-medium text-gray-700">Ngân hàng</Label>
+                          <Label className="text-sm font-medium text-slate-300">Ngân hàng</Label>
                           <p className="text-lg font-semibold">Vietcombank</p>
                         </div>
                         <div>
-                          <Label className="text-sm font-medium text-gray-700">Số tài khoản</Label>
+                          <Label className="text-sm font-medium text-slate-300">Số tài khoản</Label>
                           <p className="text-lg font-semibold">1234567890</p>
                         </div>
                         <div>
-                          <Label className="text-sm font-medium text-gray-700">Chủ tài khoản</Label>
+                          <Label className="text-sm font-medium text-slate-300">Chủ tài khoản</Label>
                           <p className="text-lg font-semibold">CONSTRUCTVN JSC</p>
                         </div>
                         <div>
-                          <Label className="text-sm font-medium text-gray-700">Số tiền</Label>
+                          <Label className="text-sm font-medium text-slate-300">Số tiền</Label>
                           <p className="text-lg font-semibold text-blue-600">
                             {upgradeSelectedPlan && formatCurrency(upgradeSelectedPlan.price)}
                           </p>
@@ -565,12 +585,12 @@ export default function SubscriptionPage() {
                     </div>
 
                     <div>
-                      <Label className="text-sm font-medium text-gray-700">Nội dung chuyển khoản (bắt buộc)</Label>
+                      <Label className="text-sm font-medium text-slate-300">Nội dung chuyển khoản (bắt buộc)</Label>
                       <div className="flex items-center space-x-2 mt-1">
                         <Input
                           value={`ConstructVN UPGRADE${Date.now().toString().slice(-6)} ${upgradeSelectedPlan?.name || ""}`}
                           readOnly
-                          className="bg-gray-50"
+                          className="bg-slate-800"
                         />
                         <Button
                           type="button"
@@ -604,13 +624,13 @@ export default function SubscriptionPage() {
         </TabsContent>
 
         <TabsContent value="topup" className="space-y-6">
-          <Card>
+          <Card className="bg-slate-800 border-slate-700">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Wallet className="h-5 w-5" />
                 Nạp tiền vào tài khoản
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-slate-400">
                 Số dư hiện tại: <span className="font-semibold">{formatCurrency(currentSubscription.balance)}</span>
               </CardDescription>
             </CardHeader>
@@ -668,7 +688,7 @@ export default function SubscriptionPage() {
                             className={`p-4 border-2 rounded-lg cursor-pointer transition-colors ${
                               paymentMethodType === "online"
                                 ? "border-slate-900 bg-slate-50"
-                                : "border-gray-200 hover:border-gray-300"
+                                : "border-slate-700 hover:border-slate-600"
                             }`}
                             onClick={() => setPaymentMethodType("online")}
                           >
@@ -676,7 +696,7 @@ export default function SubscriptionPage() {
                               <CreditCard className="w-6 h-6 text-slate-700" />
                               <div>
                                 <h3 className="font-medium">Thanh toán trực tuyến</h3>
-                                <p className="text-sm text-gray-600">Thẻ tín dụng, ví điện tử</p>
+                                <p className="text-sm text-slate-300">Thẻ tín dụng, ví điện tử</p>
                               </div>
                             </div>
                           </div>
@@ -685,7 +705,7 @@ export default function SubscriptionPage() {
                             className={`p-4 border-2 rounded-lg cursor-pointer transition-colors ${
                               paymentMethodType === "qr_transfer"
                                 ? "border-slate-900 bg-slate-50"
-                                : "border-gray-200 hover:border-gray-300"
+                                : "border-slate-700 hover:border-slate-600"
                             }`}
                             onClick={() => setPaymentMethodType("qr_transfer")}
                           >
@@ -693,7 +713,7 @@ export default function SubscriptionPage() {
                               <QrCode className="w-6 h-6 text-slate-700" />
                               <div>
                                 <h3 className="font-medium">Chuyển khoản QR</h3>
-                                <p className="text-sm text-gray-600">Quét mã, chuyển khoản</p>
+                                <p className="text-sm text-slate-300">Quét mã, chuyển khoản</p>
                               </div>
                             </div>
                           </div>
@@ -811,40 +831,40 @@ export default function SubscriptionPage() {
                           <div className="grid md:grid-cols-2 gap-6">
                             {/* QR Code */}
                             <div className="text-center">
-                              <div className="bg-white p-4 rounded-lg border-2 border-dashed border-gray-300 inline-block">
+                              <div className="bg-white p-4 rounded-lg border-2 border-dashed border-slate-600 inline-block">
                                 <div className="w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center">
                                   <QrCode className="w-24 h-24 text-gray-400" />
                                 </div>
-                                <p className="text-sm text-gray-600 mt-2">Quét mã để chuyển khoản</p>
+                                <p className="text-sm text-slate-300 mt-2">Quét mã để chuyển khoản</p>
                               </div>
                             </div>
 
                             {/* Bank Info */}
                             <div className="space-y-4">
                               <div>
-                                <Label className="text-sm font-medium text-gray-700">Ngân hàng</Label>
+                                <Label className="text-sm font-medium text-slate-300">Ngân hàng</Label>
                                 <p className="text-lg font-semibold">Vietcombank</p>
                               </div>
                               <div>
-                                <Label className="text-sm font-medium text-gray-700">Số tài khoản</Label>
+                                <Label className="text-sm font-medium text-slate-300">Số tài khoản</Label>
                                 <p className="text-lg font-semibold">1234567890</p>
                               </div>
                               <div>
-                                <Label className="text-sm font-medium text-gray-700">Chủ tài khoản</Label>
+                                <Label className="text-sm font-medium text-slate-300">Chủ tài khoản</Label>
                                 <p className="text-lg font-semibold">CONSTRUCTVN JSC</p>
                               </div>
                             </div>
                           </div>
 
                           <div>
-                            <Label className="text-sm font-medium text-gray-700">
+                            <Label className="text-sm font-medium text-slate-300">
                               Nội dung chuyển khoản (bắt buộc)
                             </Label>
                             <div className="flex items-center space-x-2 mt-1">
                               <Input
                                 value={`ConstructVN NAP${Date.now().toString().slice(-6)} ${customAmount || "[Số tiền]"}`}
                                 readOnly
-                                className="bg-gray-50"
+                                className="bg-slate-800"
                               />
                               <Button
                                 type="button"
@@ -911,13 +931,13 @@ export default function SubscriptionPage() {
         </TabsContent>
 
         <TabsContent value="history" className="space-y-6">
-          <Card>
+          <Card className="bg-slate-800 border-slate-700">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <History className="h-5 w-5" />
                 Lịch sử giao dịch
               </CardTitle>
-              <CardDescription>Xem tất cả các giao dịch của bạn</CardDescription>
+              <CardDescription className="text-slate-400">Xem tất cả các giao dịch của bạn</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -939,7 +959,7 @@ export default function SubscriptionPage() {
                       </div>
                       <div>
                         <p className="font-medium">{transaction.description}</p>
-                        <p className="text-sm text-gray-600">{transaction.date}</p>
+                        <p className="text-sm text-slate-300">{transaction.date}</p>
                       </div>
                     </div>
                     <div className="text-right">
@@ -961,7 +981,8 @@ export default function SubscriptionPage() {
             </CardContent>
           </Card>
         </TabsContent>
-      </Tabs>
+        </Tabs>
+      </div>
     </div>
   )
 }
