@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { useLanguage } from "@/contexts/language-context"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -24,6 +25,7 @@ export default function AdminAgentPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
+  const { t } = useLanguage()
 
   useEffect(() => {
     const authStatus = localStorage.getItem("admin_authenticated")
@@ -113,10 +115,10 @@ export default function AdminAgentPage() {
   ]
 
   const navigationItems = [
-    { id: "overview", label: "Tổng quan", icon: BarChart3 },
-    { id: "commission", label: "Hoa hồng", icon: CreditCard },
-    { id: "reports", label: "Báo cáo", icon: FileText },
-    { id: "settings", label: "Cài đặt", icon: Settings },
+    { id: "overview", label: t("agentManagement.overview"), icon: BarChart3 },
+    { id: "commission", label: t("agentManagement.commission"), icon: CreditCard },
+    { id: "reports", label: t("agentManagement.reports"), icon: FileText },
+    { id: "settings", label: t("agentManagement.settings"), icon: Settings },
   ]
 
   const renderContent = () => {
@@ -128,31 +130,31 @@ export default function AdminAgentPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <Card className="bg-slate-800 border-slate-700">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-slate-100">Tổng hoa hồng tháng</CardTitle>
+                  <CardTitle className="text-sm font-medium text-slate-100">{t("agentManagement.monthlyCommission")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-white">240M đ</div>
-                  <p className="text-xs text-green-400">+15% so với tháng trước</p>
+                  <p className="text-xs text-green-400">{t("agentManagement.compareLastMonth").replace("{percent}", "15")}</p>
                 </CardContent>
               </Card>
 
               <Card className="bg-slate-800 border-slate-700">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-slate-100">Đã thanh toán</CardTitle>
+                  <CardTitle className="text-sm font-medium text-slate-100">{t("agentManagement.paidCommission")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-white">180M đ</div>
-                  <p className="text-xs text-slate-300">75% tổng hoa hồng</p>
+                  <p className="text-xs text-slate-300">{t("agentManagement.percentOfCommission").replace("{percent}", "75")}</p>
                 </CardContent>
               </Card>
 
               <Card className="bg-slate-800 border-slate-700">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-slate-100">Chờ thanh toán</CardTitle>
+                  <CardTitle className="text-sm font-medium text-slate-100">{t("agentManagement.pendingCommission")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-white">60M đ</div>
-                  <p className="text-xs text-yellow-400">25% tổng hoa hồng</p>
+                  <p className="text-xs text-yellow-400">{t("agentManagement.percentOfCommission").replace("{percent}", "25")}</p>
                 </CardContent>
               </Card>
             </div>
@@ -161,10 +163,10 @@ export default function AdminAgentPage() {
             <Card className="bg-slate-800 border-slate-700">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-slate-100">Lịch sử thanh toán hoa hồng</CardTitle>
+                  <CardTitle className="text-slate-100">{t("agentManagement.commissionHistory")}</CardTitle>
                   <Button className="bg-orange-500 hover:bg-orange-600 text-white">
                     <CreditCard className="h-4 w-4 mr-2" />
-                    Thanh toán hàng loạt
+                    {t("agentManagement.batchPayment")}
                   </Button>
                 </div>
               </CardHeader>
@@ -173,13 +175,13 @@ export default function AdminAgentPage() {
                   <table className="w-full">
                     <thead>
                       <tr className="border-b border-slate-700">
-                        <th className="text-left py-3 px-4 text-slate-100 font-medium">Agent</th>
-                        <th className="text-left py-3 px-4 text-slate-100 font-medium">Số tiền</th>
-                        <th className="text-left py-3 px-4 text-slate-100 font-medium">Kỳ</th>
-                        <th className="text-left py-3 px-4 text-slate-100 font-medium">Trạng thái</th>
-                        <th className="text-left py-3 px-4 text-slate-100 font-medium">Ngày thanh toán</th>
-                        <th className="text-left py-3 px-4 text-slate-100 font-medium">Phương thức</th>
-                        <th className="text-left py-3 px-4 text-slate-100 font-medium">Thao tác</th>
+                        <th className="text-left py-3 px-4 text-slate-100 font-medium">{t("agentManagement.agent")}</th>
+                        <th className="text-left py-3 px-4 text-slate-100 font-medium">{t("agentManagement.amount")}</th>
+                        <th className="text-left py-3 px-4 text-slate-100 font-medium">{t("agentManagement.period")}</th>
+                        <th className="text-left py-3 px-4 text-slate-100 font-medium">{t("agentManagement.status")}</th>
+                        <th className="text-left py-3 px-4 text-slate-100 font-medium">{t("agentManagement.paymentDate")}</th>
+                        <th className="text-left py-3 px-4 text-slate-100 font-medium">{t("agentManagement.paymentMethod")}</th>
+                        <th className="text-left py-3 px-4 text-slate-100 font-medium">{t("agentManagement.actions")}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -199,13 +201,13 @@ export default function AdminAgentPage() {
                               }
                             >
                               {payment.status === "paid"
-                                ? "Đã thanh toán"
+                                ? t("agentManagement.paid")
                                 : payment.status === "pending"
-                                  ? "Chờ thanh toán"
-                                  : "Đang xử lý"}
+                                  ? t("agentManagement.pending")
+                                  : t("agentManagement.processing")}
                             </Badge>
                           </td>
-                          <td className="py-3 px-4 text-slate-200">{payment.paymentDate || "Chưa thanh toán"}</td>
+                          <td className="py-3 px-4 text-slate-200">{payment.paymentDate || t("agentManagement.notPaid")}</td>
                           <td className="py-3 px-4 text-slate-200">{payment.method}</td>
                           <td className="py-3 px-4">
                             <div className="flex items-center gap-2">
@@ -236,45 +238,45 @@ export default function AdminAgentPage() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <Card className="bg-slate-800 border-slate-700">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-slate-100">Tổng Agent</CardTitle>
+                  <CardTitle className="text-sm font-medium text-slate-100">{t("agentManagement.totalAgents")}</CardTitle>
                   <Users className="h-4 w-4 text-orange-500" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-white">156</div>
-                  <p className="text-xs text-slate-300">+12% so với tháng trước</p>
+                  <p className="text-xs text-slate-300">{t("agentManagement.compareLastMonth").replace("{percent}", "12")}</p>
                 </CardContent>
               </Card>
 
               <Card className="bg-slate-800 border-slate-700">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-slate-100">Agent Hoạt động</CardTitle>
+                  <CardTitle className="text-sm font-medium text-slate-100">{t("agentManagement.activeAgents")}</CardTitle>
                   <UserPlus className="h-4 w-4 text-green-500" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-white">142</div>
-                  <p className="text-xs text-slate-300">91% tổng agent</p>
+                  <p className="text-xs text-slate-300">{t("agentManagement.percentOfTotal").replace("{percent}", "91")}</p>
                 </CardContent>
               </Card>
 
               <Card className="bg-slate-800 border-slate-700">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-slate-100">Doanh số tháng</CardTitle>
+                  <CardTitle className="text-sm font-medium text-slate-100">{t("agentManagement.monthlySales")}</CardTitle>
                   <TrendingUp className="h-4 w-4 text-blue-500" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-white">2.4B</div>
-                  <p className="text-xs text-slate-300">+18% so với tháng trước</p>
+                  <p className="text-xs text-slate-300">{t("agentManagement.compareLastMonth").replace("{percent}", "18")}</p>
                 </CardContent>
               </Card>
 
               <Card className="bg-slate-800 border-slate-700">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium text-slate-100">Hoa hồng</CardTitle>
+                  <CardTitle className="text-sm font-medium text-slate-100">{t("agentManagement.commission")}</CardTitle>
                   <DollarSign className="h-4 w-4 text-yellow-500" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-white">240M</div>
-                  <p className="text-xs text-slate-300">10% doanh số</p>
+                  <p className="text-xs text-slate-300">{t("agentManagement.percentOfSales").replace("{percent}", "10")}</p>
                 </CardContent>
               </Card>
             </div>
@@ -283,10 +285,10 @@ export default function AdminAgentPage() {
             <Card className="bg-slate-800 border-slate-700">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-slate-100">Danh sách Agent</CardTitle>
+                  <CardTitle className="text-slate-100">{t("agentManagement.agentList")}</CardTitle>
                   <Button className="bg-orange-500 hover:bg-orange-600 text-white">
                     <UserPlus className="h-4 w-4 mr-2" />
-                    Thêm Agent
+                    {t("agentManagement.addAgent")}
                   </Button>
                 </div>
               </CardHeader>
@@ -295,13 +297,13 @@ export default function AdminAgentPage() {
                   <table className="w-full">
                     <thead>
                       <tr className="border-b border-slate-700">
-                        <th className="text-left py-3 px-4 text-slate-100 font-medium">Agent</th>
-                        <th className="text-left py-3 px-4 text-slate-100 font-medium">Liên hệ</th>
-                        <th className="text-left py-3 px-4 text-slate-100 font-medium">Trạng thái</th>
-                        <th className="text-left py-3 px-4 text-slate-100 font-medium">Doanh số</th>
-                        <th className="text-left py-3 px-4 text-slate-100 font-medium">Hoa hồng</th>
-                        <th className="text-left py-3 px-4 text-slate-100 font-medium">Ngày tham gia</th>
-                        <th className="text-left py-3 px-4 text-slate-100 font-medium">Thao tác</th>
+                        <th className="text-left py-3 px-4 text-slate-100 font-medium">{t("agentManagement.agent")}</th>
+                        <th className="text-left py-3 px-4 text-slate-100 font-medium">{t("agentManagement.contact")}</th>
+                        <th className="text-left py-3 px-4 text-slate-100 font-medium">{t("agentManagement.status")}</th>
+                        <th className="text-left py-3 px-4 text-slate-100 font-medium">{t("agentManagement.sales")}</th>
+                        <th className="text-left py-3 px-4 text-slate-100 font-medium">{t("agentManagement.commissionAmount")}</th>
+                        <th className="text-left py-3 px-4 text-slate-100 font-medium">{t("agentManagement.joinDate")}</th>
+                        <th className="text-left py-3 px-4 text-slate-100 font-medium">{t("agentManagement.actions")}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -326,10 +328,10 @@ export default function AdminAgentPage() {
                                 agent.status === "active" ? "bg-green-500 text-white" : "bg-slate-600 text-slate-300"
                               }
                             >
-                              {agent.status === "active" ? "Hoạt động" : "Không hoạt động"}
+                              {agent.status === "active" ? t("agentManagement.active") : t("agentManagement.inactive")}
                             </Badge>
                           </td>
-                          <td className="py-3 px-4 text-slate-200">{agent.sales} gói</td>
+                          <td className="py-3 px-4 text-slate-200">{agent.sales} {t("agentManagement.packages")}</td>
                           <td className="py-3 px-4 text-slate-200">{agent.commission.toLocaleString("vi-VN")} đ</td>
                           <td className="py-3 px-4 text-slate-300">{agent.joinDate}</td>
                           <td className="py-3 px-4">
