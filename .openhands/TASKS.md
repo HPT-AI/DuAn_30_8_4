@@ -10,4 +10,6 @@
 
 5. ✅ Kiểm tra và test các trang sau khi cập nhật
 
+6. ✅ Khôi phục liên kết Admin Panel trong user menu
+
 
