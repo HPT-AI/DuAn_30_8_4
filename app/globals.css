@@ -74,6 +74,10 @@
   --sidebar-ring: oklch(0.439 0 0);
 }
 
+html {
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
