@@ -27,13 +27,15 @@ export default function AdminAgentPage() {
 
   useEffect(() => {
     const authStatus = localStorage.getItem("admin_authenticated")
-    if (authStatus !== "true") {
-      router.push("/admin")
-    } else {
-      setIsAuthenticated(true)
-    }
+    setIsAuthenticated(authStatus === "true")
     setLoading(false)
-  }, [router])
+  }, [])
+
+
+  if (!isAuthenticated) {
+    // Khi chưa đăng nhập, không render gì để tránh flicker; layout sẽ xử lý hiển thị login ở /admin
+    return null
+  }
 
   if (loading) {
     return (

@@ -18,6 +18,7 @@ import {
   Home,
 } from "lucide-react"
 import { useState } from "react"
+import { useLanguage } from "@/contexts/language-context"
 
 interface AdminSidebarProps {
   isOpen: boolean
@@ -28,6 +29,8 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
   const pathname = usePathname()
   const [isContentOpen, setIsContentOpen] = useState(pathname.startsWith("/admin/content"))
   const [isHomepageOpen, setIsHomepageOpen] = useState(pathname.startsWith("/admin/content/homepage"))
+  const { t, isHydrated } = useLanguage()
+
 
   const navigation = [
     {
@@ -111,7 +114,7 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
             onClick={onClose}
           >
             <Home className="h-5 w-5" />
-            <span>← Về trang chủ</span>
+            <span>← {isHydrated ? t("common.back_home") : "Về trang chủ"}</span>
           </Link>
 
           {navigation.map((item) => {

@@ -16,7 +16,7 @@ export default function AdminAgentLayout({
 }) {
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const router = useRouter()
-  const { language, setLanguage } = useLanguage()
+  const { language, setLanguage, t, isHydrated } = useLanguage()
 
   const handleLogout = () => {
     localStorage.removeItem("admin_authenticated")

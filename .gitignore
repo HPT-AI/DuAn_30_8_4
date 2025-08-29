@@ -25,3 +25,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# Dependencies & builds
+node_modules/
+pnpm-lock.yaml
+# BCTC subapp
+BCTC/node_modules/
+BCTC/.next/
+BCTC/server-bctc.log
+BCTC/server-bctc.pid
+# Logs & pids
+*.log
+*.pid
