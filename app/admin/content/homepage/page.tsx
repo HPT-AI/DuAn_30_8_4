@@ -149,6 +149,12 @@ export default function HomepageContentPage() {
         },
       ],
     },
+    cta: {
+      title: "Sẵn sàng bắt đầu?",
+      subtitle: "Tham gia cùng hàng nghìn doanh nghiệp đã tin tưởng sử dụng ConstructVN",
+      placeholder: "Bắt đầu miễn phí ngay",
+      button: "Đăng ký"
+    },
     newsletter: {
       title: "Đăng ký nhận tin tức",
       subtitle: "Nhận thông tin mới nhất về sản phẩm và ngành xây dựng",
@@ -955,7 +961,7 @@ export default function HomepageContentPage() {
         </Card>
 
         {/* Newsletter Section */}
-        <Card className="bg-slate-800 border-slate-700">
+        <Card id="newsletter" className="bg-slate-800 border-slate-700">
           <CardHeader>
             <CardTitle className="text-white">Newsletter - Đăng ký nhận tin</CardTitle>
             <CardDescription className="text-slate-400">Quản lý phần đăng ký nhận tin tức</CardDescription>
@@ -1016,8 +1022,47 @@ export default function HomepageContentPage() {
           </CardContent>
         </Card>
 
+
+        {/* CTA Section */}
+        <Card id="cta" className="bg-slate-800 border-slate-700 lg:col-span-2">
+          <CardHeader>
+            <CardTitle className="text-white">CTA - Sẵn sàng bắt đầu?</CardTitle>
+            <CardDescription className="text-slate-400">Quản lý nội dung kêu gọi hành động trên trang chủ</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="cta-title" className="text-slate-300">Tiêu đề</Label>
+                <Input id="cta-title" value={content.cta?.title || ''}
+                  onChange={(e) => setContent({ ...content, cta: { ...(content.cta||{}), title: e.target.value } })}
+                  className="bg-slate-700 border-slate-600 text-white" />
+              </div>
+              <div>
+                <Label htmlFor="cta-subtitle" className="text-slate-300">Mô tả</Label>
+                <Input id="cta-subtitle" value={content.cta?.subtitle || ''}
+                  onChange={(e) => setContent({ ...content, cta: { ...(content.cta||{}), subtitle: e.target.value } })}
+                  className="bg-slate-700 border-slate-600 text-white" />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="cta-placeholder" className="text-slate-300">Placeholder input</Label>
+                <Input id="cta-placeholder" value={content.cta?.placeholder || ''}
+                  onChange={(e) => setContent({ ...content, cta: { ...(content.cta||{}), placeholder: e.target.value } })}
+                  className="bg-slate-700 border-slate-600 text-white" />
+              </div>
+              <div>
+                <Label htmlFor="cta-button" className="text-slate-300">Text nút</Label>
+                <Input id="cta-button" value={content.cta?.button || ''}
+                  onChange={(e) => setContent({ ...content, cta: { ...(content.cta||{}), button: e.target.value } })}
+                  className="bg-slate-700 border-slate-600 text-white" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Footer Section */}
-        <Card className="bg-slate-800 border-slate-700 lg:col-span-2">
+        <Card id="footer" className="bg-slate-800 border-slate-700 lg:col-span-2">
           <CardHeader>
             <CardTitle className="text-white">Footer - Chân trang</CardTitle>
             <CardDescription className="text-slate-400">Quản lý thông tin chân trang website</CardDescription>
