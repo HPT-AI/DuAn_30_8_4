@@ -470,3 +470,40 @@ Import trace for requested module:
  ○ Compiling /admin ...
  ✓ Compiled /admin in 574ms (488 modules)
  ✓ Compiled /admin/content/homepage/cta in 336ms (480 modules)
+ ✓ Compiled in 425ms (665 modules)
+ GET / 200 in 121ms
+ GET / 200 in 47ms
+ GET /contact 200 in 39ms
+ GET / 200 in 55ms
+ GET / 200 in 44ms
+ GET / 200 in 39ms
+ GET / 200 in 35ms
+ ✓ Compiled /subscription in 345ms (476 modules)
+ GET /subscription 200 in 433ms
+ GET / 200 in 55ms
+ GET / 200 in 34ms
+ GET / 200 in 46ms
+ GET / 200 in 42ms
+ GET / 200 in 37ms
+ GET / 200 in 35ms
+ GET / 200 in 36ms
+ GET / 200 in 31ms
+ GET / 200 in 37ms
+ GET / 200 in 38ms
+ GET /admin 200 in 34ms
+ ○ Compiling /admin-agent ...
+ ✓ Compiled /admin-agent in 1160ms (1139 modules)
+ ○ Compiling /about ...
+ ✓ Compiled /about in 607ms (1153 modules)
+ GET / 200 in 113ms
+ ✓ Compiled /agent-frontend in 165ms (499 modules)
+ ✓ Compiled /agent-frontend/referral-links in 305ms (1166 modules)
+ GET / 200 in 86ms
+ GET / 200 in 39ms
+ ✓ Compiled in 1245ms (1156 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /agent-frontend/referral-links 200 in 85ms
+ ✓ Compiled in 445ms (1156 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /agent-frontend/referral-links 200 in 52ms
+ GET /agent-frontend/referral-links 200 in 36ms

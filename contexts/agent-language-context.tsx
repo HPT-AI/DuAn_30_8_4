@@ -89,11 +89,26 @@ const translations = {
     "account.enable2FA": "Bật xác thực 2FA",
     "account.disable2FA": "Tắt xác thực 2FA",
 
+    // Referral Links
+    "referralLinks.title": "Link giới thiệu",
+    "referralLinks.description": "Quản lý và theo dõi các link giới thiệu của bạn",
+    "referralLinks.totalClicks": "Tổng lượt click",
+    "referralLinks.totalConversions": "Tổng chuyển đổi",
+    "referralLinks.conversionRate": "Tỷ lệ chuyển đổi",
+    "referralLinks.createNew": "Tạo link mới",
+    "referralLinks.linkNamePlaceholder": "Nhập tên link (VD: Link Facebook, Link Website...)",
+    "referralLinks.createLink": "Tạo link",
+    "referralLinks.myLinks": "Link của tôi",
+    "referralLinks.clicks": "Lượt click",
+    "referralLinks.conversions": "Chuyển đổi",
+    "referralLinks.created": "Ngày tạo",
+
     // Common
     "common.loading": "Đang tải...",
     "common.viewAll": "Xem tất cả",
     "common.active": "Hoạt động",
     "common.pending": "Chờ xử lý",
+    "common.paused": "Tạm dừng",
     "common.backToHome": "Về trang chủ",
     "common.edit": "Chỉnh sửa",
     "common.save": "Lưu",
@@ -179,11 +194,26 @@ const translations = {
     "account.enable2FA": "Enable 2FA",
     "account.disable2FA": "Disable 2FA",
 
+    // Referral Links
+    "referralLinks.title": "Referral Links",
+    "referralLinks.description": "Manage and track your referral links",
+    "referralLinks.totalClicks": "Total Clicks",
+    "referralLinks.totalConversions": "Total Conversions",
+    "referralLinks.conversionRate": "Conversion Rate",
+    "referralLinks.createNew": "Create New Link",
+    "referralLinks.linkNamePlaceholder": "Enter link name (e.g., Facebook Link, Website Link...)",
+    "referralLinks.createLink": "Create Link",
+    "referralLinks.myLinks": "My Links",
+    "referralLinks.clicks": "Clicks",
+    "referralLinks.conversions": "Conversions",
+    "referralLinks.created": "Created",
+
     // Common
     "common.loading": "Loading...",
     "common.viewAll": "View All",
     "common.active": "Active",
     "common.pending": "Pending",
+    "common.paused": "Paused",
     "common.backToHome": "Back to Home",
     "common.edit": "Edit",
     "common.save": "Save",
