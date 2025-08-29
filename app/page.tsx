@@ -35,7 +35,7 @@ import {
 } from "lucide-react"
 
 export default function HomePage() {
-  const { language, setLanguage, t } = useLanguage()
+  const { language, setLanguage, t, isHydrated } = useLanguage()
   const { user, isAdmin } = useAuth()
   const [loginModalOpen, setLoginModalOpen] = useState(false)
   const [isVideoPlaying, setIsVideoPlaying] = useState(false)
@@ -114,11 +114,11 @@ export default function HomePage() {
             {/* Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
               <Link href="/about" className="text-slate-300 hover:text-cyan-400 transition-colors">
-                {t("header.about")}
+                {isHydrated ? t("header.about") : "Về chúng tôi"}
               </Link>
               <DropdownMenu>
                 <DropdownMenuTrigger className="flex items-center space-x-1 text-slate-300 hover:text-cyan-400 transition-colors">
-                  <span>{t("header.services")}</span>
+                  <span>{isHydrated ? t("header.services") : "Dịch vụ"}</span>
                   <ChevronDown className="w-4 h-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-56 bg-slate-800 border-slate-700">
@@ -128,43 +128,43 @@ export default function HomePage() {
                   >
                     <Link href="/construction-reports">
                       <FileText className="w-4 h-4" />
-                      <span>{t("services.construction_report")}</span>
+                      <span>{isHydrated ? t("services.construction_report") : "Báo cáo thi công"}</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem className="flex items-center space-x-2 text-slate-300 hover:text-cyan-400 hover:bg-slate-700">
                     <Warehouse className="w-4 h-4" />
-                    <span>{t("services.warehouse_management")}</span>
+                    <span>{isHydrated ? t("services.warehouse_management") : "Quản lý kho"}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem className="flex items-center space-x-2 text-slate-300 hover:text-cyan-400 hover:bg-slate-700">
                     <Wrench className="w-4 h-4" />
-                    <span>{t("services.material_management")}</span>
+                    <span>{isHydrated ? t("services.material_management") : "Quản lý vật tư"}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem className="flex items-center space-x-2 text-slate-300 hover:text-cyan-400 hover:bg-slate-700">
                     <HardHat className="w-4 h-4" />
-                    <span>{t("services.construction_consulting")}</span>
+                    <span>{isHydrated ? t("services.construction_consulting") : "Công tác tư vấn xây dựng"}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem className="flex items-center space-x-2 text-slate-300 hover:text-cyan-400 hover:bg-slate-700">
                     <GraduationCap className="w-4 h-4" />
-                    <span>{t("services.training")}</span>
+                    <span>{isHydrated ? t("services.training") : "Đào tạo"}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem className="flex items-center space-x-2 text-slate-300 hover:text-cyan-400 hover:bg-slate-700">
                     <MessageCircle className="w-4 h-4" />
-                    <span>{t("services.chatbot")}</span>
+                    <span>{isHydrated ? t("services.chatbot") : "Chatbot"}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem className="flex items-center space-x-2 text-slate-300 hover:text-cyan-400 hover:bg-slate-700">
                     <Calculator className="w-4 h-4" />
-                    <span>{t("services.design_calculation")}</span>
+                    <span>{isHydrated ? t("services.design_calculation") : "Tính toán thiết kế"}</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
               <a href="#pricing" className="text-slate-300 hover:text-cyan-400 transition-colors">
-                {t("header.pricing")}
+                {isHydrated ? t("header.pricing") : "Giá"}
               </a>
               <Link href="/agent-frontend" className="text-slate-300 hover:text-cyan-400 transition-colors">
-                {t("header.agents")}
+                {isHydrated ? t("header.agents") : "Đại lý"}
               </Link>
               <Link href="/contact" className="text-slate-300 hover:text-cyan-400 transition-colors">
-                {t("header.contact")}
+                {isHydrated ? t("header.contact") : "Liên hệ"}
               </Link>
               <a
                 href="https://youtube.com"
@@ -172,7 +172,7 @@ export default function HomePage() {
                 rel="noopener noreferrer"
                 className="text-slate-300 hover:text-cyan-400 transition-colors"
               >
-                {t("header.guide")}
+                {isHydrated ? t("header.guide") : "Hướng dẫn"}
               </a>
               {user && isAdmin() && (
                 <DropdownMenu>
@@ -239,11 +239,11 @@ export default function HomePage() {
                     className="text-slate-300 hover:text-cyan-400 hover:bg-slate-800"
                     onClick={() => setLoginModalOpen(true)}
                   >
-                    {t("header.login")}
+                    {isHydrated ? t("header.login") : "Đăng nhập"}
                   </Button>
                   <Link href="/register">
                     <Button className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all">
-                      {t("header.start")}
+                      {isHydrated ? t("header.start") : "Bắt đầu"}
                     </Button>
                   </Link>
                 </>

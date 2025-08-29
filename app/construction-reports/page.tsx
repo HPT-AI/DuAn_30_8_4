@@ -710,7 +710,7 @@ const getWordPageCount = async (file: File): Promise<number> => {
     e.preventDefault()
     const file = e.dataTransfer.files[0]
     if (file && file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-      handleTemplateUpload({ target: { files: [file] } as any)
+      handleTemplateUpload({ target: { files: [file] } } as any)
     }
   }
 
@@ -720,7 +720,7 @@ const getWordPageCount = async (file: File): Promise<number> => {
     console.log("[v0] Setting showEditProjectGroup to true")
     setShowEditProjectGroup(true)
   }
-\
+
   const handleDeleteProjectGroup = (projectGroupId: string) => {
     setProjectGroupToDelete(projectGroupId)
     setShowDeleteProjectGroupDialog(true)

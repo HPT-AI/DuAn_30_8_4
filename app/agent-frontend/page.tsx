@@ -15,23 +15,25 @@ export default function AgentDashboard() {
   const { t } = useAgentLanguage()
   const router = useRouter()
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push("/agent-frontend/login")
-    }
-  }, [user, loading, router])
+  // Removed authentication requirement for demo purposes
+  // useEffect(() => {
+  //   if (!loading && !user) {
+  //     router.push("/agent-frontend/login")
+  //   }
+  // }, [user, loading, router])
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-slate-900"></div>
-      </div>
-    )
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center">
+  //       <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-slate-900"></div>
+  //     </div>
+  //   )
+  // }
 
-  if (!user) {
-    return null
-  }
+  // Allow access without authentication for demo
+  // if (!user) {
+  //   return null
+  // }
 
   const stats = [
     {
@@ -77,7 +79,7 @@ export default function AgentDashboard() {
         {/* Welcome Section */}
         <div className="bg-gradient-to-r from-slate-900 to-slate-700 rounded-lg p-6 text-white">
           <h1 className="text-2xl font-bold mb-2">
-            {t("dashboard.welcome")}, {user.name}!
+            {t("dashboard.welcome")}, Agent User!
           </h1>
           <p className="text-slate-300">{t("dashboard.welcomeMessage")}</p>
         </div>

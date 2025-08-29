@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useState, type ReactNode } from "react"
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 
 type Language = "vi" | "en"
 
@@ -8,6 +8,7 @@ interface LanguageContextType {
   language: Language
   setLanguage: (lang: Language) => void
   t: (key: string) => string
+  isHydrated: boolean
 }
 
 const translations = {
@@ -982,19 +983,20 @@ const translations = {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("constructvn-language")
-      return (saved as Language) || "vi"
+  const [language, setLanguage] = useState<Language>("vi")
+  const [isHydrated, setIsHydrated] = useState(false)
+
+  useEffect(() => {
+    const saved = localStorage.getItem("constructvn-language")
+    if (saved && (saved === "vi" || saved === "en")) {
+      setLanguage(saved as Language)
     }
-    return "vi"
-  })
+    setIsHydrated(true)
+  }, [])
 
   const handleSetLanguage = (lang: Language) => {
     setLanguage(lang)
-    if (typeof window !== "undefined") {
-      localStorage.setItem("constructvn-language", lang)
-    }
+    localStorage.setItem("constructvn-language", lang)
   }
 
   const t = (key: string): string => {
@@ -1002,7 +1004,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage: handleSetLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage: handleSetLanguage, t, isHydrated }}>
       {children}
     </LanguageContext.Provider>
   )

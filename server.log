@@ -1,0 +1,49 @@
+
+> my-v0-project@0.1.0 dev /workspace/Khuongcuoicung
+> next dev --port 12000
+
+  ▲ Next.js 14.2.16
+  - Local:        http://localhost:12000
+
+ ✓ Starting...
+ ✓ Ready in 1577ms
+ ○ Compiling /admin ...
+ ✓ Compiled /admin in 2.4s (607 modules)
+ GET /admin 200 in 2535ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1278ms (805 modules)
+ GET / 200 in 1431ms
+ GET / 200 in 27ms
+ GET / 200 in 43ms
+ GET / 200 in 31ms
+ GET / 200 in 33ms
+ GET / 200 in 29ms
+ GET / 200 in 24ms
+ GET / 200 in 28ms
+ GET / 200 in 29ms
+ GET / 200 in 22ms
+ GET / 200 in 22ms
+ GET / 200 in 22ms
+ GET / 200 in 26ms
+ ✓ Compiled in 737ms (782 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 97ms
+ ✓ Compiled in 451ms (782 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 75ms
+ ✓ Compiled in 391ms (782 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 45ms
+ ✓ Compiled in 358ms (782 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 48ms
+ ✓ Compiled in 483ms (782 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET / 200 in 56ms
+ ✓ Compiled in 1039ms (782 modules)
+ ✓ Compiled in 500ms (782 modules)
+ ✓ Compiled in 463ms (782 modules)
+ ✓ Compiled in 629ms (782 modules)
+ ✓ Compiled in 555ms (782 modules)
+ ✓ Compiled in 621ms (782 modules)
+ ✓ Compiled in 493ms (782 modules)
