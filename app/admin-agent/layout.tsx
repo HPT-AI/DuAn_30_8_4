@@ -32,10 +32,10 @@ export default function AdminAgentLayout({
             <Link href="/admin">
               <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white">
                 <ArrowLeft className="h-5 w-5 mr-2" />
-                Quay lại Admin
+                {isHydrated ? t("adminAgent.back") : "Quay lại Admin"}
               </Button>
             </Link>
-            <h1 className="text-xl font-semibold text-white">Quản lý Agent</h1>
+            <h1 className="text-xl font-semibold text-white">{isHydrated ? t("adminAgent.header.title") : "Quản lý Agent"}</h1>
           </div>
 
           <div className="flex items-center gap-3">

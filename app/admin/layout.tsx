@@ -68,7 +68,7 @@ export default function AdminLayout({
               >
                 <Menu className="h-5 w-5" />
               </Button>
-              <h1 className="text-xl font-semibold text-white">Dashboard Quản trị</h1>
+              <h1 className="text-xl font-semibold text-white">{isHydrated ? t("admin.header.title") : "Dashboard Quản trị"}</h1>
             </div>
 
             <div className="flex items-center gap-3">

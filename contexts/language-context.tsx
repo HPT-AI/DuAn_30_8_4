@@ -23,6 +23,12 @@ const translations = {
     "header.login": "Đăng nhập",
     "header.start": "Bắt đầu",
 
+    "admin.header.title": "Dashboard Quản trị",
+    "common.language": "Ngôn ngữ",
+    "adminAgent.header.title": "Quản lý Agent",
+    "adminAgent.back": "Quay lại Admin",
+
+
     "common.back_home": "Quay về trang chủ",
 
     // Services dropdown
@@ -514,6 +520,12 @@ const translations = {
     // Header
     "header.about": "About Us",
     "header.services": "Services",
+
+    "admin.header.title": "Admin Dashboard",
+    "common.language": "Language",
+    "adminAgent.header.title": "Agent Management",
+    "adminAgent.back": "Back to Admin",
+
     "header.pricing": "Pricing", // Added pricing navigation link
     "header.contact": "Contact",
     "header.guide": "Guide",
