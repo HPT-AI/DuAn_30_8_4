@@ -454,3 +454,19 @@ Import trace for requested module:
  GET /subscription 200 in 44ms
  GET /subscribe 200 in 38ms
  ✓ Compiled in 529ms (660 modules)
+ GET / 200 in 89ms
+ GET / 200 in 43ms
+ ○ Compiling /agent-frontend ...
+ ✓ Compiled /agent-frontend in 826ms (493 modules)
+ ○ Compiling /contact ...
+ ✓ Compiled /contact in 1011ms (1144 modules)
+ GET / 200 in 121ms
+ GET / 200 in 54ms
+ ✓ Compiled in 1326ms (1145 modules)
+ ✓ Compiled in 534ms (1145 modules)
+ ✓ Compiled in 926ms (1145 modules)
+ ✓ Compiled in 634ms (1145 modules)
+ GET / 200 in 154ms
+ ○ Compiling /admin ...
+ ✓ Compiled /admin in 574ms (488 modules)
+ ✓ Compiled /admin/content/homepage/cta in 336ms (480 modules)

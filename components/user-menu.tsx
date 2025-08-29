@@ -10,10 +10,10 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useAuth } from "@/contexts/auth-context"
 import { useLanguage } from "@/contexts/language-context"
-import { User, Settings, LogOut, CreditCard, HelpCircle } from "lucide-react"
+import { User, Settings, LogOut, CreditCard, HelpCircle, Shield } from "lucide-react"
 
 export function UserMenu() {
-  const { user, logout } = useAuth()
+  const { user, logout, isAdmin } = useAuth()
   const { t } = useLanguage()
   const currentPlan = "professional"
   const planNames = {
@@ -41,7 +41,7 @@ export function UserMenu() {
           <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
           <AvatarFallback className="bg-slate-900 text-white text-xs">{getInitials(user.name)}</AvatarFallback>
         </Avatar>
-        <span className="hidden md:block text-sm font-medium text-gray-700">{user.name}</span>
+        <span className="hidden md:block text-sm font-medium text-slate-300">{user.name}</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
         <div className="px-2 py-1.5">
@@ -72,6 +72,17 @@ export function UserMenu() {
             {t("user_menu.billing")}
           </a>
         </DropdownMenuItem>
+        {isAdmin() && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <a href="/admin" className="flex items-center w-full">
+                <Shield className="w-4 h-4 mr-2" />
+                Admin Panel
+              </a>
+            </DropdownMenuItem>
+          </>
+        )}
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <a href="/contact" className="flex items-center w-full">
