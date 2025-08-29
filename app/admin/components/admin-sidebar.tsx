@@ -15,6 +15,7 @@ import {
   ChevronDown,
   ChevronRight,
   Palette,
+  Home,
 } from "lucide-react"
 import { useState } from "react"
 
@@ -103,6 +104,16 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
 
         {/* Navigation */}
         <nav className="p-4 space-y-2">
+          {/* Back to Home Button */}
+          <Link
+            href="/"
+            className="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-700 mb-4"
+            onClick={onClose}
+          >
+            <Home className="h-5 w-5" />
+            <span>← Về trang chủ</span>
+          </Link>
+
           {navigation.map((item) => {
             const isActive = pathname === item.href
             return (

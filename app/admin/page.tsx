@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -10,12 +10,14 @@ import { Label } from "@/components/ui/label"
 import { Users, CreditCard, TrendingUp, Activity, DollarSign, UserCheck, Lock } from "lucide-react"
 
 export default function AdminDashboard() {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem("admin_authenticated") === "true"
-  })
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
+
+  useEffect(() => {
+    setIsAuthenticated(localStorage.getItem("admin_authenticated") === "true")
+  }, [])
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
