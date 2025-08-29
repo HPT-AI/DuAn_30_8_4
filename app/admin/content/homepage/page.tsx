@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import type React from "react"
 
 import { Button } from "@/components/ui/button"
@@ -186,6 +186,19 @@ export default function HomepageContentPage() {
       copyright: "© 2024 ConstructVN. Tất cả quyền được bảo lưu.",
     },
   })
+
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const hash = window.location.hash
+    if (hash) {
+      // slight delay to ensure DOM is ready
+      setTimeout(() => {
+        const el = document.querySelector(hash)
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 50)
+    }
+  }, [])
 
   const getIconComponent = (iconName: string) => {
     const icons = {
