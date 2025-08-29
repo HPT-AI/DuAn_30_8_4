@@ -4,8 +4,10 @@ import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Bell, ArrowLeft, User, Settings, LogOut, Globe } from "lucide-react"
 import Link from "next/link"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function AdminAgentLayout({
   children,
@@ -14,10 +16,11 @@ export default function AdminAgentLayout({
 }) {
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const router = useRouter()
+  const { language, setLanguage } = useLanguage()
 
   const handleLogout = () => {
     localStorage.removeItem("admin_authenticated")
-    router.push("/admin")
+    router.push("/")
   }
 
   return (
@@ -36,6 +39,23 @@ export default function AdminAgentLayout({
           </div>
 
           <div className="flex items-center gap-3">
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center space-x-2 text-sm text-slate-400 hover:text-cyan-400 transition-colors">
+                <Globe className="w-4 h-4" />
+                <span>{language === "vi" ? "🇻🇳 VN" : "🇺🇸 EN"}</span>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-slate-800 border-slate-700">
+                <DropdownMenuItem onClick={() => setLanguage("vi")} className="flex items-center space-x-2 text-slate-300 hover:text-cyan-400 hover:bg-slate-700">
+                  <span>🇻🇳</span>
+                  <span>Tiếng Việt</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLanguage("en")} className="flex items-center space-x-2 text-slate-300 hover:text-cyan-400 hover:bg-slate-700">
+                  <span>🇺🇸</span>
+                  <span>English</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white">
               <Bell className="h-5 w-5" />
             </Button>
@@ -70,10 +90,17 @@ export default function AdminAgentLayout({
                       <Settings className="w-4 h-4 mr-3" />
                       Cài đặt
                     </button>
-                    <button className="flex items-center w-full px-4 py-2 text-sm text-slate-300 hover:bg-slate-700 hover:text-white">
-                      <Globe className="w-4 h-4 mr-3" />
-                      Ngôn ngữ
-                    </button>
+                    <div className="px-2 py-1">
+                      <div className="text-xs uppercase text-slate-400 px-2 pb-1">Ngôn ngữ</div>
+                      <div className="flex items-center gap-2 px-2 pb-2">
+                        <Button variant="outline" size="sm" className="h-7 text-xs" onClick={() => setLanguage("vi")}>
+                          🇻🇳 Tiếng Việt
+                        </Button>
+                        <Button variant="outline" size="sm" className="h-7 text-xs" onClick={() => setLanguage("en")}>
+                          🇺🇸 English
+                        </Button>
+                      </div>
+                    </div>
                   </div>
                   
                   <div className="border-t border-slate-700">
