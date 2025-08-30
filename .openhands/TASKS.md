@@ -1,17 +1,17 @@
 # Task List
 
-1. ✅ Tìm tất cả form có input password trong dự án
+1. ✅ Kiểm tra và khởi động Docker daemon
 
-2. ✅ Thêm biểu tượng con mắt cho form đăng nhập admin
+2. ✅ Tạo Dockerfile cho Next.js application
 
-3. ✅ Thêm biểu tượng con mắt cho login modal
+3. ✅ Tạo docker-compose.yml để quản lý services
 
-4. ✅ Thêm biểu tượng con mắt cho agent login forms
+4. ✅ Tạo .dockerignore để tối ưu build process
 
-5. ✅ Thêm biểu tượng con mắt cho settings password forms
+5. ✅ Build Docker image và test
 
-6. ✅ Thêm biểu tượng con mắt cho forgot password forms
+6. ✅ Chạy ứng dụng bằng Docker và xác nhận
 
-7. 🔄 Test tất cả form password với biểu tượng con mắt
+7. 🔄 Cập nhật documentation và push lên GitHub
 
 
