@@ -71,20 +71,20 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
   ]
 
   const contentPages = [
-    { name: "Về chúng tôi", href: "/admin/content/about" },
-    { name: "Dịch vụ", href: "/admin/content/services" },
-    { name: "Liên hệ", href: "/admin/content/contact" },
-    { name: "Đăng ký", href: "/admin/content/register" },
-    { name: "Đăng nhập", href: "/admin/content/login" },
+    { name: isHydrated ? t("admin.sidebar.content.about") : "Về chúng tôi", href: "/admin/content/about" },
+    { name: isHydrated ? t("admin.sidebar.content.services") : "Dịch vụ", href: "/admin/content/services" },
+    { name: isHydrated ? t("admin.sidebar.content.contact") : "Liên hệ", href: "/admin/content/contact" },
+    { name: isHydrated ? t("admin.sidebar.content.register") : "Đăng ký", href: "/admin/content/register" },
+    { name: isHydrated ? t("admin.sidebar.content.login") : "Đăng nhập", href: "/admin/content/login" },
   ]
 
   const homepageSubsections = [
-    { name: "Tổng quan", href: "/admin/content/homepage" },
-    { name: "Hero Section", href: "/admin/content/homepage/hero" },
-    { name: "Tính năng nổi bật", href: "/admin/content/homepage/features" },
-    { name: "Tại sao chọn chúng tôi", href: "/admin/content/homepage/why-choose-us" },
-    { name: "CTA - Sẵn sàng bắt đầu", href: "/admin/content/homepage/cta" },
-    { name: "Footer", href: "/admin/content/homepage/footer" },
+    { name: isHydrated ? t("admin.sidebar.homepage.overview") : "Tổng quan", href: "/admin/content/homepage" },
+    { name: isHydrated ? t("admin.sidebar.homepage.hero") : "Hero Section", href: "/admin/content/homepage/hero" },
+    { name: isHydrated ? t("admin.sidebar.homepage.features") : "Tính năng nổi bật", href: "/admin/content/homepage/features" },
+    { name: isHydrated ? t("admin.sidebar.homepage.why_choose") : "Tại sao chọn chúng tôi", href: "/admin/content/homepage/why-choose-us" },
+    { name: isHydrated ? t("admin.sidebar.homepage.cta") : "CTA - Sẵn sàng bắt đầu", href: "/admin/content/homepage/cta" },
+    { name: isHydrated ? t("admin.sidebar.homepage.footer") : "Footer", href: "/admin/content/homepage/footer" },
   ]
 
   return (
@@ -150,7 +150,7 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
             >
               <div className="flex items-center space-x-3">
                 <FileText className="h-5 w-5" />
-                <span>Quản lý nội dung</span>
+                <span>{isHydrated ? t("admin.sidebar.content") : "Quản lý nội dung"}</span>
               </div>
               {isContentOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
             </button>
@@ -167,7 +167,7 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                         : "text-slate-400 hover:text-white hover:bg-slate-800",
                     )}
                   >
-                    <span>Trang chủ</span>
+                    <span>{isHydrated ? t("admin.sidebar.homepage") : "Trang chủ"}</span>
                     {isHomepageOpen ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
                   </button>
 
