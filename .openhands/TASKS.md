@@ -1,15 +1,17 @@
 # Task List
 
-1. ✅ Phân tích màu sắc hiện tại của các trang subscription và subscribe
+1. ✅ Tìm tất cả form có input password trong dự án
 
-2. ✅ Kiểm tra màu sắc chủ đạo của trang chủ
+2. ✅ Thêm biểu tượng con mắt cho form đăng nhập admin
 
-3. ✅ Cập nhật màu sắc và thêm nút quay về cho trang subscription
+3. ✅ Thêm biểu tượng con mắt cho login modal
 
-4. ✅ Cập nhật màu sắc cho trang subscribe
+4. ✅ Thêm biểu tượng con mắt cho agent login forms
 
-5. ✅ Kiểm tra và test các trang sau khi cập nhật
+5. ✅ Thêm biểu tượng con mắt cho settings password forms
 
-6. ✅ Khôi phục liên kết Admin Panel trong user menu
+6. ✅ Thêm biểu tượng con mắt cho forgot password forms
+
+7. 🔄 Test tất cả form password với biểu tượng con mắt
 
 

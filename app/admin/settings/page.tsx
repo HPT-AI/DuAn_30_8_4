@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Shield, Mail, Database, Globe } from "lucide-react"
+import { Shield, Mail, Database, Globe, Eye, EyeOff } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 
 export default function AdminSettingsPage() {
@@ -25,6 +25,8 @@ export default function AdminSettingsPage() {
     maxFileSize: "10",
     sessionTimeout: "30",
   })
+
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleSettingChange = (key: string, value: any) => {
     setSettings((prev) => ({ ...prev, [key]: value }))
@@ -243,11 +245,20 @@ export default function AdminSettingsPage() {
                   </div>
                   <div>
                     <Label className="text-slate-300">Password</Label>
-                    <Input
-                      type="password"
-                      placeholder="••••••••"
-                      className="bg-slate-700 border-slate-600 text-white"
-                    />
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="••••••••"
+                        className="bg-slate-700 border-slate-600 text-white pr-10"
+                      />
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white transition-colors"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
                   </div>
                 </div>
                 <div className="space-y-4">

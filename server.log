@@ -1,509 +1,146 @@
 
 > my-v0-project@0.1.0 dev /workspace/Khuongcuoicung
-> next dev --port 12000 --hostname 0.0.0.0
+> next dev -H 0.0.0.0
 
   ▲ Next.js 14.2.16
   - Local:        http://localhost:12000
   - Network:      http://0.0.0.0:12000
 
  ✓ Starting...
-Attention: Next.js now collects completely anonymous telemetry regarding usage.
-This information is used to shape Next.js' roadmap and prioritize features.
-You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
-https://nextjs.org/telemetry
-
- ✓ Ready in 1255ms
+ ✓ Ready in 1717ms
  ○ Compiling / ...
- ✓ Compiled / in 3.9s (780 modules)
- HEAD / 200 in 4130ms
- GET / 200 in 34ms
- ✓ Compiled in 453ms (389 modules)
- ✓ Compiled in 289ms (389 modules)
- GET / 200 in 52ms
- ○ Compiling /admin ...
- ✓ Compiled /admin in 730ms (791 modules)
- ○ Compiling /admin/content/homepage ...
- ✓ Compiled /admin/content/homepage in 625ms (822 modules)
- GET / 200 in 137ms
- ✓ Compiled in 319ms (423 modules)
- ✓ Compiled in 295ms (423 modules)
- ✓ Compiled in 316ms (423 modules)
- ✓ Compiled in 302ms (423 modules)
- ✓ Compiled in 994ms (822 modules)
- ✓ Compiled in 276ms (423 modules)
- ✓ Compiled in 685ms (822 modules)
- ✓ Compiled in 262ms (423 modules)
- ✓ Compiled in 1040ms (836 modules)
- ✓ Compiled in 751ms (836 modules)
- ✓ Compiled in 550ms (836 modules)
- GET /admin 200 in 95ms
- ✓ Compiled /admin/content/homepage/cta in 299ms (830 modules)
- GET /admin/content/homepage/cta 200 in 405ms
- ✓ Compiled /admin/content/homepage/footer in 274ms (844 modules)
- GET /admin/content/homepage/footer 200 in 338ms
- ✓ Compiled in 361ms (432 modules)
- GET / 200 in 57ms
- ○ Compiling /admin/content/homepage/why-choose-us ...
- ✓ Compiled /admin/content/homepage/why-choose-us in 719ms (852 modules)
- ○ Compiling /admin/content/homepage/features ...
- ✓ Compiled /admin/content/homepage/features in 695ms (860 modules)
- ✓ Compiled /admin/content/homepage/hero in 394ms (868 modules)
- ○ Compiling /subscribe ...
- ✓ Compiled /subscribe in 650ms (897 modules)
- GET / 200 in 116ms
- ○ Compiling /subscription ...
- ✓ Compiled /subscription in 656ms (917 modules)
- GET /subscription 200 in 765ms
- GET / 200 in 58ms
- GET / 200 in 28ms
- ✓ Compiled /agent-frontend in 391ms (913 modules)
- GET / 200 in 79ms
- GET / 200 in 45ms
- ✓ Compiled in 672ms (475 modules)
- ✓ Compiled in 243ms (475 modules)
- ✓ Compiled in 233ms (475 modules)
- ✓ Compiled in 810ms (909 modules)
- ⨯ ./app/subscription/page.tsx
-Error: 
-  [31mx[0m Unexpected token `div`. Expected jsx identifier
-     ,-[[36;1;4m/workspace/Khuongcuoicung/app/subscription/page.tsx[0m:251:1]
- [2m251[0m |   }
- [2m252[0m | 
- [2m253[0m |   return (
- [2m254[0m |     <div className="min-h-screen bg-slate-900 text-white">
-     : [31;1m     ^^^[0m
- [2m255[0m |       {/* Header */}
- [2m256[0m |       <header className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50">
- [2m257[0m |         <div className="container mx-auto px-4 py-4">
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./app/subscription/page.tsx
- ○ Compiling /_error ...
- ⨯ ./app/subscription/page.tsx
-Error: 
-  [31mx[0m Unexpected token `div`. Expected jsx identifier
-     ,-[[36;1;4m/workspace/Khuongcuoicung/app/subscription/page.tsx[0m:251:1]
- [2m251[0m |   }
- [2m252[0m | 
- [2m253[0m |   return (
- [2m254[0m |     <div className="min-h-screen bg-slate-900 text-white">
-     : [31;1m     ^^^[0m
- [2m255[0m |       {/* Header */}
- [2m256[0m |       <header className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50">
- [2m257[0m |         <div className="container mx-auto px-4 py-4">
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./app/subscription/page.tsx
- GET /admin/content/homepage/footer 500 in 31ms
- ⨯ ./app/subscription/page.tsx
-Error: 
-  [31mx[0m Unexpected token `div`. Expected jsx identifier
-     ,-[[36;1;4m/workspace/Khuongcuoicung/app/subscription/page.tsx[0m:251:1]
- [2m251[0m |   }
- [2m252[0m | 
- [2m253[0m |   return (
- [2m254[0m |     <div className="min-h-screen bg-slate-900 text-white">
-     : [31;1m     ^^^[0m
- [2m255[0m |       {/* Header */}
- [2m256[0m |       <header className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50">
- [2m257[0m |         <div className="container mx-auto px-4 py-4">
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./app/subscription/page.tsx
- GET /_next/static/webpack/9047dff732810ad7.webpack.hot-update.json 500 in 625ms
- GET /_next/static/webpack/b619376baf36fde9.webpack.hot-update.json 500 in 423ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /admin/content/homepage/footer 500 in 51ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /subscribe?plan=professional&billing=monthly 500 in 53ms
-<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/workspace/Khuongcuoicung/.next/cache/webpack/client-development-fallback/0.pack.gz_' -> '/workspace/Khuongcuoicung/.next/cache/webpack/client-development-fallback/0.pack.gz'
- ⨯ ./app/subscription/page.tsx
-Error: 
-  [31mx[0m Unexpected token `div`. Expected jsx identifier
-     ,-[[36;1;4m/workspace/Khuongcuoicung/app/subscription/page.tsx[0m:251:1]
- [2m251[0m |   }
- [2m252[0m | 
- [2m253[0m |   return (
- [2m254[0m |     <div className="min-h-screen bg-slate-900 text-white">
-     : [31;1m     ^^^[0m
- [2m255[0m |       {/* Header */}
- [2m256[0m |       <header className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50">
- [2m257[0m |         <div className="container mx-auto px-4 py-4">
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./app/subscription/page.tsx
- GET /_next/static/webpack/b619376baf36fde9.webpack.hot-update.json 500 in 517ms
- GET /_next/static/webpack/b619376baf36fde9.webpack.hot-update.json 500 in 270ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /admin/content/homepage/footer 500 in 29ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /subscribe?plan=professional&billing=monthly 200 in 11ms
- GET /subscribe?plan=professional&billing=monthly 500 in 14ms
- ⨯ ./app/subscription/page.tsx
-Error: 
-  [31mx[0m Unexpected token `div`. Expected jsx identifier
-     ,-[[36;1;4m/workspace/Khuongcuoicung/app/subscription/page.tsx[0m:251:1]
- [2m251[0m |   }
- [2m252[0m | 
- [2m253[0m |   return (
- [2m254[0m |     <div className="min-h-screen bg-slate-900 text-white">
-     : [31;1m     ^^^[0m
- [2m255[0m |       {/* Header */}
- [2m256[0m |       <header className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50">
- [2m257[0m |         <div className="container mx-auto px-4 py-4">
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./app/subscription/page.tsx
- GET /_next/static/webpack/b619376baf36fde9.webpack.hot-update.json 500 in 471ms
- GET /_next/static/webpack/b619376baf36fde9.webpack.hot-update.json 500 in 261ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /admin/content/homepage/footer 500 in 45ms
- GET /subscribe?plan=professional&billing=monthly 500 in 13ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /subscribe?plan=professional&billing=monthly 500 in 19ms
- ⨯ ./app/subscription/page.tsx
-Error: 
-  [31mx[0m Unexpected token `div`. Expected jsx identifier
-     ,-[[36;1;4m/workspace/Khuongcuoicung/app/subscription/page.tsx[0m:251:1]
- [2m251[0m |   }
- [2m252[0m | 
- [2m253[0m |   return (
- [2m254[0m |     <div className="min-h-screen bg-slate-900 text-white">
-     : [31;1m     ^^^[0m
- [2m255[0m |       {/* Header */}
- [2m256[0m |       <header className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50">
- [2m257[0m |         <div className="container mx-auto px-4 py-4">
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./app/subscription/page.tsx
- GET /_next/static/webpack/b619376baf36fde9.webpack.hot-update.json 500 in 598ms
- GET /_next/static/webpack/b619376baf36fde9.webpack.hot-update.json 500 in 386ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /admin/content/homepage/footer 500 in 24ms
- GET /subscribe?plan=professional&billing=monthly 200 in 7ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /subscribe?plan=professional&billing=monthly 500 in 14ms
- ⨯ ./app/subscription/page.tsx
-Error: 
-  [31mx[0m Unexpected token `div`. Expected jsx identifier
-     ,-[[36;1;4m/workspace/Khuongcuoicung/app/subscription/page.tsx[0m:251:1]
- [2m251[0m |   }
- [2m252[0m | 
- [2m253[0m |   return (
- [2m254[0m |     <div className="min-h-screen bg-slate-900 text-white">
-     : [31;1m     ^^^[0m
- [2m255[0m |       {/* Header */}
- [2m256[0m |       <header className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50">
- [2m257[0m |         <div className="container mx-auto px-4 py-4">
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./app/subscription/page.tsx
- GET /_next/static/webpack/b619376baf36fde9.webpack.hot-update.json 500 in 468ms
- GET /_next/static/webpack/b619376baf36fde9.webpack.hot-update.json 500 in 231ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /admin/content/homepage/footer 500 in 16ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /subscribe?plan=professional&billing=monthly 500 in 19ms
- ⨯ ./app/subscription/page.tsx
-Error: 
-  [31mx[0m Unexpected token `div`. Expected jsx identifier
-     ,-[[36;1;4m/workspace/Khuongcuoicung/app/subscription/page.tsx[0m:251:1]
- [2m251[0m |   }
- [2m252[0m | 
- [2m253[0m |   return (
- [2m254[0m |     <div className="min-h-screen bg-slate-900 text-white">
-     : [31;1m     ^^^[0m
- [2m255[0m |       {/* Header */}
- [2m256[0m |       <header className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50">
- [2m257[0m |         <div className="container mx-auto px-4 py-4">
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./app/subscription/page.tsx
- GET /_next/static/webpack/b619376baf36fde9.webpack.hot-update.json 500 in 455ms
- GET /_next/static/webpack/b619376baf36fde9.webpack.hot-update.json 500 in 238ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /admin/content/homepage/footer 500 in 45ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /subscribe?plan=professional&billing=monthly 200 in 7ms
- GET /subscribe?plan=professional&billing=monthly 500 in 14ms
- ⨯ ./app/subscription/page.tsx
-Error: 
-  [31mx[0m Unexpected token `div`. Expected jsx identifier
-     ,-[[36;1;4m/workspace/Khuongcuoicung/app/subscription/page.tsx[0m:251:1]
- [2m251[0m |   }
- [2m252[0m | 
- [2m253[0m |   return (
- [2m254[0m |     <div className="min-h-screen bg-slate-900 text-white">
-     : [31;1m     ^^^[0m
- [2m255[0m |       {/* Header */}
- [2m256[0m |       <header className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50">
- [2m257[0m |         <div className="container mx-auto px-4 py-4">
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./app/subscription/page.tsx
- GET /_next/static/webpack/b619376baf36fde9.webpack.hot-update.json 500 in 704ms
- GET /_next/static/webpack/b619376baf36fde9.webpack.hot-update.json 500 in 295ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /admin/content/homepage/footer 500 in 17ms
- GET /subscribe?plan=professional&billing=monthly 500 in 16ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /subscribe?plan=professional&billing=monthly 500 in 17ms
- ⨯ ./app/subscription/page.tsx
-Error: 
-  [31mx[0m Unexpected token `div`. Expected jsx identifier
-     ,-[[36;1;4m/workspace/Khuongcuoicung/app/subscription/page.tsx[0m:251:1]
- [2m251[0m |   }
- [2m252[0m | 
- [2m253[0m |   return (
- [2m254[0m |     <div className="min-h-screen bg-slate-900 text-white">
-     : [31;1m     ^^^[0m
- [2m255[0m |       {/* Header */}
- [2m256[0m |       <header className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50">
- [2m257[0m |         <div className="container mx-auto px-4 py-4">
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./app/subscription/page.tsx
- GET /_next/static/webpack/b619376baf36fde9.webpack.hot-update.json 500 in 418ms
- GET /_next/static/webpack/b619376baf36fde9.webpack.hot-update.json 500 in 176ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /admin/content/homepage/footer 500 in 15ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /subscribe?plan=professional&billing=monthly 500 in 24ms
- ⨯ ./app/subscription/page.tsx
-Error: 
-  [31mx[0m Unexpected token `div`. Expected jsx identifier
-     ,-[[36;1;4m/workspace/Khuongcuoicung/app/subscription/page.tsx[0m:251:1]
- [2m251[0m |   }
- [2m252[0m | 
- [2m253[0m |   return (
- [2m254[0m |     <div className="min-h-screen bg-slate-900 text-white">
-     : [31;1m     ^^^[0m
- [2m255[0m |       {/* Header */}
- [2m256[0m |       <header className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50">
- [2m257[0m |         <div className="container mx-auto px-4 py-4">
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./app/subscription/page.tsx
- ⨯ ./app/subscription/page.tsx
-Error: 
-  [31mx[0m Unexpected token `div`. Expected jsx identifier
-     ,-[[36;1;4m/workspace/Khuongcuoicung/app/subscription/page.tsx[0m:251:1]
- [2m251[0m |   }
- [2m252[0m | 
- [2m253[0m |   return (
- [2m254[0m |     <div className="min-h-screen bg-slate-900 text-white">
-     : [31;1m     ^^^[0m
- [2m255[0m |       {/* Header */}
- [2m256[0m |       <header className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50">
- [2m257[0m |         <div className="container mx-auto px-4 py-4">
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./app/subscription/page.tsx
- GET /_next/static/webpack/b619376baf36fde9.webpack.hot-update.json 500 in 583ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- ⨯ ./app/subscription/page.tsx
-Error: 
-  [31mx[0m Unexpected token `div`. Expected jsx identifier
-     ,-[[36;1;4m/workspace/Khuongcuoicung/app/subscription/page.tsx[0m:251:1]
- [2m251[0m |   }
- [2m252[0m | 
- [2m253[0m |   return (
- [2m254[0m |     <div className="min-h-screen bg-slate-900 text-white">
-     : [31;1m     ^^^[0m
- [2m255[0m |       {/* Header */}
- [2m256[0m |       <header className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50">
- [2m257[0m |         <div className="container mx-auto px-4 py-4">
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./app/subscription/page.tsx
- ⨯ ./app/subscription/page.tsx
-Error: 
-  [31mx[0m Unexpected token `div`. Expected jsx identifier
-     ,-[[36;1;4m/workspace/Khuongcuoicung/app/subscription/page.tsx[0m:251:1]
- [2m251[0m |   }
- [2m252[0m | 
- [2m253[0m |   return (
- [2m254[0m |     <div className="min-h-screen bg-slate-900 text-white">
-     : [31;1m     ^^^[0m
- [2m255[0m |       {/* Header */}
- [2m256[0m |       <header className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50">
- [2m257[0m |         <div className="container mx-auto px-4 py-4">
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./app/subscription/page.tsx
- GET /_next/static/webpack/b619376baf36fde9.webpack.hot-update.json 500 in 698ms
- ⨯ ./app/subscription/page.tsx
-Error: 
-  [31mx[0m Unexpected token `div`. Expected jsx identifier
-     ,-[[36;1;4m/workspace/Khuongcuoicung/app/subscription/page.tsx[0m:251:1]
- [2m251[0m |   }
- [2m252[0m | 
- [2m253[0m |   return (
- [2m254[0m |     <div className="min-h-screen bg-slate-900 text-white">
-     : [31;1m     ^^^[0m
- [2m255[0m |       {/* Header */}
- [2m256[0m |       <header className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50">
- [2m257[0m |         <div className="container mx-auto px-4 py-4">
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./app/subscription/page.tsx
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /subscribe?plan=professional&billing=monthly 200 in 491ms
- ⨯ ./app/subscription/page.tsx
-Error: 
-  [31mx[0m Unexpected token `div`. Expected jsx identifier
-     ,-[[36;1;4m/workspace/Khuongcuoicung/app/subscription/page.tsx[0m:251:1]
- [2m251[0m |   }
- [2m252[0m | 
- [2m253[0m |   return (
- [2m254[0m |     <div className="min-h-screen bg-slate-900 text-white">
-     : [31;1m     ^^^[0m
- [2m255[0m |       {/* Header */}
- [2m256[0m |       <header className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-700/50">
- [2m257[0m |         <div className="container mx-auto px-4 py-4">
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./app/subscription/page.tsx
- GET /admin/content/homepage/footer 500 in 744ms
- GET /subscribe?plan=professional&billing=monthly 500 in 162ms
- ✓ Compiled /_not-found in 1109ms (1124 modules)
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /_next/static/webpack/b619376baf36fde9.webpack.hot-update.json 404 in 1352ms
- GET /admin/content/homepage/footer 200 in 258ms
- GET /_next/static/webpack/b619376baf36fde9.webpack.hot-update.json 404 in 1141ms
- GET /subscribe?plan=professional&billing=monthly 200 in 108ms
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /subscribe?plan=professional&billing=monthly 200 in 36ms
- ✓ Compiled in 250ms (662 modules)
- ✓ Compiled in 757ms (1138 modules)
- ✓ Compiled in 448ms (1138 modules)
- ✓ Compiled in 420ms (1138 modules)
- ✓ Compiled in 426ms (1138 modules)
- ✓ Compiled in 414ms (1138 modules)
- ✓ Compiled in 487ms (1138 modules)
- ✓ Compiled in 764ms (1135 modules)
- ✓ Compiled in 425ms (1135 modules)
- ✓ Compiled in 406ms (1135 modules)
- ✓ Compiled in 343ms (660 modules)
- GET /subscription 200 in 102ms
- GET /subscribe 200 in 42ms
- GET /subscription 200 in 44ms
- GET /subscribe 200 in 38ms
- ✓ Compiled in 529ms (660 modules)
- GET / 200 in 89ms
- GET / 200 in 43ms
- ○ Compiling /agent-frontend ...
- ✓ Compiled /agent-frontend in 826ms (493 modules)
- ○ Compiling /contact ...
- ✓ Compiled /contact in 1011ms (1144 modules)
- GET / 200 in 121ms
- GET / 200 in 54ms
- ✓ Compiled in 1326ms (1145 modules)
- ✓ Compiled in 534ms (1145 modules)
- ✓ Compiled in 926ms (1145 modules)
- ✓ Compiled in 634ms (1145 modules)
- GET / 200 in 154ms
- ○ Compiling /admin ...
- ✓ Compiled /admin in 574ms (488 modules)
- ✓ Compiled /admin/content/homepage/cta in 336ms (480 modules)
- ✓ Compiled in 425ms (665 modules)
- GET / 200 in 121ms
- GET / 200 in 47ms
- GET /contact 200 in 39ms
- GET / 200 in 55ms
- GET / 200 in 44ms
- GET / 200 in 39ms
+ ✓ Compiled / in 4.1s (780 modules)
+ HEAD / 200 in 4325ms
+ GET / 200 in 60ms
  GET / 200 in 35ms
- ✓ Compiled /subscription in 345ms (476 modules)
- GET /subscription 200 in 433ms
- GET / 200 in 55ms
- GET / 200 in 34ms
- GET / 200 in 46ms
- GET / 200 in 42ms
- GET / 200 in 37ms
- GET / 200 in 35ms
- GET / 200 in 36ms
- GET / 200 in 31ms
- GET / 200 in 37ms
- GET / 200 in 38ms
- GET /admin 200 in 34ms
  ○ Compiling /admin-agent ...
- ✓ Compiled /admin-agent in 1160ms (1139 modules)
- ○ Compiling /about ...
- ✓ Compiled /about in 607ms (1153 modules)
- GET / 200 in 113ms
- ✓ Compiled /agent-frontend in 165ms (499 modules)
- ✓ Compiled /agent-frontend/referral-links in 305ms (1166 modules)
- GET / 200 in 86ms
- GET / 200 in 39ms
- ✓ Compiled in 1245ms (1156 modules)
+ ✓ Compiled /admin-agent in 780ms (799 modules)
+ ✓ Compiled /admin in 287ms (818 modules)
+ GET / 200 in 121ms
+ GET / 200 in 49ms
+ GET / 200 in 30ms
+ ✓ Compiled in 410ms (421 modules)
+ ✓ Compiled in 278ms (421 modules)
+ ✓ Compiled in 239ms (421 modules)
+ ✓ Compiled in 294ms (421 modules)
+ ✓ Compiled in 931ms (832 modules)
  ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /agent-frontend/referral-links 200 in 85ms
- ✓ Compiled in 445ms (1156 modules)
+ GET /admin 200 in 81ms
+ ✓ Compiled in 582ms (832 modules)
  ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
- GET /agent-frontend/referral-links 200 in 52ms
- GET /agent-frontend/referral-links 200 in 36ms
+ GET /admin 200 in 70ms
+ ✓ Compiled in 267ms (421 modules)
+ ✓ Compiled in 513ms (832 modules)
+ ✓ Compiled in 251ms (421 modules)
+ ✓ Compiled in 408ms (832 modules)
+ ✓ Compiled in 433ms (832 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /admin 200 in 83ms
+ ✓ Compiled in 322ms (832 modules)
+ ✓ Compiled in 523ms (832 modules)
+ ✓ Compiled in 372ms (832 modules)
+ ✓ Compiled in 341ms (832 modules)
+ ✓ Compiled in 402ms (832 modules)
+ ✓ Compiled in 328ms (832 modules)
+ ✓ Compiled in 297ms (832 modules)
+ ✓ Compiled in 354ms (832 modules)
+ GET / 200 in 70ms
+ ✓ Compiled in 315ms (832 modules)
+ ✓ Compiled in 330ms (832 modules)
+ ✓ Compiled in 646ms (832 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /admin 200 in 45ms
+ ✓ Compiled in 409ms (832 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /admin 200 in 40ms
+ ✓ Compiled in 242ms (421 modules)
+ ✓ Compiled in 287ms (421 modules)
+ ✓ Compiled in 232ms (421 modules)
+ ✓ Compiled in 340ms (421 modules)
+ ✓ Compiled in 254ms (421 modules)
+ ✓ Compiled in 236ms (421 modules)
+ ✓ Compiled in 229ms (421 modules)
+ ✓ Compiled in 251ms (421 modules)
+ ✓ Compiled in 215ms (421 modules)
+ ✓ Compiled in 382ms (421 modules)
+ ✓ Compiled in 263ms (421 modules)
+ ✓ Compiled in 500ms (832 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /admin 200 in 87ms
+ ✓ Compiled in 420ms (832 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /admin 200 in 70ms
+ ✓ Compiled in 240ms (421 modules)
+ ✓ Compiled in 229ms (421 modules)
+ ✓ Compiled in 335ms (421 modules)
+ ✓ Compiled in 327ms (421 modules)
+ ✓ Compiled in 243ms (421 modules)
+ ✓ Compiled in 237ms (421 modules)
+ ✓ Compiled in 297ms (421 modules)
+ ✓ Compiled in 346ms (421 modules)
+ ✓ Compiled in 299ms (421 modules)
+ ✓ Compiled in 272ms (421 modules)
+ ✓ Compiled in 349ms (421 modules)
+ ✓ Compiled /_not-found in 398ms (821 modules)
+ GET / 404 in 691ms
+ ✓ Compiled in 621ms (421 modules)
+ ✓ Compiled in 360ms (421 modules)
+ ✓ Compiled in 336ms (421 modules)
+ ✓ Compiled in 316ms (421 modules)
+ ✓ Compiled in 302ms (421 modules)
+ ✓ Compiled in 260ms (421 modules)
+ ✓ Compiled in 265ms (421 modules)
+ ✓ Compiled in 317ms (421 modules)
+ ✓ Compiled in 265ms (421 modules)
+ ✓ Compiled in 319ms (421 modules)
+ ✓ Compiled in 323ms (421 modules)
+ ✓ Compiled in 309ms (421 modules)
+ ✓ Compiled in 1061ms (832 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /admin 200 in 89ms
+ ✓ Compiled in 627ms (832 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /admin 200 in 87ms
+ ✓ Compiled in 360ms (421 modules)
+ ✓ Compiled /_not-found in 468ms (821 modules)
+ GET / 404 in 754ms
+ GET /_next/static/webpack/25023fe7178d507f.webpack.hot-update.json 404 in 355ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /admin 200 in 38ms
+ ✓ Compiled in 303ms (423 modules)
+ GET /_next/static/webpack/09619a8194cfc145.webpack.hot-update.json 404 in 17ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /admin 200 in 26ms
+ ✓ Compiled in 312ms (423 modules)
+ GET /_next/static/webpack/37fd8330bf30e17f.webpack.hot-update.json 404 in 14ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /admin 200 in 24ms
+ ✓ Compiled in 309ms (423 modules)
+ GET /_next/static/webpack/7f453ac189d72b7e.webpack.hot-update.json 404 in 15ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /admin 200 in 25ms
+ ✓ Compiled in 929ms (835 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /admin 200 in 51ms
+ ✓ Compiled in 678ms (835 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /admin 200 in 43ms
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 1659ms (1047 modules)
+ GET / 404 in 2161ms
+ GET /_next/static/webpack/a12b492418ad012e.webpack.hot-update.json 404 in 306ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /admin 200 in 77ms
+ GET / 404 in 32ms
+ ✓ Compiled in 850ms (608 modules)
+ ✓ Compiled in 951ms (1061 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /admin 200 in 81ms
+ ✓ Compiled in 1045ms (1061 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /admin 200 in 88ms
+ GET / 404 in 42ms
+ GET / 404 in 33ms
+ GET / 404 in 30ms
+ GET / 404 in 29ms
+ ○ Compiling /_not-found ...

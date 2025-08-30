@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Settings, Bell, Lock, Globe, Save } from "lucide-react"
+import { Settings, Bell, Lock, Globe, Save, Eye, EyeOff } from "lucide-react"
 
 export default function SettingsPage() {
   const { t, language, setLanguage } = useLanguage()
@@ -29,6 +29,12 @@ export default function SettingsPage() {
     current: "",
     new: "",
     confirm: "",
+  })
+
+  const [showPasswords, setShowPasswords] = useState({
+    current: false,
+    new: false,
+    confirm: false,
   })
 
   return (
@@ -189,30 +195,60 @@ export default function SettingsPage() {
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="current">Mật khẩu hiện tại</Label>
-                    <Input
-                      id="current"
-                      type="password"
-                      value={passwordData.current}
-                      onChange={(e) => setPasswordData({ ...passwordData, current: e.target.value })}
-                    />
+                    <div className="relative">
+                      <Input
+                        id="current"
+                        type={showPasswords.current ? "text" : "password"}
+                        value={passwordData.current}
+                        onChange={(e) => setPasswordData({ ...passwordData, current: e.target.value })}
+                        className="pr-10"
+                      />
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+                        onClick={() => setShowPasswords({ ...showPasswords, current: !showPasswords.current })}
+                      >
+                        {showPasswords.current ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="new">Mật khẩu mới</Label>
-                    <Input
-                      id="new"
-                      type="password"
-                      value={passwordData.new}
-                      onChange={(e) => setPasswordData({ ...passwordData, new: e.target.value })}
-                    />
+                    <div className="relative">
+                      <Input
+                        id="new"
+                        type={showPasswords.new ? "text" : "password"}
+                        value={passwordData.new}
+                        onChange={(e) => setPasswordData({ ...passwordData, new: e.target.value })}
+                        className="pr-10"
+                      />
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+                        onClick={() => setShowPasswords({ ...showPasswords, new: !showPasswords.new })}
+                      >
+                        {showPasswords.new ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="confirm">Xác nhận mật khẩu mới</Label>
-                    <Input
-                      id="confirm"
-                      type="password"
-                      value={passwordData.confirm}
-                      onChange={(e) => setPasswordData({ ...passwordData, confirm: e.target.value })}
-                    />
+                    <div className="relative">
+                      <Input
+                        id="confirm"
+                        type={showPasswords.confirm ? "text" : "password"}
+                        value={passwordData.confirm}
+                        onChange={(e) => setPasswordData({ ...passwordData, confirm: e.target.value })}
+                        className="pr-10"
+                      />
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+                        onClick={() => setShowPasswords({ ...showPasswords, confirm: !showPasswords.confirm })}
+                      >
+                        {showPasswords.confirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
                   </div>
 
                   <div className="flex justify-end">

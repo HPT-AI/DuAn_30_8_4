@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Users, CreditCard, TrendingUp, Activity, DollarSign, UserCheck, Lock } from "lucide-react"
+import { Users, CreditCard, TrendingUp, Activity, DollarSign, UserCheck, Lock, Eye, EyeOff } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 
 export default function AdminDashboard() {
@@ -15,6 +15,7 @@ export default function AdminDashboard() {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
   const { t, isHydrated } = useLanguage()
 
   useEffect(() => {
@@ -69,15 +70,24 @@ export default function AdminDashboard() {
                 <Label htmlFor="password" className="text-slate-300">
                   {isHydrated ? t("admin.dashboard.password") : "Mật khẩu"}
                 </Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-400"
-                  placeholder={isHydrated ? t("admin.dashboard.password_placeholder") : "Nhập mật khẩu"}
-                  required
-                />
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-400 pr-10"
+                    placeholder={isHydrated ? t("admin.dashboard.password_placeholder") : "Nhập mật khẩu"}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white transition-colors"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
               </div>
               {error && <div className="text-red-400 text-sm text-center bg-red-500/10 p-2 rounded">{error}</div>}
               <Button type="submit" className="w-full bg-red-600 hover:bg-red-700 text-white">
