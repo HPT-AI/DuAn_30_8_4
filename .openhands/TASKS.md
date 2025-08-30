@@ -1,17 +1,11 @@
 # Task List
 
-1. ✅ Kiểm tra và khởi động Docker daemon
+1. ✅ Kiểm tra trạng thái hiện tại của repository
 
-2. ✅ Tạo Dockerfile cho Next.js application
+2. 🔄 Cập nhật remote URL với token mới
 
-3. ✅ Tạo docker-compose.yml để quản lý services
+3. ⏳ Push tất cả thay đổi Docker lên GitHub
 
-4. ✅ Tạo .dockerignore để tối ưu build process
-
-5. ✅ Build Docker image và test
-
-6. ✅ Chạy ứng dụng bằng Docker và xác nhận
-
-7. 🔄 Cập nhật documentation và push lên GitHub
+4. ⏳ Xác nhận và kiểm tra repository trên GitHub
 
 
