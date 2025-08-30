@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Service</title>
+</head>
+<body>
+    <h1>User Service Mock</h1>
+    <p>This is a mock user service for testing the API Gateway.</p>
+    <script>
+        // Simple health check endpoint simulation
+        if (window.location.pathname === '/health') {
+            document.body.innerHTML = JSON.stringify({
+                status: 'healthy',
+                service: 'user-service',
+                timestamp: new Date().toISOString()
+            });
+        }
+    </script>
+</body>
+</html>

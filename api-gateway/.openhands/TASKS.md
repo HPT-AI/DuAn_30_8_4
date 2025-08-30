@@ -16,8 +16,8 @@
 
 8. ✅ Tạo configuration management
 
-9. 🔄 Viết documentation và Docker setup
+9. ✅ Viết documentation và Docker setup
 
-10. ⏳ Testing và deployment
+10. ✅ Testing và deployment
 
 
