@@ -11,9 +11,16 @@ DuAn_30_8/
 ├── docker-compose.yml          # File chính để chạy tất cả services
 ├── agent-frontend/
 │   └── Dockerfile             # Dockerfile cho Next.js frontend
-├── api-gateway/
-│   ├── Dockerfile             # Dockerfile cho API Gateway
-│   └── .dockerignore          # Ignore file cho API Gateway
+├── kong-gateway/              # Kong Gateway configuration
+│   ├── Dockerfile             # Kong Gateway container
+│   ├── kong.yml               # Declarative configuration
+│   ├── config/
+│   │   └── kong.conf          # Kong configuration file
+│   ├── scripts/
+│   │   ├── init-kong.sh       # Initialization script
+│   │   └── setup-jwt.sh       # JWT setup script
+│   └── README.md              # Kong Gateway documentation
+├── api-gateway/               # Legacy API Gateway (deprecated)
 ├── .dockerignore              # Ignore file cho frontend build
 └── DOCKER_COMPOSE_GUIDE.md    # File hướng dẫn này
 ```
@@ -25,19 +32,24 @@ DuAn_30_8/
    - Container: khuongcuoicung-app
    - Mô tả: Ứng dụng Next.js chính
 
-2. **api-gateway** (API Gateway)
-   - Port: 8080 → 8080
-   - Container: api-gateway
-   - Mô tả: Cổng API chính để định tuyến các request
+2. **kong-database** (Kong Database)
+   - Port: 5432 (internal)
+   - Container: kong-database
+   - Mô tả: PostgreSQL database cho Kong Gateway
 
-3. **redis** (Cache & Rate Limiting)
+3. **kong-gateway** (API Gateway)
+   - Port: 8080 → 8000 (Proxy), 8001 (Admin API)
+   - Container: kong-gateway
+   - Mô tả: Kong Gateway với JWT auth, rate limiting, CORS, monitoring
+
+4. **redis** (Cache & Rate Limiting)
    - Port: 6379 → 6379
    - Container: api-gateway-redis
-   - Mô tả: Redis cho caching và rate limiting
+   - Mô tả: Redis cho caching và rate limiting (legacy)
 
 ### Backend Microservices (7 services):
 
-4. **user-service**
+5. **user-service**
    - Port: 3001 → 80
    - Container: user-service
    - Mô tả: Dịch vụ quản lý người dùng

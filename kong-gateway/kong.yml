@@ -1,0 +1,617 @@
+# Kong Gateway Configuration
+# This file defines the Kong Gateway configuration for the MathService project
+
+_format_version: "3.0"
+_transform: true
+
+# Services - Backend microservices
+services:
+  # User Service (Authify)
+  - name: authify-service
+    url: http://authify:3001
+    protocol: http
+    host: authify
+    port: 3001
+    path: /
+    connect_timeout: 60000
+    write_timeout: 60000
+    read_timeout: 60000
+    retries: 5
+    tags:
+      - microservice
+      - authentication
+
+  # Payment Service
+  - name: payment-service
+    url: http://payment-service:3002
+    protocol: http
+    host: payment-service
+    port: 3002
+    path: /
+    connect_timeout: 60000
+    write_timeout: 60000
+    read_timeout: 60000
+    retries: 5
+    tags:
+      - microservice
+      - payment
+
+  # Agent Policy Service
+  - name: agent-policy-service
+    url: http://agent-policy-service:3003
+    protocol: http
+    host: agent-policy-service
+    port: 3003
+    path: /
+    connect_timeout: 60000
+    write_timeout: 60000
+    read_timeout: 60000
+    retries: 5
+    tags:
+      - microservice
+      - policy
+
+  # Admin Service
+  - name: admin-service
+    url: http://admin-service:3004
+    protocol: http
+    host: admin-service
+    port: 3004
+    path: /
+    connect_timeout: 60000
+    write_timeout: 60000
+    read_timeout: 60000
+    retries: 5
+    tags:
+      - microservice
+      - admin
+
+  # Admin Management Service
+  - name: admin-management-service
+    url: http://admin-management-service:3005
+    protocol: http
+    host: admin-management-service
+    port: 3005
+    path: /
+    connect_timeout: 60000
+    write_timeout: 60000
+    read_timeout: 60000
+    retries: 5
+    tags:
+      - microservice
+      - management
+
+  # Content Service
+  - name: content-service
+    url: http://content-service:3006
+    protocol: http
+    host: content-service
+    port: 3006
+    path: /
+    connect_timeout: 60000
+    write_timeout: 60000
+    read_timeout: 60000
+    retries: 5
+    tags:
+      - microservice
+      - content
+
+  # Botpress Service
+  - name: botpress-service
+    url: http://botpress:3000
+    protocol: http
+    host: botpress
+    port: 3000
+    path: /
+    connect_timeout: 60000
+    write_timeout: 60000
+    read_timeout: 60000
+    retries: 5
+    tags:
+      - microservice
+      - chatbot
+
+# Routes - API endpoints routing
+routes:
+  # Authentication routes
+  - name: auth-login
+    service: authify-service
+    paths:
+      - /api/auth/login
+    methods:
+      - POST
+    strip_path: false
+    preserve_host: false
+    tags:
+      - auth
+      - public
+
+  - name: auth-register
+    service: authify-service
+    paths:
+      - /api/auth/register
+    methods:
+      - POST
+    strip_path: false
+    preserve_host: false
+    tags:
+      - auth
+      - public
+
+  - name: auth-refresh
+    service: authify-service
+    paths:
+      - /api/auth/refresh
+    methods:
+      - POST
+    strip_path: false
+    preserve_host: false
+    tags:
+      - auth
+      - protected
+
+  - name: auth-logout
+    service: authify-service
+    paths:
+      - /api/auth/logout
+    methods:
+      - POST
+    strip_path: false
+    preserve_host: false
+    tags:
+      - auth
+      - protected
+
+  - name: auth-profile
+    service: authify-service
+    paths:
+      - /api/auth/profile
+    methods:
+      - GET
+      - PUT
+    strip_path: false
+    preserve_host: false
+    tags:
+      - auth
+      - protected
+
+  # User management routes
+  - name: users-routes
+    service: authify-service
+    paths:
+      - /api/users
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+    strip_path: false
+    preserve_host: false
+    tags:
+      - users
+      - protected
+
+  # Payment routes
+  - name: payment-routes
+    service: payment-service
+    paths:
+      - /api/payments
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+    strip_path: false
+    preserve_host: false
+    tags:
+      - payments
+      - protected
+
+  # Agent Policy routes
+  - name: agent-policy-routes
+    service: agent-policy-service
+    paths:
+      - /api/agent-policies
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+    strip_path: false
+    preserve_host: false
+    tags:
+      - policies
+      - protected
+
+  # Admin routes
+  - name: admin-routes
+    service: admin-service
+    paths:
+      - /api/admin
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+    strip_path: false
+    preserve_host: false
+    tags:
+      - admin
+      - protected
+
+  # Admin Management routes
+  - name: admin-management-routes
+    service: admin-management-service
+    paths:
+      - /api/admin-management
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+    strip_path: false
+    preserve_host: false
+    tags:
+      - management
+      - protected
+
+  # Content routes
+  - name: content-routes
+    service: content-service
+    paths:
+      - /api/content
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+    strip_path: false
+    preserve_host: false
+    tags:
+      - content
+      - protected
+
+  # Botpress routes
+  - name: botpress-routes
+    service: botpress-service
+    paths:
+      - /api/chatbot
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+    strip_path: false
+    preserve_host: false
+    tags:
+      - chatbot
+      - protected
+
+  # Health check route
+  - name: health-check
+    service: authify-service
+    paths:
+      - /api/health
+    methods:
+      - GET
+    strip_path: false
+    preserve_host: false
+    tags:
+      - health
+      - public
+
+# Consumers - API clients
+consumers:
+  - username: frontend-client
+    custom_id: frontend-client
+    tags:
+      - frontend
+      - client
+
+  - username: admin-client
+    custom_id: admin-client
+    tags:
+      - admin
+      - client
+
+  - username: agent-client
+    custom_id: agent-client
+    tags:
+      - agent
+      - client
+
+# Plugins - Kong plugins configuration
+plugins:
+  # Global CORS plugin
+  - name: cors
+    config:
+      origins:
+        - "http://localhost:12000"
+        - "http://localhost:12001"
+        - "https://work-1-mrkbqxbmzqirrkwn.prod-runtime.all-hands.dev"
+        - "https://work-2-mrkbqxbmzqirrkwn.prod-runtime.all-hands.dev"
+      methods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - OPTIONS
+        - HEAD
+        - PATCH
+      headers:
+        - Accept
+        - Accept-Version
+        - Content-Length
+        - Content-MD5
+        - Content-Type
+        - Date
+        - Authorization
+        - X-Auth-Token
+      exposed_headers:
+        - X-Auth-Token
+      credentials: true
+      max_age: 3600
+    tags:
+      - global
+      - cors
+
+  # Global rate limiting plugin
+  - name: rate-limiting
+    config:
+      minute: 100
+      hour: 1000
+      day: 10000
+      policy: local
+      fault_tolerant: true
+      hide_client_headers: false
+    tags:
+      - global
+      - rate-limiting
+
+  # Global request logging plugin
+  - name: file-log
+    config:
+      path: /tmp/kong-access.log
+      reopen: true
+    tags:
+      - global
+      - logging
+
+  # Global Prometheus metrics plugin
+  - name: prometheus
+    config:
+      per_consumer: true
+      status_code_metrics: true
+      latency_metrics: true
+      bandwidth_metrics: true
+      upstream_health_metrics: true
+    tags:
+      - global
+      - monitoring
+
+  # JWT Authentication for protected routes
+  - name: jwt
+    route: auth-refresh
+    config:
+      uri_param_names:
+        - jwt
+      cookie_names:
+        - jwt
+      header_names:
+        - authorization
+      claims_to_verify:
+        - exp
+        - iat
+      key_claim_name: iss
+      secret_is_base64: false
+      anonymous: null
+      run_on_preflight: true
+    tags:
+      - auth
+      - jwt
+
+  - name: jwt
+    route: auth-logout
+    config:
+      uri_param_names:
+        - jwt
+      cookie_names:
+        - jwt
+      header_names:
+        - authorization
+      claims_to_verify:
+        - exp
+        - iat
+      key_claim_name: iss
+      secret_is_base64: false
+      anonymous: null
+      run_on_preflight: true
+    tags:
+      - auth
+      - jwt
+
+  - name: jwt
+    route: auth-profile
+    config:
+      uri_param_names:
+        - jwt
+      cookie_names:
+        - jwt
+      header_names:
+        - authorization
+      claims_to_verify:
+        - exp
+        - iat
+      key_claim_name: iss
+      secret_is_base64: false
+      anonymous: null
+      run_on_preflight: true
+    tags:
+      - auth
+      - jwt
+
+  - name: jwt
+    route: users-routes
+    config:
+      uri_param_names:
+        - jwt
+      cookie_names:
+        - jwt
+      header_names:
+        - authorization
+      claims_to_verify:
+        - exp
+        - iat
+      key_claim_name: iss
+      secret_is_base64: false
+      anonymous: null
+      run_on_preflight: true
+    tags:
+      - auth
+      - jwt
+
+  - name: jwt
+    route: payment-routes
+    config:
+      uri_param_names:
+        - jwt
+      cookie_names:
+        - jwt
+      header_names:
+        - authorization
+      claims_to_verify:
+        - exp
+        - iat
+      key_claim_name: iss
+      secret_is_base64: false
+      anonymous: null
+      run_on_preflight: true
+    tags:
+      - auth
+      - jwt
+
+  - name: jwt
+    route: agent-policy-routes
+    config:
+      uri_param_names:
+        - jwt
+      cookie_names:
+        - jwt
+      header_names:
+        - authorization
+      claims_to_verify:
+        - exp
+        - iat
+      key_claim_name: iss
+      secret_is_base64: false
+      anonymous: null
+      run_on_preflight: true
+    tags:
+      - auth
+      - jwt
+
+  - name: jwt
+    route: admin-routes
+    config:
+      uri_param_names:
+        - jwt
+      cookie_names:
+        - jwt
+      header_names:
+        - authorization
+      claims_to_verify:
+        - exp
+        - iat
+      key_claim_name: iss
+      secret_is_base64: false
+      anonymous: null
+      run_on_preflight: true
+    tags:
+      - auth
+      - jwt
+
+  - name: jwt
+    route: admin-management-routes
+    config:
+      uri_param_names:
+        - jwt
+      cookie_names:
+        - jwt
+      header_names:
+        - authorization
+      claims_to_verify:
+        - exp
+        - iat
+      key_claim_name: iss
+      secret_is_base64: false
+      anonymous: null
+      run_on_preflight: true
+    tags:
+      - auth
+      - jwt
+
+  - name: jwt
+    route: content-routes
+    config:
+      uri_param_names:
+        - jwt
+      cookie_names:
+        - jwt
+      header_names:
+        - authorization
+      claims_to_verify:
+        - exp
+        - iat
+      key_claim_name: iss
+      secret_is_base64: false
+      anonymous: null
+      run_on_preflight: true
+    tags:
+      - auth
+      - jwt
+
+  - name: jwt
+    route: botpress-routes
+    config:
+      uri_param_names:
+        - jwt
+      cookie_names:
+        - jwt
+      header_names:
+        - authorization
+      claims_to_verify:
+        - exp
+        - iat
+      key_claim_name: iss
+      secret_is_base64: false
+      anonymous: null
+      run_on_preflight: true
+    tags:
+      - auth
+      - jwt
+
+# JWT Credentials for services
+jwt_secrets:
+  - consumer: frontend-client
+    key: frontend-jwt-key
+    secret: your-jwt-secret-key-here
+    algorithm: HS256
+    tags:
+      - frontend
+      - jwt
+
+  - consumer: admin-client
+    key: admin-jwt-key
+    secret: your-jwt-secret-key-here
+    algorithm: HS256
+    tags:
+      - admin
+      - jwt
+
+  - consumer: agent-client
+    key: agent-jwt-key
+    secret: your-jwt-secret-key-here
+    algorithm: HS256
+    tags:
+      - agent
+      - jwt
