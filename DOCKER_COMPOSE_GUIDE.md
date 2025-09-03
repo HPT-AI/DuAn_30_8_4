@@ -9,7 +9,7 @@ File `docker-compose.yml` đã được hợp nhất để chứa tất cả cá
 ```
 DuAn_30_8/
 ├── docker-compose.yml          # File chính để chạy tất cả services
-├── frontend/
+├── agent-frontend/
 │   └── Dockerfile             # Dockerfile cho Next.js frontend
 ├── api-gateway/
 │   ├── Dockerfile             # Dockerfile cho API Gateway
@@ -144,7 +144,7 @@ grafana (phụ thuộc vào prometheus)
 
 - **Frontend (nextjs-app)**: 
   - Build context: Thư mục gốc (.)
-  - Dockerfile: frontend/Dockerfile
+  - Dockerfile: agent-frontend/Dockerfile
   - Có thể truy cập tất cả file trong project root
 
 - **API Gateway**: 

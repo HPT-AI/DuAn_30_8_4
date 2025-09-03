@@ -119,3 +119,7 @@ server.log
 
 # API Gateway (exclude from frontend build)
 api-gateway/
+
+# Other directories not needed for frontend build
+Admin/
+BCTC/

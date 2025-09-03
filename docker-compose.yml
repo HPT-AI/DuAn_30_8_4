@@ -3,7 +3,7 @@ services:
   nextjs-app:
     build:
       context: .
-      dockerfile: frontend/Dockerfile
+      dockerfile: agent-frontend/Dockerfile
     container_name: khuongcuoicung-app
     ports:
       - "12000:3000"
