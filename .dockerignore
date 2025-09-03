@@ -116,3 +116,6 @@ README.md
 # OpenHands specific
 .openhands/
 server.log
+
+# API Gateway (exclude from frontend build)
+api-gateway/

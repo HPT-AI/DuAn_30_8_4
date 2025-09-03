@@ -3,7 +3,7 @@ services:
   nextjs-app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: frontend/Dockerfile
     container_name: khuongcuoicung-app
     ports:
       - "12000:3000"
@@ -11,13 +11,15 @@ services:
       - NODE_ENV=production
       - PORT=3000
       - HOSTNAME=0.0.0.0
+      - NEXT_TELEMETRY_DISABLED=1
+      - API_GATEWAY_URL=http://api-gateway:8080
     depends_on:
       - api-gateway
     networks:
       - khuongcuoicung-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3

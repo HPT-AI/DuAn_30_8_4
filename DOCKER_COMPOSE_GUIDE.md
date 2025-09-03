@@ -4,6 +4,20 @@
 
 File `docker-compose.yml` đã được hợp nhất để chứa tất cả các dịch vụ cần thiết cho dự án, bao gồm:
 
+## Cấu trúc dự án
+
+```
+DuAn_30_8/
+├── docker-compose.yml          # File chính để chạy tất cả services
+├── frontend/
+│   └── Dockerfile             # Dockerfile cho Next.js frontend
+├── api-gateway/
+│   ├── Dockerfile             # Dockerfile cho API Gateway
+│   └── .dockerignore          # Ignore file cho API Gateway
+├── .dockerignore              # Ignore file cho frontend build
+└── DOCKER_COMPOSE_GUIDE.md    # File hướng dẫn này
+```
+
 ### Các dịch vụ chính:
 
 1. **nextjs-app** (Frontend)
@@ -125,6 +139,18 @@ grafana (phụ thuộc vào prometheus)
 - `grafana-data`: Lưu trữ cấu hình Grafana
 - `botpress-data`: Lưu trữ dữ liệu Botpress
 - `./api-gateway/logs`: Logs của API Gateway
+
+## Build Context
+
+- **Frontend (nextjs-app)**: 
+  - Build context: Thư mục gốc (.)
+  - Dockerfile: frontend/Dockerfile
+  - Có thể truy cập tất cả file trong project root
+
+- **API Gateway**: 
+  - Build context: ./api-gateway
+  - Dockerfile: api-gateway/Dockerfile
+  - Chỉ truy cập file trong thư mục api-gateway
 
 ## Cách sử dụng
 
