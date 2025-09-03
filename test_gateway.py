@@ -29,7 +29,7 @@ app.add_middleware(
 )
 
 # User Service URL
-USER_SERVICE_URL = "http://localhost:8001"
+USER_SERVICE_URL = "http://localhost:8002"
 
 @app.get("/health")
 async def health_check():

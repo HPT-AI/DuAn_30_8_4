@@ -1,5 +1,5 @@
-// API client for communicating with User Service directly
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001';
+// API client for communicating with User Service via API Gateway
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
 export interface LoginCredentials {
   email: string;
