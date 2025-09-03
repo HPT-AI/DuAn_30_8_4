@@ -1,84 +1,94 @@
-# user-service
+# Authify User Service
 
-User authentication and management service (Authify)
+User authentication and management service for the MathService ecosystem.
 
 ## Features
 
-- RESTful API endpoints
-- JWT authentication integration
-- Request validation
-- Error handling
-- Logging
-- Health checks
-- Docker support
+- User registration and authentication
+- JWT token management (access and refresh tokens)
+- Role-based access control (USER, ADMIN, AGENT)
+- User profile management
+- Admin user management capabilities
+- Token verification for API Gateway integration
 
-## Installation
+## Technology Stack
 
+- **Framework**: FastAPI
+- **Database**: PostgreSQL with SQLAlchemy ORM
+- **Authentication**: JWT with python-jose
+- **Password Hashing**: bcrypt via passlib
+- **Validation**: Pydantic
+- **Migration**: Alembic
+- **Logging**: structlog
+
+## API Endpoints
+
+### Authentication
+- `POST /api/v1/auth/register` - Register new user
+- `POST /api/v1/auth/login` - User login
+- `POST /api/v1/auth/refresh` - Refresh access token
+- `GET /api/v1/auth/me` - Get current user info
+- `POST /api/v1/auth/verify-token` - Verify JWT token (for API Gateway)
+
+### User Management
+- `GET /api/v1/users/me` - Get current user profile
+- `PUT /api/v1/users/me` - Update current user profile
+- `GET /api/v1/users/` - Get all users (Admin only)
+- `GET /api/v1/users/{user_id}` - Get user by ID (Admin only)
+- `PUT /api/v1/users/{user_id}` - Update user (Admin only)
+- `POST /api/v1/users/{user_id}/deactivate` - Deactivate user (Admin only)
+- `POST /api/v1/users/{user_id}/activate` - Activate user (Admin only)
+- `POST /api/v1/users/{user_id}/change-role` - Change user role (Admin only)
+
+## Setup
+
+1. Install dependencies:
 ```bash
-npm install
+pip install -r requirements.txt
 ```
 
-## Configuration
-
-Copy `.env.example` to `.env` and configure your environment variables:
-
+2. Set up environment variables:
 ```bash
 cp .env.example .env
+# Edit .env with your configuration
 ```
 
-## Development
-
+3. Run database migrations:
 ```bash
-npm run dev
+alembic upgrade head
 ```
 
-## Production
-
+4. Start the service:
 ```bash
-npm start
+uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload
 ```
 
 ## Docker
 
-```bash
-# Build image
-npm run docker:build
-
-# Run container
-npm run docker:run
-```
-
-## API Endpoints
-
-### Health Check
-- `GET /api/health` - Service health status
-
-### Service Info
-- `GET /` - Service information
-
-## Testing
+Build and run with Docker:
 
 ```bash
-# Run tests
-npm test
-
-# Run tests in watch mode
-npm run test:watch
-
-# Generate coverage report
-npm run test:coverage
+docker build -t authify-user-service .
+docker run -p 8001:8001 authify-user-service
 ```
 
-## Linting
+## Environment Variables
 
-```bash
-# Check code style
-npm run lint
+- `DATABASE_URL`: PostgreSQL connection string
+- `JWT_SECRET_KEY`: Secret key for JWT signing
+- `JWT_ALGORITHM`: JWT algorithm (default: HS256)
+- `JWT_ACCESS_TOKEN_EXPIRE_MINUTES`: Access token expiration (default: 30)
+- `JWT_REFRESH_TOKEN_EXPIRE_DAYS`: Refresh token expiration (default: 7)
+- `REDIS_URL`: Redis connection string
+- `BACKEND_CORS_ORIGINS`: Allowed CORS origins
+- `RATE_LIMIT_PER_MINUTE`: Rate limiting (default: 60)
 
-# Fix code style issues
-npm run lint:fix
-```
+## User Roles
 
-## Port
+- **USER**: Regular user with basic access
+- **ADMIN**: Administrator with full access to user management
+- **AGENT**: Agent role for special permissions
 
-This service runs on port **3001**
+## Integration with API Gateway
+
+The service provides a `/api/v1/auth/verify-token` endpoint that API Gateway can use to verify JWT tokens and get user information for request routing and authorization.

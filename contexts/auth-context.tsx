@@ -1,76 +1,148 @@
 "use client"
 
-import { createContext, useContext, useState, type ReactNode } from "react"
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import { apiClient, type User as ApiUser, type LoginCredentials, type RegisterData } from "@/lib/api"
 
 interface User {
-  id: string
+  id: number
   name: string
   email: string
   avatar?: string
-  provider: "email" | "google" | "facebook"
+  role: "USER" | "ADMIN" | "AGENT"
+  is_active: boolean
+  is_verified: boolean
 }
 
 interface AuthContextType {
   user: User | null
-  login: (provider: "email" | "google" | "facebook", credentials?: { email: string; password: string }) => Promise<void>
+  login: (credentials: LoginCredentials) => Promise<void>
+  register: (userData: RegisterData) => Promise<void>
   logout: () => void
   isLoading: boolean
   isAdmin: () => boolean
+  updateProfile: (userData: Partial<User>) => Promise<void>
+  changePassword: (currentPassword: string, newPassword: string) => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
+// Helper function to convert API user to context user
+const mapApiUserToUser = (apiUser: ApiUser): User => ({
+  id: apiUser.id,
+  name: apiUser.full_name,
+  email: apiUser.email,
+  role: apiUser.role,
+  is_active: apiUser.is_active,
+  is_verified: apiUser.is_verified,
+})
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
-  const login = async (
-    provider: "email" | "google" | "facebook",
-    credentials?: { email: string; password: string },
-  ) => {
-    setIsLoading(true)
-
-    // Simulate API call delay
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    // Mock successful login - in real app this would call actual auth service
-    if (provider === "facebook") {
-      setUser({
-        id: "1",
-        name: "Nguyễn Văn A",
-        email: "nguyenvana@example.com",
-        avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face",
-        provider: "facebook",
-      })
-    } else if (provider === "google") {
-      setUser({
-        id: "2",
-        name: "John Doe",
-        email: "john.doe@gmail.com",
-        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face",
-        provider: "google",
-      })
-    } else if (provider === "email" && credentials) {
-      setUser({
-        id: "3",
-        name: "User Email",
-        email: credentials.email,
-        provider: "email",
-      })
+  // Check for existing session on mount
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const currentUser = await apiClient.getCurrentUser()
+        setUser(mapApiUserToUser(currentUser))
+      } catch (error) {
+        // No valid session, user remains null
+        console.log('No valid session found')
+      } finally {
+        setIsLoading(false)
+      }
     }
 
+    checkAuth()
+  }, [])
+
+  const login = async (credentials: LoginCredentials) => {
+    setIsLoading(true)
+    try {
+      await apiClient.login(credentials)
+      const currentUser = await apiClient.getCurrentUser()
+      setUser(mapApiUserToUser(currentUser))
+    } catch (error) {
+      setIsLoading(false)
+      throw error
+    }
     setIsLoading(false)
   }
 
-  const logout = () => {
-    setUser(null)
+  const register = async (userData: RegisterData) => {
+    setIsLoading(true)
+    try {
+      const newUser = await apiClient.register(userData)
+      // After registration, automatically log in
+      await login({ email: userData.email, password: userData.password })
+    } catch (error) {
+      setIsLoading(false)
+      throw error
+    }
+    setIsLoading(false)
+  }
+
+  const logout = async () => {
+    setIsLoading(true)
+    try {
+      await apiClient.logout()
+    } catch (error) {
+      console.error('Logout error:', error)
+    } finally {
+      setUser(null)
+      setIsLoading(false)
+    }
+  }
+
+  const updateProfile = async (userData: Partial<User>) => {
+    if (!user) throw new Error('No user logged in')
+    
+    setIsLoading(true)
+    try {
+      const updatedUser = await apiClient.updateProfile({
+        full_name: userData.name,
+        ...userData
+      })
+      setUser(mapApiUserToUser(updatedUser))
+    } catch (error) {
+      setIsLoading(false)
+      throw error
+    }
+    setIsLoading(false)
+  }
+
+  const changePassword = async (currentPassword: string, newPassword: string) => {
+    setIsLoading(true)
+    try {
+      await apiClient.changePassword(currentPassword, newPassword)
+    } catch (error) {
+      setIsLoading(false)
+      throw error
+    }
+    setIsLoading(false)
   }
 
   const isAdmin = () => {
-    return user?.provider === "facebook"
+    return user?.role === "ADMIN"
   }
 
-  return <AuthContext.Provider value={{ user, login, logout, isLoading, isAdmin }}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider 
+      value={{ 
+        user, 
+        login, 
+        register, 
+        logout, 
+        isLoading, 
+        isAdmin, 
+        updateProfile, 
+        changePassword 
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  )
 }
 
 export function useAuth() {

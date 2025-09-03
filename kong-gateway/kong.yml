@@ -8,10 +8,10 @@ _transform: true
 services:
   # User Service (Authify)
   - name: authify-service
-    url: http://authify:3001
+    url: http://user-service:8001
     protocol: http
-    host: authify
-    port: 3001
+    host: user-service
+    port: 8001
     path: /
     connect_timeout: 60000
     write_timeout: 60000
@@ -117,7 +117,7 @@ routes:
   - name: auth-login
     service: authify-service
     paths:
-      - /api/auth/login
+      - /api/v1/auth/login
     methods:
       - POST
     strip_path: false
@@ -129,7 +129,7 @@ routes:
   - name: auth-register
     service: authify-service
     paths:
-      - /api/auth/register
+      - /api/v1/auth/register
     methods:
       - POST
     strip_path: false
@@ -141,7 +141,7 @@ routes:
   - name: auth-refresh
     service: authify-service
     paths:
-      - /api/auth/refresh
+      - /api/v1/auth/refresh
     methods:
       - POST
     strip_path: false
@@ -150,46 +150,69 @@ routes:
       - auth
       - protected
 
-  - name: auth-logout
+  - name: auth-me
     service: authify-service
     paths:
-      - /api/auth/logout
-    methods:
-      - POST
-    strip_path: false
-    preserve_host: false
-    tags:
-      - auth
-      - protected
-
-  - name: auth-profile
-    service: authify-service
-    paths:
-      - /api/auth/profile
+      - /api/v1/auth/me
     methods:
       - GET
-      - PUT
     strip_path: false
     preserve_host: false
     tags:
       - auth
       - protected
+
+  - name: auth-verify-token
+    service: authify-service
+    paths:
+      - /api/v1/auth/verify-token
+    methods:
+      - POST
+    strip_path: false
+    preserve_host: false
+    tags:
+      - auth
+      - internal
 
   # User management routes
-  - name: users-routes
+  - name: users-me
     service: authify-service
     paths:
-      - /api/users
+      - /api/v1/users/me
     methods:
       - GET
-      - POST
       - PUT
-      - DELETE
     strip_path: false
     preserve_host: false
     tags:
       - users
       - protected
+
+  - name: users-admin
+    service: authify-service
+    paths:
+      - /api/v1/users
+    methods:
+      - GET
+    strip_path: false
+    preserve_host: false
+    tags:
+      - users
+      - admin
+
+  - name: users-admin-detail
+    service: authify-service
+    paths:
+      - /api/v1/users/~
+    methods:
+      - GET
+      - PUT
+      - POST
+    strip_path: false
+    preserve_host: false
+    tags:
+      - users
+      - admin
 
   # Payment routes
   - name: payment-routes
@@ -291,7 +314,7 @@ routes:
   - name: health-check
     service: authify-service
     paths:
-      - /api/health
+      - /health
     methods:
       - GET
     strip_path: false
@@ -328,8 +351,8 @@ plugins:
       origins:
         - "http://localhost:12000"
         - "http://localhost:12001"
-        - "https://work-1-mrkbqxbmzqirrkwn.prod-runtime.all-hands.dev"
-        - "https://work-2-mrkbqxbmzqirrkwn.prod-runtime.all-hands.dev"
+        - "https://work-1-qivpqxdxprbfynjb.prod-runtime.all-hands.dev"
+        - "https://work-2-qivpqxdxprbfynjb.prod-runtime.all-hands.dev"
       methods:
         - GET
         - POST

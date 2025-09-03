@@ -16,7 +16,7 @@ import Link from "next/link"
 
 export default function RegisterPage() {
   const { t } = useLanguage()
-  const { login } = useAuth()
+  const { register, isLoading } = useAuth()
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -27,6 +27,7 @@ export default function RegisterPage() {
     confirmPassword: "",
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [apiError, setApiError] = useState("")
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -64,30 +65,26 @@ export default function RegisterPage() {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleEmailRegister = (e: React.FormEvent) => {
+  const handleEmailRegister = async (e: React.FormEvent) => {
     e.preventDefault()
     if (validateForm()) {
-      // Mock registration success
-      login({
-        id: "1",
-        name: formData.fullName,
-        email: formData.email,
-        avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(formData.fullName)}&background=1e293b&color=fff`,
-      })
-      router.push("/")
+      try {
+        setApiError("")
+        await register({
+          email: formData.email,
+          password: formData.password,
+          full_name: formData.fullName,
+        })
+        router.push("/")
+      } catch (err) {
+        setApiError(err instanceof Error ? err.message : "Registration failed")
+      }
     }
   }
 
   const handleSocialRegister = (provider: string) => {
-    // Mock social registration
-    const mockUser = {
-      id: "1",
-      name: provider === "google" ? "Google User" : "Facebook User",
-      email: `user@${provider}.com`,
-      avatar: `https://ui-avatars.com/api/?name=${provider}&background=1e293b&color=fff`,
-    }
-    login(mockUser)
-    router.push("/")
+    // Social registration not implemented yet
+    setApiError(`${provider} registration not implemented yet. Please use email registration.`)
   }
 
   return (
@@ -113,6 +110,13 @@ export default function RegisterPage() {
           </CardHeader>
 
           <CardContent className="space-y-6">
+            {/* API Error Message */}
+            {apiError && (
+              <div className="p-3 text-sm text-red-400 bg-red-900/20 border border-red-500/20 rounded-md">
+                {apiError}
+              </div>
+            )}
+
             <div className="space-y-3">
               <Button
                 variant="outline"
@@ -243,9 +247,17 @@ export default function RegisterPage() {
 
               <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300"
+                disabled={isLoading}
+                className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 disabled:opacity-50"
               >
-                {t("register.create_account")}
+                {isLoading ? (
+                  <div className="flex items-center">
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                    Creating account...
+                  </div>
+                ) : (
+                  t("register.create_account")
+                )}
               </Button>
             </form>
 

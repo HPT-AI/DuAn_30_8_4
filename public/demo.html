@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo User Service - Đăng ký & Đăng nhập</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #06b6d4, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .demo-card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 12px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .demo-card h2 {
+            color: #06b6d4;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #06b6d4;
+            box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #06b6d4, #3b82f6);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(6, 182, 212, 0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .response {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .response.success {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #4ade80;
+        }
+        
+        .response.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+        
+        .status-bar {
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 15px;
+        }
+        
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ef4444;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-dot.online {
+            background: #22c55e;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .links {
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .links a {
+            display: inline-block;
+            margin: 10px 15px;
+            padding: 12px 24px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 8px;
+            color: #06b6d4;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .links a:hover {
+            background: rgba(6, 182, 212, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #06b6d4;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 User Service Demo</h1>
+            <p>Test đăng ký, đăng nhập và các tính năng JWT authentication</p>
+        </div>
+        
+        <div class="status-bar">
+            <div class="status-indicator">
+                <div class="status-dot" id="gatewayStatus"></div>
+                <span>API Gateway</span>
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot" id="userServiceStatus"></div>
+                <span>User Service</span>
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot" id="frontendStatus"></div>
+                <span>Frontend</span>
+            </div>
+        </div>
+        
+        <div class="demo-grid">
+            <!-- Đăng ký -->
+            <div class="demo-card">
+                <h2>📝 Đăng ký tài khoản</h2>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="regFullName">Họ và tên:</label>
+                        <input type="text" id="regFullName" value="Nguyễn Văn A" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmail">Email:</label>
+                        <input type="email" id="regEmail" value="demo@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">Mật khẩu:</label>
+                        <input type="password" id="regPassword" value="password123" required>
+                    </div>
+                    <button type="submit" class="btn" id="registerBtn">
+                        Đăng ký
+                    </button>
+                </form>
+                <div id="registerResponse" class="response" style="display: none;"></div>
+            </div>
+            
+            <!-- Đăng nhập -->
+            <div class="demo-card">
+                <h2>🔐 Đăng nhập</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email:</label>
+                        <input type="email" id="loginEmail" value="demo@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Mật khẩu:</label>
+                        <input type="password" id="loginPassword" value="password123" required>
+                    </div>
+                    <button type="submit" class="btn" id="loginBtn">
+                        Đăng nhập
+                    </button>
+                </form>
+                <div id="loginResponse" class="response" style="display: none;"></div>
+            </div>
+            
+            <!-- Thông tin người dùng -->
+            <div class="demo-card">
+                <h2>👤 Thông tin người dùng</h2>
+                <p style="color: #94a3b8; margin-bottom: 20px;">Cần đăng nhập trước</p>
+                <button class="btn" id="getUserBtn">
+                    Lấy thông tin
+                </button>
+                <div id="userResponse" class="response" style="display: none;"></div>
+            </div>
+            
+            <!-- Cập nhật profile -->
+            <div class="demo-card">
+                <h2>✏️ Cập nhật thông tin</h2>
+                <form id="updateForm">
+                    <div class="form-group">
+                        <label for="updateFullName">Họ và tên mới:</label>
+                        <input type="text" id="updateFullName" value="Nguyễn Văn B" required>
+                    </div>
+                    <button type="submit" class="btn" id="updateBtn">
+                        Cập nhật
+                    </button>
+                </form>
+                <div id="updateResponse" class="response" style="display: none;"></div>
+            </div>
+        </div>
+        
+        <div class="links">
+            <a href="/">🏠 Trang chủ Frontend</a>
+            <a href="/register">📝 Trang đăng ký</a>
+            <a href="/test-api.html">🔧 API Test Tool</a>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = window.location.protocol === 'https:' 
+            ? 'https://work-1-qivpqxdxprbfynjb.prod-runtime.all-hands.dev:8080'
+            : 'http://localhost:8080';
+        
+        let accessToken = localStorage.getItem('access_token');
+        
+        // Utility functions
+        function showResponse(elementId, data, isError = false) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.className = `response ${isError ? 'error' : 'success'}`;
+            element.textContent = JSON.stringify(data, null, 2);
+        }
+        
+        function showLoading(buttonId) {
+            const btn = document.getElementById(buttonId);
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Đang xử lý...';
+        }
+        
+        function hideLoading(buttonId, originalText) {
+            const btn = document.getElementById(buttonId);
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+        }
+        
+        async function makeRequest(url, options = {}) {
+            try {
+                const response = await fetch(API_URL + url, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(accessToken && { 'Authorization': `Bearer ${accessToken}` }),
+                        ...options.headers
+                    },
+                    ...options
+                });
+                
+                const data = await response.json();
+                return { data, status: response.status, ok: response.ok };
+            } catch (error) {
+                return { error: error.message, status: 0, ok: false };
+            }
+        }
+        
+        // Status check
+        async function checkStatus() {
+            const services = [
+                { id: 'gatewayStatus', url: '/health' },
+                { id: 'userServiceStatus', url: '/health' },
+                { id: 'frontendStatus', url: '/' }
+            ];
+            
+            for (const service of services) {
+                try {
+                    const result = await makeRequest(service.url);
+                    const dot = document.getElementById(service.id);
+                    if (result.ok) {
+                        dot.classList.add('online');
+                    }
+                } catch (error) {
+                    console.log(`${service.id} offline`);
+                }
+            }
+        }
+        
+        // Register form
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            showLoading('registerBtn');
+            
+            const formData = {
+                full_name: document.getElementById('regFullName').value,
+                email: document.getElementById('regEmail').value,
+                password: document.getElementById('regPassword').value
+            };
+            
+            const result = await makeRequest('/api/v1/auth/register', {
+                method: 'POST',
+                body: JSON.stringify(formData)
+            });
+            
+            showResponse('registerResponse', result.data || { error: result.error }, !result.ok);
+            hideLoading('registerBtn', 'Đăng ký');
+        });
+        
+        // Login form
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            showLoading('loginBtn');
+            
+            const formData = {
+                email: document.getElementById('loginEmail').value,
+                password: document.getElementById('loginPassword').value
+            };
+            
+            const result = await makeRequest('/api/v1/auth/login', {
+                method: 'POST',
+                body: JSON.stringify(formData)
+            });
+            
+            if (result.ok && result.data) {
+                accessToken = result.data.access_token;
+                localStorage.setItem('access_token', accessToken);
+                localStorage.setItem('refresh_token', result.data.refresh_token);
+            }
+            
+            showResponse('loginResponse', result.data || { error: result.error }, !result.ok);
+            hideLoading('loginBtn', 'Đăng nhập');
+        });
+        
+        // Get user info
+        document.getElementById('getUserBtn').addEventListener('click', async () => {
+            showLoading('getUserBtn');
+            
+            const result = await makeRequest('/api/v1/auth/me');
+            showResponse('userResponse', result.data || { error: result.error }, !result.ok);
+            hideLoading('getUserBtn', 'Lấy thông tin');
+        });
+        
+        // Update profile
+        document.getElementById('updateForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            showLoading('updateBtn');
+            
+            const formData = {
+                full_name: document.getElementById('updateFullName').value
+            };
+            
+            const result = await makeRequest('/api/v1/users/me', {
+                method: 'PUT',
+                body: JSON.stringify(formData)
+            });
+            
+            showResponse('updateResponse', result.data || { error: result.error }, !result.ok);
+            hideLoading('updateBtn', 'Cập nhật');
+        });
+        
+        // Initialize
+        checkStatus();
+    </script>
+</body>
+</html>

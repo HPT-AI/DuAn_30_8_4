@@ -25,19 +25,26 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
 
+  const [error, setError] = useState("")
+
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     if (email && password) {
-      await login("email", { email, password })
-      onOpenChange(false)
-      setEmail("")
-      setPassword("")
+      try {
+        setError("")
+        await login({ email, password })
+        onOpenChange(false)
+        setEmail("")
+        setPassword("")
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Login failed")
+      }
     }
   }
 
   const handleSocialLogin = async (provider: "google" | "facebook") => {
-    await login(provider)
-    onOpenChange(false)
+    // Social login not implemented yet - show message
+    setError(`${provider} login not implemented yet. Please use email login.`)
   }
 
   return (
@@ -49,6 +56,13 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
         </DialogHeader>
 
         <div className="space-y-4">
+          {/* Error Message */}
+          {error && (
+            <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
+              {error}
+            </div>
+          )}
+
           {/* Social Login Buttons */}
           <div className="space-y-3">
             <Button

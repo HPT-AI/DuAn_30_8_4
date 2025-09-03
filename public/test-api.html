@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Service API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .endpoint {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        .endpoint-header {
+            background: #007bff;
+            color: white;
+            padding: 10px 15px;
+            font-weight: bold;
+        }
+        .endpoint-body {
+            padding: 15px;
+        }
+        .method {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .method.post { background: #28a745; color: white; }
+        .method.get { background: #17a2b8; color: white; }
+        .method.put { background: #ffc107; color: black; }
+        textarea, input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px 5px 5px 0;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .response {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success { border-left: 4px solid #28a745; }
+        .error { border-left: 4px solid #dc3545; }
+        .token-display {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 User Service API Test Interface</h1>
+        <p><strong>API Gateway URL:</strong> <span id="apiUrl">http://localhost:8080</span></p>
+        <p><strong>Status:</strong> <span id="status">Checking...</span></p>
+        
+        <div id="tokenDisplay" class="token-display" style="display: none;">
+            <strong>Current Access Token:</strong><br>
+            <span id="currentToken"></span>
+        </div>
+    </div>
+
+    <!-- Health Check -->
+    <div class="container">
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method get">GET</span> Health Check
+            </div>
+            <div class="endpoint-body">
+                <p><strong>Endpoint:</strong> /health</p>
+                <button onclick="testHealth()">Test Health Check</button>
+                <div id="healthResponse" class="response" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Registration -->
+    <div class="container">
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method post">POST</span> User Registration
+            </div>
+            <div class="endpoint-body">
+                <p><strong>Endpoint:</strong> /api/v1/auth/register</p>
+                <label>Email:</label>
+                <input type="email" id="regEmail" placeholder="test@example.com" value="demo@example.com">
+                <label>Password:</label>
+                <input type="password" id="regPassword" placeholder="password" value="password123">
+                <label>Full Name:</label>
+                <input type="text" id="regFullName" placeholder="Full Name" value="Demo User">
+                <button onclick="testRegister()">Register User</button>
+                <div id="registerResponse" class="response" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Login -->
+    <div class="container">
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method post">POST</span> User Login
+            </div>
+            <div class="endpoint-body">
+                <p><strong>Endpoint:</strong> /api/v1/auth/login</p>
+                <label>Email:</label>
+                <input type="email" id="loginEmail" placeholder="test@example.com" value="demo@example.com">
+                <label>Password:</label>
+                <input type="password" id="loginPassword" placeholder="password" value="password123">
+                <button onclick="testLogin()">Login</button>
+                <div id="loginResponse" class="response" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Get Current User -->
+    <div class="container">
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method get">GET</span> Get Current User
+            </div>
+            <div class="endpoint-body">
+                <p><strong>Endpoint:</strong> /api/v1/auth/me</p>
+                <p><em>Requires authentication token</em></p>
+                <button onclick="testGetCurrentUser()">Get Current User</button>
+                <div id="currentUserResponse" class="response" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Token Verification -->
+    <div class="container">
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method post">POST</span> Verify Token
+            </div>
+            <div class="endpoint-body">
+                <p><strong>Endpoint:</strong> /api/v1/auth/verify-token</p>
+                <button onclick="testVerifyToken()">Verify Current Token</button>
+                <div id="verifyResponse" class="response" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Refresh Token -->
+    <div class="container">
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method post">POST</span> Refresh Token
+            </div>
+            <div class="endpoint-body">
+                <p><strong>Endpoint:</strong> /api/v1/auth/refresh</p>
+                <button onclick="testRefreshToken()">Refresh Token</button>
+                <div id="refreshResponse" class="response" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Profile -->
+    <div class="container">
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method put">PUT</span> Update Profile
+            </div>
+            <div class="endpoint-body">
+                <p><strong>Endpoint:</strong> /api/v1/users/me</p>
+                <label>Full Name:</label>
+                <input type="text" id="updateFullName" placeholder="New Full Name" value="Updated Demo User">
+                <button onclick="testUpdateProfile()">Update Profile</button>
+                <div id="updateResponse" class="response" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = window.location.protocol === 'https:' 
+            ? 'https://work-1-qivpqxdxprbfynjb.prod-runtime.all-hands.dev:8080'
+            : 'http://localhost:8080';
+        
+        document.getElementById('apiUrl').textContent = API_URL;
+        
+        let accessToken = localStorage.getItem('access_token');
+        let refreshToken = localStorage.getItem('refresh_token');
+        
+        function updateTokenDisplay() {
+            const tokenDisplay = document.getElementById('tokenDisplay');
+            const currentToken = document.getElementById('currentToken');
+            
+            if (accessToken) {
+                tokenDisplay.style.display = 'block';
+                currentToken.textContent = accessToken;
+            } else {
+                tokenDisplay.style.display = 'none';
+            }
+        }
+        
+        function showResponse(elementId, response, isError = false) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.className = `response ${isError ? 'error' : 'success'}`;
+            element.textContent = JSON.stringify(response, null, 2);
+        }
+        
+        async function makeRequest(url, options = {}) {
+            try {
+                const response = await fetch(API_URL + url, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(accessToken && { 'Authorization': `Bearer ${accessToken}` }),
+                        ...options.headers
+                    },
+                    ...options
+                });
+                
+                const data = await response.json();
+                return { data, status: response.status, ok: response.ok };
+            } catch (error) {
+                return { error: error.message, status: 0, ok: false };
+            }
+        }
+        
+        async function testHealth() {
+            const result = await makeRequest('/health');
+            showResponse('healthResponse', result.data || result.error, !result.ok);
+            document.getElementById('status').textContent = result.ok ? '✅ Online' : '❌ Offline';
+        }
+        
+        async function testRegister() {
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const fullName = document.getElementById('regFullName').value;
+            
+            const result = await makeRequest('/api/v1/auth/register', {
+                method: 'POST',
+                body: JSON.stringify({ email, password, full_name: fullName })
+            });
+            
+            showResponse('registerResponse', result.data || result.error, !result.ok);
+        }
+        
+        async function testLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const result = await makeRequest('/api/v1/auth/login', {
+                method: 'POST',
+                body: JSON.stringify({ email, password })
+            });
+            
+            if (result.ok && result.data) {
+                accessToken = result.data.access_token;
+                refreshToken = result.data.refresh_token;
+                localStorage.setItem('access_token', accessToken);
+                localStorage.setItem('refresh_token', refreshToken);
+                updateTokenDisplay();
+            }
+            
+            showResponse('loginResponse', result.data || result.error, !result.ok);
+        }
+        
+        async function testGetCurrentUser() {
+            const result = await makeRequest('/api/v1/auth/me');
+            showResponse('currentUserResponse', result.data || result.error, !result.ok);
+        }
+        
+        async function testVerifyToken() {
+            if (!accessToken) {
+                showResponse('verifyResponse', { error: 'No access token available. Please login first.' }, true);
+                return;
+            }
+            
+            const result = await makeRequest('/api/v1/auth/verify-token', {
+                method: 'POST',
+                body: JSON.stringify({ token: accessToken })
+            });
+            
+            showResponse('verifyResponse', result.data || result.error, !result.ok);
+        }
+        
+        async function testRefreshToken() {
+            if (!refreshToken) {
+                showResponse('refreshResponse', { error: 'No refresh token available. Please login first.' }, true);
+                return;
+            }
+            
+            const result = await makeRequest('/api/v1/auth/refresh', {
+                method: 'POST',
+                body: JSON.stringify({ refresh_token: refreshToken })
+            });
+            
+            if (result.ok && result.data) {
+                accessToken = result.data.access_token;
+                refreshToken = result.data.refresh_token;
+                localStorage.setItem('access_token', accessToken);
+                localStorage.setItem('refresh_token', refreshToken);
+                updateTokenDisplay();
+            }
+            
+            showResponse('refreshResponse', result.data || result.error, !result.ok);
+        }
+        
+        async function testUpdateProfile() {
+            const fullName = document.getElementById('updateFullName').value;
+            
+            const result = await makeRequest('/api/v1/users/me', {
+                method: 'PUT',
+                body: JSON.stringify({ full_name: fullName })
+            });
+            
+            showResponse('updateResponse', result.data || result.error, !result.ok);
+        }
+        
+        // Initialize
+        updateTokenDisplay();
+        testHealth();
+    </script>
+</body>
+</html>

@@ -124,17 +124,24 @@ services:
 
   # Backend Microservices (7 services)
   user-service:
-    image: nginx:alpine
+    build:
+      context: ./backend/user-service
+      dockerfile: Dockerfile
     container_name: user-service
     ports:
-      - "3001:80"
-    volumes:
-      - ./api-gateway/examples/user-service:/usr/share/nginx/html:ro
+      - "3001:8001"
+    environment:
+      - DATABASE_URL=sqlite:///./authify.db
+      - JWT_SECRET_KEY=super-secret-jwt-key-for-development-only-change-in-production
+      - REDIS_URL=redis://redis:6379/0
+      - BACKEND_CORS_ORIGINS=http://localhost:3000,http://localhost:12000,http://localhost:8080,https://work-1-qivpqxdxprbfynjb.prod-runtime.all-hands.dev,https://work-2-qivpqxdxprbfynjb.prod-runtime.all-hands.dev
+    depends_on:
+      - redis
     networks:
       - khuongcuoicung-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
       interval: 30s
       timeout: 10s
       retries: 3
