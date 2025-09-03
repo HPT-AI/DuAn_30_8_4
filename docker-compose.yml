@@ -1,6 +1,5 @@
-version: '3.8'
-
 services:
+  # Frontend - Next.js Application
   nextjs-app:
     build:
       context: .
@@ -12,6 +11,10 @@ services:
       - NODE_ENV=production
       - PORT=3000
       - HOSTNAME=0.0.0.0
+    depends_on:
+      - api-gateway
+    networks:
+      - khuongcuoicung-network
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
@@ -19,6 +22,220 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+      - PORT=8080
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JWT_SECRET=your-super-secret-jwt-key-change-in-production
+      - LOG_LEVEL=info
+      - MONITORING_ENABLED=true
+    depends_on:
+      - redis
+      - user-service
+      - content-service
+      - payment-service
+      - admin-service
+      - botpress
+      - agent-policy-service
+      - agent-management-service
+    volumes:
+      - ./api-gateway/logs:/app/logs
+    networks:
+      - khuongcuoicung-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:8080/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Redis for caching and rate limiting
+  redis:
+    image: redis:7-alpine
+    container_name: api-gateway-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+      - ./api-gateway/config/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    command: redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      - khuongcuoicung-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Backend Microservices (7 services)
+  user-service:
+    image: nginx:alpine
+    container_name: user-service
+    ports:
+      - "3001:80"
+    volumes:
+      - ./api-gateway/examples/user-service:/usr/share/nginx/html:ro
+    networks:
+      - khuongcuoicung-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  content-service:
+    image: nginx:alpine
+    container_name: content-service
+    ports:
+      - "3002:80"
+    volumes:
+      - ./api-gateway/examples/content-service:/usr/share/nginx/html:ro
+    networks:
+      - khuongcuoicung-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  payment-service:
+    image: nginx:alpine
+    container_name: payment-service
+    ports:
+      - "3003:80"
+    volumes:
+      - ./api-gateway/examples/payment-service:/usr/share/nginx/html:ro
+    networks:
+      - khuongcuoicung-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  admin-service:
+    image: nginx:alpine
+    container_name: admin-service
+    ports:
+      - "3004:80"
+    volumes:
+      - ./api-gateway/examples/admin-service:/usr/share/nginx/html:ro
+    networks:
+      - khuongcuoicung-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  botpress:
+    image: botpress/server:latest
+    container_name: botpress
+    ports:
+      - "3005:3000"
+    environment:
+      - BP_HOST=0.0.0.0
+      - BP_PORT=3000
+      - BP_PRODUCTION=true
+      - BP_MODULE_NLU_DUCKLINGURL=http://duckling:8000
+    volumes:
+      - botpress-data:/botpress/data
+      - ./botpress/config:/botpress/config:ro
+    networks:
+      - khuongcuoicung-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  agent-policy-service:
+    image: nginx:alpine
+    container_name: agent-policy-service
+    ports:
+      - "3006:80"
+    volumes:
+      - ./api-gateway/examples/agent-policy-service:/usr/share/nginx/html:ro
+    networks:
+      - khuongcuoicung-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  agent-management-service:
+    image: nginx:alpine
+    container_name: agent-management-service
+    ports:
+      - "3007:80"
+    volumes:
+      - ./api-gateway/examples/agent-management-service:/usr/share/nginx/html:ro
+    networks:
+      - khuongcuoicung-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Monitoring Services
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: api-gateway-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./api-gateway/config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    depends_on:
+      - api-gateway
+    networks:
+      - khuongcuoicung-network
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: api-gateway-grafana
+    ports:
+      - "12001:3000"  # Changed from 3000 to 12001 to avoid conflict with nextjs-app
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./api-gateway/config/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./api-gateway/config/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    depends_on:
+      - prometheus
+    networks:
+      - khuongcuoicung-network
+    restart: unless-stopped
 
   # Optional: Add nginx reverse proxy for production
   # nginx:
@@ -31,8 +248,24 @@ services:
   #     - ./nginx.conf:/etc/nginx/nginx.conf:ro
   #   depends_on:
   #     - nextjs-app
+  #     - api-gateway
+  #   networks:
+  #     - khuongcuoicung-network
   #   restart: unless-stopped
 
+volumes:
+  redis-data:
+    driver: local
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
+  botpress-data:
+    driver: local
+
 networks:
-  default:
-    name: khuongcuoicung-network
+  khuongcuoicung-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
