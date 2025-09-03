@@ -1,7 +1,7 @@
 # Kong Gateway Dockerfile
 # Based on official Kong image with custom configuration
 
-FROM kong:3.4-alpine
+FROM kong/kong:latest
 
 # Set environment variables
 ENV KONG_DATABASE=postgres
@@ -18,16 +18,12 @@ ENV KONG_PROXY_LISTEN="0.0.0.0:8000, 0.0.0.0:8443 ssl"
 ENV KONG_PLUGINS="bundled,jwt,cors,rate-limiting,file-log,prometheus,request-transformer,response-transformer"
 ENV KONG_LOG_LEVEL=info
 
-# Install additional packages
-USER root
-RUN apk add --no-cache postgresql-client curl jq
-
 # Create necessary directories
+USER root
 RUN mkdir -p /etc/kong/ssl /usr/local/kong/logs /tmp
 
 # Copy configuration files
 COPY config/kong.conf /etc/kong/kong.conf
-COPY kong.yml /etc/kong/kong.yml
 COPY scripts/init-kong.sh /usr/local/bin/init-kong.sh
 
 # Set permissions
@@ -39,10 +35,10 @@ USER kong
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-  CMD curl -f http://localhost:8001/status || exit 1
+  CMD kong health || exit 1
 
 # Expose ports
 EXPOSE 8000 8001 8443 8444 8100
 
-# Use custom initialization script
-ENTRYPOINT ["/usr/local/bin/init-kong.sh"]
+# Use Kong default startup
+CMD ["kong", "start", "--conf", "/etc/kong/kong.conf", "--vv"]

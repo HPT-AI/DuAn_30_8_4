@@ -1,5 +1,5 @@
-// API client for communicating with Kong Gateway
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+// API client for communicating with User Service directly
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001';
 
 export interface LoginCredentials {
   email: string;
@@ -148,7 +148,7 @@ class ApiClient {
   }
 
   async getCurrentUser(): Promise<User> {
-    return this.request<User>('/api/v1/auth/me');
+    return this.request<User>('/api/v1/users/me');
   }
 
   async refreshToken(): Promise<AuthTokens> {
@@ -187,7 +187,6 @@ class ApiClient {
     await this.request('/api/v1/users/me', {
       method: 'PUT',
       body: JSON.stringify({ 
-        current_password: currentPassword,
         password: newPassword 
       }),
     });

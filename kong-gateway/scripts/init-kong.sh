@@ -9,7 +9,7 @@ echo "🚀 Starting Kong Gateway initialization..."
 
 # Wait for PostgreSQL to be ready
 echo "⏳ Waiting for PostgreSQL database to be ready..."
-until pg_isready -h kong-database -p 5432 -U kong; do
+until nc -z kong-database 5432; do
   echo "PostgreSQL is unavailable - sleeping"
   sleep 2
 done

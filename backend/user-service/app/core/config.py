@@ -1,6 +1,6 @@
 from typing import List, Optional
 from pydantic_settings import BaseSettings
-from pydantic import field_validator
+from pydantic import model_validator
 import os
 
 
@@ -25,14 +25,25 @@ class Settings(BaseSettings):
     # CORS
     BACKEND_CORS_ORIGINS: List[str] = []
     
-    @field_validator("BACKEND_CORS_ORIGINS", mode="before")
+    @model_validator(mode="before")
     @classmethod
-    def assemble_cors_origins(cls, v):
-        if isinstance(v, str) and not v.startswith("["):
-            return [i.strip() for i in v.split(",")]
-        elif isinstance(v, (list, str)):
-            return v
-        raise ValueError(v)
+    def validate_cors_origins(cls, values):
+        if isinstance(values, dict) and "BACKEND_CORS_ORIGINS" in values:
+            v = values["BACKEND_CORS_ORIGINS"]
+            if isinstance(v, str):
+                if v.startswith("[") and v.endswith("]"):
+                    # Handle JSON-like string
+                    import json
+                    try:
+                        values["BACKEND_CORS_ORIGINS"] = json.loads(v)
+                    except json.JSONDecodeError:
+                        values["BACKEND_CORS_ORIGINS"] = [i.strip() for i in v.split(",") if i.strip()]
+                else:
+                    # Handle comma-separated string
+                    values["BACKEND_CORS_ORIGINS"] = [i.strip() for i in v.split(",") if i.strip()]
+            elif not isinstance(v, list):
+                values["BACKEND_CORS_ORIGINS"] = []
+        return values
     
     # Rate Limiting
     RATE_LIMIT_PER_MINUTE: int = 60

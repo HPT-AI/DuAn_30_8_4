@@ -43,7 +43,7 @@ services:
       - API_V1_STR=/api/v1
       - PROJECT_NAME=Authify User Service
       - DEBUG=True
-      - BACKEND_CORS_ORIGINS=["http://localhost:3000", "http://localhost:8080", "https://work-1-qivpqxdxprbfynjb.prod-runtime.all-hands.dev", "https://work-2-qivpqxdxprbfynjb.prod-runtime.all-hands.dev"]
+      - BACKEND_CORS_ORIGINS=["http://localhost:3000","http://127.0.0.1:3000"]
       - RATE_LIMIT_PER_MINUTE=60
       - BCRYPT_ROUNDS=12
     ports:
