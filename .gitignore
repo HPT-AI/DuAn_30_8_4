@@ -36,3 +36,6 @@ BCTC/server-bctc.pid
 # Logs & pids
 *.log
 *.pid
+
+# HTML documentation files with long names
+File_Html_DuAn/
