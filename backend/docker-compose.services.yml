@@ -1,0 +1,177 @@
+# Backend Services Configuration for docker-compose.yml
+# Copy these service definitions to your main docker-compose.yml
+
+services:
+  # User Service (Authify)
+  user-service:
+    build:
+      context: ./backend/user-service
+      dockerfile: Dockerfile
+    container_name: user-service
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - MONGODB_URI=mongodb://mongo:27017/user_service
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=${JWT_SECRET}
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - khuongcuoicung-network
+    restart: unless-stopped
+    volumes:
+      - ./backend/user-service/logs:/app/logs
+
+  # Content Service
+  content-service:
+    build:
+      context: ./backend/content-service
+      dockerfile: Dockerfile
+    container_name: content-service
+    ports:
+      - "3006:3006"
+    environment:
+      - NODE_ENV=production
+      - PORT=3006
+      - MONGODB_URI=mongodb://mongo:27017/content_service
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - khuongcuoicung-network
+    restart: unless-stopped
+    volumes:
+      - ./backend/content-service/logs:/app/logs
+
+  # Payment Service
+  payment-service:
+    build:
+      context: ./backend/payment-service
+      dockerfile: Dockerfile
+    container_name: payment-service
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=production
+      - PORT=3002
+      - MONGODB_URI=mongodb://mongo:27017/payment_service
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - khuongcuoicung-network
+    restart: unless-stopped
+    volumes:
+      - ./backend/payment-service/logs:/app/logs
+
+  # Admin Service
+  admin-service:
+    build:
+      context: ./backend/admin-service
+      dockerfile: Dockerfile
+    container_name: admin-service
+    ports:
+      - "3004:3004"
+    environment:
+      - NODE_ENV=production
+      - PORT=3004
+      - MONGODB_URI=mongodb://mongo:27017/admin_service
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - khuongcuoicung-network
+    restart: unless-stopped
+    volumes:
+      - ./backend/admin-service/logs:/app/logs
+
+  # Agent Policy Service
+  agent-policy-service:
+    build:
+      context: ./backend/agent-policy-service
+      dockerfile: Dockerfile
+    container_name: agent-policy-service
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=production
+      - PORT=3003
+      - MONGODB_URI=mongodb://mongo:27017/agent_policy_service
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - khuongcuoicung-network
+    restart: unless-stopped
+    volumes:
+      - ./backend/agent-policy-service/logs:/app/logs
+
+  # Agent Management Service
+  agent-management-service:
+    build:
+      context: ./backend/agent-management-service
+      dockerfile: Dockerfile
+    container_name: agent-management-service
+    ports:
+      - "3005:3005"
+    environment:
+      - NODE_ENV=production
+      - PORT=3005
+      - MONGODB_URI=mongodb://mongo:27017/agent_management_service
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - khuongcuoicung-network
+    restart: unless-stopped
+    volumes:
+      - ./backend/agent-management-service/logs:/app/logs
+
+  # Botpress Service
+  botpress-service:
+    image: botpress/server:latest
+    container_name: botpress-service
+    ports:
+      - "3000:3000"
+    environment:
+      - BP_HOST=0.0.0.0
+      - BP_PORT=3000
+      - BP_PRODUCTION=true
+    volumes:
+      - ./backend/botpress-service/data:/botpress/data
+      - ./backend/botpress-service/config:/botpress/config
+    networks:
+      - khuongcuoicung-network
+    restart: unless-stopped
+
+  # MongoDB for backend services
+  mongo:
+    image: mongo:7
+    container_name: backend-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+    volumes:
+      - mongo-data:/data/db
+      - ./backend/shared/database/init:/docker-entrypoint-initdb.d
+    networks:
+      - khuongcuoicung-network
+    restart: unless-stopped
+
+volumes:
+  mongo-data:
+    driver: local
+
+networks:
+  khuongcuoicung-network:
+    driver: bridge
