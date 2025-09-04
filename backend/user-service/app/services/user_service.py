@@ -34,6 +34,23 @@ class UserService:
         self.db.refresh(db_user)
         return db_user
 
+    def create_oauth_user(self, user_create: UserCreate, provider: str) -> User:
+        """
+        Create user from OAuth provider (no password required)
+        """
+        db_user = User(
+            email=user_create.email,
+            hashed_password="",  # No password for OAuth users
+            full_name=user_create.full_name,
+            is_active=user_create.is_active,
+            role=user_create.role,
+            is_verified=getattr(user_create, 'is_verified', True)  # OAuth users are usually verified
+        )
+        self.db.add(db_user)
+        self.db.commit()
+        self.db.refresh(db_user)
+        return db_user
+
     def update_user(self, user_id: int, user_update: UserUpdate) -> Optional[User]:
         db_user = self.get_user_by_id(user_id)
         if not db_user:

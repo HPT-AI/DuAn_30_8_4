@@ -424,7 +424,6 @@ plugins:
         - authorization
       claims_to_verify:
         - exp
-        - iat
       key_claim_name: iss
       secret_is_base64: false
       anonymous: null
@@ -434,7 +433,7 @@ plugins:
       - jwt
 
   - name: jwt
-    route: auth-logout
+    route: auth-me
     config:
       uri_param_names:
         - jwt
@@ -444,7 +443,6 @@ plugins:
         - authorization
       claims_to_verify:
         - exp
-        - iat
       key_claim_name: iss
       secret_is_base64: false
       anonymous: null
@@ -454,7 +452,7 @@ plugins:
       - jwt
 
   - name: jwt
-    route: auth-profile
+    route: users-me
     config:
       uri_param_names:
         - jwt
@@ -464,27 +462,6 @@ plugins:
         - authorization
       claims_to_verify:
         - exp
-        - iat
-      key_claim_name: iss
-      secret_is_base64: false
-      anonymous: null
-      run_on_preflight: true
-    tags:
-      - auth
-      - jwt
-
-  - name: jwt
-    route: users-routes
-    config:
-      uri_param_names:
-        - jwt
-      cookie_names:
-        - jwt
-      header_names:
-        - authorization
-      claims_to_verify:
-        - exp
-        - iat
       key_claim_name: iss
       secret_is_base64: false
       anonymous: null
@@ -504,7 +481,6 @@ plugins:
         - authorization
       claims_to_verify:
         - exp
-        - iat
       key_claim_name: iss
       secret_is_base64: false
       anonymous: null
@@ -524,7 +500,6 @@ plugins:
         - authorization
       claims_to_verify:
         - exp
-        - iat
       key_claim_name: iss
       secret_is_base64: false
       anonymous: null
@@ -544,7 +519,6 @@ plugins:
         - authorization
       claims_to_verify:
         - exp
-        - iat
       key_claim_name: iss
       secret_is_base64: false
       anonymous: null
@@ -564,7 +538,6 @@ plugins:
         - authorization
       claims_to_verify:
         - exp
-        - iat
       key_claim_name: iss
       secret_is_base64: false
       anonymous: null
@@ -584,7 +557,6 @@ plugins:
         - authorization
       claims_to_verify:
         - exp
-        - iat
       key_claim_name: iss
       secret_is_base64: false
       anonymous: null
@@ -604,7 +576,6 @@ plugins:
         - authorization
       claims_to_verify:
         - exp
-        - iat
       key_claim_name: iss
       secret_is_base64: false
       anonymous: null

@@ -1,6 +1,5 @@
 from typing import List, Optional
 from pydantic_settings import BaseSettings
-from pydantic import model_validator
 import os
 
 
@@ -23,33 +22,20 @@ class Settings(BaseSettings):
     REDIS_URL: str = "redis://localhost:6379/0"
     
     # CORS
-    BACKEND_CORS_ORIGINS: List[str] = []
-    
-    @model_validator(mode="before")
-    @classmethod
-    def validate_cors_origins(cls, values):
-        if isinstance(values, dict) and "BACKEND_CORS_ORIGINS" in values:
-            v = values["BACKEND_CORS_ORIGINS"]
-            if isinstance(v, str):
-                if v.startswith("[") and v.endswith("]"):
-                    # Handle JSON-like string
-                    import json
-                    try:
-                        values["BACKEND_CORS_ORIGINS"] = json.loads(v)
-                    except json.JSONDecodeError:
-                        values["BACKEND_CORS_ORIGINS"] = [i.strip() for i in v.split(",") if i.strip()]
-                else:
-                    # Handle comma-separated string
-                    values["BACKEND_CORS_ORIGINS"] = [i.strip() for i in v.split(",") if i.strip()]
-            elif not isinstance(v, list):
-                values["BACKEND_CORS_ORIGINS"] = []
-        return values
+    BACKEND_CORS_ORIGINS: str = "http://localhost:3000,http://localhost:12000,http://localhost:8080"
     
     # Rate Limiting
     RATE_LIMIT_PER_MINUTE: int = 60
     
     # Security
     BCRYPT_ROUNDS: int = 12
+    
+    # OAuth Configuration
+    GOOGLE_CLIENT_ID: Optional[str] = None
+    GOOGLE_CLIENT_SECRET: Optional[str] = None
+    FACEBOOK_APP_ID: Optional[str] = None
+    FACEBOOK_CLIENT_SECRET: Optional[str] = None
+    OAUTH_REDIRECT_URI: str = "http://localhost:12000/api/auth/callback"
     
     # Email (for future use)
     SMTP_TLS: bool = True

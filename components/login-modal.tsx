@@ -19,11 +19,12 @@ interface LoginModalProps {
 }
 
 export function LoginModal({ open, onOpenChange }: LoginModalProps) {
-  const { login, isLoading } = useAuth()
+  const { login, loginWithGoogle, isLoading: authLoading } = useAuth()
   const { t } = useLanguage()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const [error, setError] = useState("")
 
@@ -43,8 +44,40 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
   }
 
   const handleSocialLogin = async (provider: "google" | "facebook") => {
-    // Social login not implemented yet - show message
-    setError(`${provider} login not implemented yet. Please use email login.`)
+    if (provider === "google") {
+      try {
+        console.log("[LOGIN-MODAL] Starting Google OAuth login process...")
+        setIsLoading(true)
+        setError("")
+        
+        console.log("[LOGIN-MODAL] Importing Google Auth library...")
+        const { signInWithGoogle } = await import("@/lib/google-auth")
+        
+        console.log("[LOGIN-MODAL] Calling signInWithGoogle()...")
+        const result = await signInWithGoogle()
+        console.log("[LOGIN-MODAL] signInWithGoogle result:", result)
+        
+        if (result.success && result.token) {
+          console.log("[LOGIN-MODAL] Google sign-in successful, calling loginWithGoogle...")
+          await loginWithGoogle(result.token)
+          console.log("[LOGIN-MODAL] loginWithGoogle completed, closing modal...")
+          onOpenChange(false)
+        } else {
+          console.error("[LOGIN-MODAL] Google sign-in failed:", result.error)
+          setError(result.error || "Google sign in failed")
+        }
+      } catch (error) {
+        console.error("[LOGIN-MODAL] Google sign in error:", error)
+        console.error("[LOGIN-MODAL] Error stack:", error instanceof Error ? error.stack : 'No stack trace')
+        setError("Failed to sign in with Google. Please try again.")
+      } finally {
+        console.log("[LOGIN-MODAL] Setting loading to false...")
+        setIsLoading(false)
+      }
+    } else {
+      // Facebook login not implemented yet
+      setError(`${provider} login not implemented yet. Please use email login.`)
+    }
   }
 
   return (
@@ -69,9 +102,9 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
               variant="outline"
               className="w-full h-11 text-left justify-start bg-transparent"
               onClick={() => handleSocialLogin("facebook")}
-              disabled={isLoading}
+              disabled={isLoading || authLoading}
             >
-              {isLoading ? (
+              {(isLoading || authLoading) ? (
                 <Loader2 className="w-4 h-4 mr-3 animate-spin" />
               ) : (
                 <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="#1877F2">
@@ -85,9 +118,9 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
               variant="outline"
               className="w-full h-11 text-left justify-start bg-transparent"
               onClick={() => handleSocialLogin("google")}
-              disabled={isLoading}
+              disabled={isLoading || authLoading}
             >
-              {isLoading ? (
+              {(isLoading || authLoading) ? (
                 <Loader2 className="w-4 h-4 mr-3 animate-spin" />
               ) : (
                 <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
@@ -156,8 +189,8 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
                 </button>
               </div>
             </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? (
+            <Button type="submit" className="w-full" disabled={isLoading || authLoading}>
+              {(isLoading || authLoading) ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                   {t("login.signing_in")}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Google OAuth</title>
+</head>
+<body>
+    <h1>Test Google OAuth Flow</h1>
+    <button onclick="testGoogleOAuth()">Test Google Login</button>
+    <div id="result"></div>
+
+    <script>
+        function testGoogleOAuth() {
+            console.log('Starting Google OAuth test...');
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Starting OAuth...';
+            
+            const clientId = '742067877936-jb5q9nbb5u4b8jarehergboqmdc84e59.apps.googleusercontent.com';
+            const redirectUri = 'http://localhost:3000/api/auth/callback/google';
+            const scope = 'openid email profile';
+            const responseType = 'code';
+            const state = Math.random().toString(36).substring(2, 15);
+            
+            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+                `client_id=${encodeURIComponent(clientId)}&` +
+                `redirect_uri=${encodeURIComponent(redirectUri)}&` +
+                `scope=${encodeURIComponent(scope)}&` +
+                `response_type=${encodeURIComponent(responseType)}&` +
+                `state=${encodeURIComponent(state)}`;
+            
+            console.log('Auth URL:', authUrl);
+            resultDiv.innerHTML = 'Opening popup...';
+            
+            const popup = window.open(authUrl, 'google-oauth', 'width=500,height=600');
+            
+            if (!popup) {
+                console.error('Popup blocked!');
+                resultDiv.innerHTML = 'Popup blocked! Please allow popups.';
+                return;
+            }
+            
+            // Listen for messages from popup
+            const messageListener = (event) => {
+                console.log('Received message:', event);
+                if (event.origin !== window.location.origin) {
+                    console.log('Ignoring message from different origin:', event.origin);
+                    return;
+                }
+                
+                if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
+                    console.log('OAuth success:', event.data);
+                    resultDiv.innerHTML = `Success! Token: ${event.data.token}`;
+                    popup.close();
+                    window.removeEventListener('message', messageListener);
+                } else if (event.data.type === 'GOOGLE_AUTH_ERROR') {
+                    console.error('OAuth error:', event.data);
+                    resultDiv.innerHTML = `Error: ${event.data.error}`;
+                    popup.close();
+                    window.removeEventListener('message', messageListener);
+                }
+            };
+            
+            window.addEventListener('message', messageListener);
+            
+            // Check if popup is closed manually
+            const checkClosed = setInterval(() => {
+                if (popup.closed) {
+                    console.log('Popup closed manually');
+                    resultDiv.innerHTML = 'Popup closed manually';
+                    clearInterval(checkClosed);
+                    window.removeEventListener('message', messageListener);
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

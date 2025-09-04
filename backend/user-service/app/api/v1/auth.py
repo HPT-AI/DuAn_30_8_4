@@ -1,12 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import HTTPBearer
+from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from app.db.database import get_db
 from app.schemas.user import UserCreate, UserLogin, Token, User
 from app.services.user_service import UserService
+from app.services.google_oauth_service import GoogleOAuthService
 from app.core.security import create_access_token, create_refresh_token, verify_token
 from app.utils.deps import get_current_active_user
+from typing import Optional
 
 router = APIRouter()
 security = HTTPBearer()
@@ -165,3 +168,150 @@ def verify_jwt_token(
         "role": user.role,
         "is_active": user.is_active
     }
+
+
+# Google OAuth endpoints
+class GoogleTokenRequest(BaseModel):
+    token: str
+
+
+@router.get("/google")
+def google_login():
+    """
+    Initiate Google OAuth login
+    """
+    try:
+        google_service = GoogleOAuthService()
+        authorization_url = google_service.get_authorization_url()
+        return {"authorization_url": authorization_url}
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=str(e)
+        )
+
+
+@router.get("/google/callback")
+def google_callback(
+    code: str,
+    state: Optional[str] = None,
+    db: Session = Depends(get_db)
+):
+    """
+    Handle Google OAuth callback
+    """
+    try:
+        google_service = GoogleOAuthService()
+        user_info = google_service.exchange_code_for_token(code, state)
+        
+        if not user_info:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Failed to get user info from Google"
+            )
+        
+        user_service = UserService(db)
+        
+        # Check if user exists
+        existing_user = user_service.get_user_by_email(user_info['email'])
+        
+        if existing_user:
+            # User exists, log them in
+            user = existing_user
+        else:
+            # Create new user
+            user_create = UserCreate(
+                email=user_info['email'],
+                password="",  # No password for OAuth users
+                full_name=user_info['full_name'],
+                role="USER",
+                is_active=True,
+                is_verified=user_info['email_verified']
+            )
+            user = user_service.create_oauth_user(user_create, provider="google")
+        
+        # Create tokens
+        access_token = create_access_token(subject=user.id)
+        refresh_token = create_refresh_token(subject=user.id)
+        
+        # Return JSON response for API call
+        return {
+            "access_token": access_token,
+            "refresh_token": refresh_token,
+            "token_type": "bearer",
+            "user": {
+                "id": user.id,
+                "email": user.email,
+                "full_name": user.full_name,
+                "role": user.role,
+                "is_active": user.is_active,
+                "is_verified": user.is_verified
+            }
+        }
+        
+        # Redirect to frontend with tokens (you might want to handle this differently)
+        frontend_url = "http://localhost:3000"
+        return RedirectResponse(
+            url=f"{frontend_url}?access_token={access_token}&refresh_token={refresh_token}"
+        )
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"OAuth callback failed: {str(e)}"
+        )
+
+
+@router.post("/google/token", response_model=Token)
+def google_token_login(
+    request: GoogleTokenRequest,
+    db: Session = Depends(get_db)
+):
+    """
+    Login with Google ID token (for frontend direct integration)
+    """
+    try:
+        google_service = GoogleOAuthService()
+        user_info = google_service.verify_google_token(request.token)
+        
+        if not user_info:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid Google token"
+            )
+        
+        user_service = UserService(db)
+        
+        # Check if user exists
+        existing_user = user_service.get_user_by_email(user_info['email'])
+        
+        if existing_user:
+            # User exists, log them in
+            user = existing_user
+        else:
+            # Create new user
+            user_create = UserCreate(
+                email=user_info['email'],
+                password="",  # No password for OAuth users
+                full_name=user_info['full_name'],
+                role="USER",
+                is_active=True,
+                is_verified=user_info['email_verified']
+            )
+            user = user_service.create_oauth_user(user_create, provider="google")
+        
+        # Create tokens
+        access_token = create_access_token(subject=user.id)
+        refresh_token = create_refresh_token(subject=user.id)
+        
+        return Token(
+            access_token=access_token,
+            refresh_token=refresh_token,
+            token_type="bearer"
+        )
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Google token login failed: {str(e)}"
+        )

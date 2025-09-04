@@ -13,6 +13,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { useRouter } from "next/navigation"
 import { Eye, EyeOff, ArrowLeft } from "lucide-react"
 import Link from "next/link"
+import { googleAuthService } from "@/lib/google-auth"
 
 export default function RegisterPage() {
   const { t } = useLanguage()
@@ -82,9 +83,28 @@ export default function RegisterPage() {
     }
   }
 
-  const handleSocialRegister = (provider: string) => {
-    // Social registration not implemented yet
-    setApiError(`${provider} registration not implemented yet. Please use email registration.`)
+  const handleSocialRegister = async (provider: string) => {
+    if (provider === "google") {
+      try {
+        setApiError("")
+        // Get Google credential
+        const credential = await googleAuthService.signInWithPopup()
+        
+        // Send credential to backend for verification and user creation/login
+        const result = await googleAuthService.signInWithCredential(credential)
+        
+        if (result.access_token) {
+          // Store token and redirect to dashboard
+          localStorage.setItem('access_token', result.access_token)
+          router.push("/")
+        }
+      } catch (error) {
+        console.error('Google sign-in error:', error)
+        setApiError(error instanceof Error ? error.message : "Google sign-in failed")
+      }
+    } else {
+      setApiError(`${provider} registration not implemented yet. Please use email registration.`)
+    }
   }
 
   return (

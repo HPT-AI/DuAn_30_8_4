@@ -13,6 +13,12 @@ services:
       - HOSTNAME=0.0.0.0
       - NEXT_TELEMETRY_DISABLED=1
       - API_GATEWAY_URL=http://kong-gateway:8000
+      - NEXT_PUBLIC_API_URL=http://localhost:3001
+      # OAuth Configuration
+      - NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-google-client-id-here
+      - NEXT_PUBLIC_FACEBOOK_APP_ID=your-facebook-app-id-here
+      - NEXTAUTH_URL=http://localhost:12000
+      - NEXTAUTH_SECRET=your-nextauth-secret-here
     depends_on:
       kong-gateway:
         condition: service_healthy
@@ -59,11 +65,7 @@ services:
       - "8445:8444"    # Admin API port (HTTPS)
       - "8100:8100"    # Status port
     environment:
-      - KONG_DATABASE=postgres
-      - KONG_PG_HOST=kong-database
-      - KONG_PG_USER=kong
-      - KONG_PG_PASSWORD=kongpass
-      - KONG_PG_DATABASE=kong
+      - KONG_DATABASE=off
       - KONG_PROXY_ACCESS_LOG=/dev/stdout
       - KONG_ADMIN_ACCESS_LOG=/dev/stdout
       - KONG_PROXY_ERROR_LOG=/dev/stderr
@@ -74,8 +76,6 @@ services:
       - KONG_LOG_LEVEL=info
       - KONG_DECLARATIVE_CONFIG=/etc/kong/kong.yml
     depends_on:
-      kong-database:
-        condition: service_healthy
       user-service:
         condition: service_healthy
       content-service:
@@ -92,6 +92,7 @@ services:
         condition: service_healthy
     volumes:
       - ./kong-gateway/logs:/usr/local/kong/logs
+      - ./kong-gateway/kong.yml:/etc/kong/kong.yml:ro
       - kong-tmp:/tmp
     networks:
       - khuongcuoicung-network
@@ -134,7 +135,12 @@ services:
       - DATABASE_URL=sqlite:///./authify.db
       - JWT_SECRET_KEY=super-secret-jwt-key-for-development-only-change-in-production
       - REDIS_URL=redis://redis:6379/0
-      - BACKEND_CORS_ORIGINS=http://localhost:3000,http://localhost:12000,http://localhost:8080,https://work-1-qivpqxdxprbfynjb.prod-runtime.all-hands.dev,https://work-2-qivpqxdxprbfynjb.prod-runtime.all-hands.dev
+      # OAuth Configuration
+      - GOOGLE_CLIENT_ID=your-google-client-id-here
+      - GOOGLE_CLIENT_SECRET=your-google-client-secret-here
+      - FACEBOOK_APP_ID=your-facebook-app-id-here
+      - FACEBOOK_CLIENT_SECRET=your-facebook-client-secret-here
+      - OAUTH_REDIRECT_URI=http://localhost:12000/api/auth/callback
     depends_on:
       - redis
     networks:

@@ -16,6 +16,7 @@ interface User {
 interface AuthContextType {
   user: User | null
   login: (credentials: LoginCredentials) => Promise<void>
+  loginWithGoogle: (token: string) => Promise<void>
   register: (userData: RegisterData) => Promise<void>
   logout: () => void
   isLoading: boolean
@@ -64,6 +65,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const currentUser = await apiClient.getCurrentUser()
       setUser(mapApiUserToUser(currentUser))
     } catch (error) {
+      setIsLoading(false)
+      throw error
+    }
+    setIsLoading(false)
+  }
+
+  const loginWithGoogle = async (token: string) => {
+    console.log('[AUTH-CONTEXT] Starting loginWithGoogle...');
+    console.log('[AUTH-CONTEXT] Token received:', token ? 'Yes' : 'No');
+    setIsLoading(true)
+    try {
+      console.log('[AUTH-CONTEXT] Calling apiClient.loginWithGoogle...');
+      await apiClient.loginWithGoogle(token)
+      console.log('[AUTH-CONTEXT] apiClient.loginWithGoogle successful, getting current user...');
+      const currentUser = await apiClient.getCurrentUser()
+      console.log('[AUTH-CONTEXT] Current user retrieved:', currentUser);
+      setUser(mapApiUserToUser(currentUser))
+      console.log('[AUTH-CONTEXT] User set successfully');
+    } catch (error) {
+      console.error('[AUTH-CONTEXT] loginWithGoogle error:', error);
+      console.error('[AUTH-CONTEXT] Error details:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : 'No stack trace'
+      });
       setIsLoading(false)
       throw error
     }
@@ -132,6 +157,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{ 
         user, 
         login, 
+        loginWithGoogle, 
         register, 
         logout, 
         isLoading, 

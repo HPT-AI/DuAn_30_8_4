@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Google Auth</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <h1>Test Google OAuth</h1>
+    <div id="g_id_onload"
+         data-client_id="742067877936-jb5q9nbb5u4b8jarehergboqmdc84e59.apps.googleusercontent.com"
+         data-callback="handleCredentialResponse">
+    </div>
+    <div class="g_id_signin" data-type="standard"></div>
+    
+    <div id="result"></div>
+    
+    <script>
+        function handleCredentialResponse(response) {
+            console.log("Encoded JWT ID token: " + response.credential);
+            document.getElementById('result').innerHTML = '<p>Success! Token received: ' + response.credential.substring(0, 50) + '...</p>';
+        }
+        
+        window.onload = function() {
+            console.log('Page loaded');
+            console.log('Google object:', window.google);
+            
+            // Test network connectivity
+            fetch('https://accounts.google.com/gsi/client')
+                .then(response => {
+                    console.log('GSI script fetch status:', response.status);
+                    document.getElementById('result').innerHTML += '<p>GSI script accessible: ' + response.status + '</p>';
+                })
+                .catch(error => {
+                    console.error('GSI script fetch error:', error);
+                    document.getElementById('result').innerHTML += '<p>GSI script error: ' + error.message + '</p>';
+                });
+        };
+    </script>
+</body>
+</html>
