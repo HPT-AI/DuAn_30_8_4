@@ -16,7 +16,7 @@ interface User {
 interface AuthContextType {
   user: User | null
   login: (credentials: LoginCredentials) => Promise<void>
-  loginWithGoogle: (tokens: any) => Promise<void>
+  loginWithGoogle: (googleToken: string) => Promise<void>
   register: (userData: RegisterData) => Promise<void>
   logout: () => void
   isLoading: boolean
@@ -49,7 +49,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(mapApiUserToUser(currentUser))
       } catch (error) {
         // No valid session, user remains null
-        console.log('No valid session found')
+        console.log('No valid session found:', error)
+        setUser(null)
       } finally {
         setIsLoading(false)
       }
@@ -71,15 +72,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false)
   }
 
-  const loginWithGoogle = async (tokens: any) => {
+  const loginWithGoogle = async (googleToken: string) => {
     console.log('[AUTH-CONTEXT] Starting loginWithGoogle...');
-    console.log('[AUTH-CONTEXT] Tokens received:', tokens ? 'Yes' : 'No');
+    console.log('[AUTH-CONTEXT] Google token received:', googleToken ? 'Yes' : 'No');
     setIsLoading(true)
     try {
-      console.log('[AUTH-CONTEXT] Setting tokens directly...');
-      // Store tokens directly since we already have them from the OAuth callback
-      apiClient.setAccessToken(tokens.access_token);
-      apiClient.setRefreshToken(tokens.refresh_token);
+      console.log('[AUTH-CONTEXT] Calling backend to exchange Google token...');
+      // Exchange Google token for JWT tokens via backend
+      const tokens = await apiClient.loginWithGoogle(googleToken);
+      console.log('[AUTH-CONTEXT] JWT tokens received from backend');
       
       console.log('[AUTH-CONTEXT] Getting current user...');
       const currentUser = await apiClient.getCurrentUser()

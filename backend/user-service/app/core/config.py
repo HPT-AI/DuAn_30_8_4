@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     REDIS_URL: str = "redis://localhost:6379/0"
     
     # CORS
-    BACKEND_CORS_ORIGINS: str = "http://localhost:3000,http://localhost:12000,http://localhost:8080"
+    BACKEND_CORS_ORIGINS: str = "http://localhost:3000,http://localhost:12000,http://localhost:8080,https://work-1-qyvohueimpqalkhz.prod-runtime.all-hands.dev,https://work-2-qyvohueimpqalkhz.prod-runtime.all-hands.dev"
     
     # Rate Limiting
     RATE_LIMIT_PER_MINUTE: int = 60
@@ -35,7 +35,7 @@ class Settings(BaseSettings):
     GOOGLE_CLIENT_SECRET: Optional[str] = None
     FACEBOOK_APP_ID: Optional[str] = None
     FACEBOOK_CLIENT_SECRET: Optional[str] = None
-    OAUTH_REDIRECT_URI: str = "http://localhost:12000/api/auth/callback"
+    OAUTH_REDIRECT_URI: str = "http://localhost:8000/api/v1/auth/google/callback"
     
     # Email (for future use)
     SMTP_TLS: bool = True

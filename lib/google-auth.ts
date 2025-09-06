@@ -62,20 +62,47 @@ class GoogleAuthService {
 
     return new Promise((resolve, reject) => {
         try {
-            this.renderSignInButton(
-            (credential: string) => {
-                console.log('[GOOGLE-AUTH-SERVICE] Received credential from GIS');
-                resolve(credential);
-            },
-            (error: Error) => {
-                console.error('[GOOGLE-AUTH-SERVICE] GIS sign-in error:', error);
-                reject(error);
-            }
-            );
+            // Initialize Google Identity Services
+            window.google.accounts.id.initialize({
+                client_id: this.clientId,
+                callback: (response: GoogleAuthResponse) => {
+                    console.log('[GOOGLE-AUTH-SERVICE] Received credential from GIS');
+                    resolve(response.credential);
+                },
+                auto_select: false,
+                cancel_on_tap_outside: false
+            });
+
+            // Show the One Tap prompt
+            window.google.accounts.id.prompt((notification: any) => {
+                console.log('[GOOGLE-AUTH-SERVICE] One Tap notification:', notification);
+                if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+                    // Fallback to popup if One Tap is not available
+                    console.log('[GOOGLE-AUTH-SERVICE] One Tap not available, using popup...');
+                    this.showPopupFallback(resolve, reject);
+                }
+            });
         } catch (e) {
+            console.error('[GOOGLE-AUTH-SERVICE] Error in signInWithPopup:', e);
             reject(e as Error);
         }
       });
+    }
+
+    private showPopupFallback(
+        resolve: (credential: string) => void,
+        reject: (error: Error) => void
+    ): void {
+        this.renderSignInButton(
+            (credential: string) => {
+                console.log('[GOOGLE-AUTH-SERVICE] Received credential from popup fallback');
+                resolve(credential);
+            },
+            (error: Error) => {
+                console.error('[GOOGLE-AUTH-SERVICE] Popup fallback error:', error);
+                reject(error);
+            }
+        );
     }
 
     private renderSignInButton(
@@ -137,7 +164,7 @@ window.google.accounts.id.renderButton(container, {
     async signInWithCredential(token: string): Promise<any> {
         console.log('[GOOGLE-AUTH-SERVICE] Processing token from OAuth callback...');
         console.log('[GOOGLE-AUTH-SERVICE] Token received:', !!token);
-        return { access_token: token, token_type: 'bearer' };
+        return token;
     }
 
     decodeJWT(token: string): GoogleUser | null {
@@ -197,11 +224,11 @@ export async function signInWithGoogle(): Promise<{
       const credential = await googleAuthService.signInWithPopup();
       console.log('[GOOGLE-AUTH] Received credential:', credential ? 'Yes' : 'No');
 
-      console.log('[GOOGLE-AUTH] Sending credential to backend...');
-      const result = await googleAuthService.signInWithCredential(credential);
-      console.log('[GOOGLE-AUTH] Backend response:', result);
+      console.log('[GOOGLE-AUTH] Processing credential...');
+      const token = await googleAuthService.signInWithCredential(credential);
+      console.log('[GOOGLE-AUTH] Token processed:', !!token);
 
-      return { success: true, token: result.access_token || result.token };
+      return { success: true, token: token };
   } 
   catch (error) {
       console.error('[GOOGLE-AUTH] Google sign-in failed:', error);
