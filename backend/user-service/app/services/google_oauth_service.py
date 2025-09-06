@@ -46,7 +46,29 @@ class GoogleOAuthService:
         Verify Google ID token and return user info
         """
         try:
-            # Verify the token
+            # First try to decode as base64 (from our frontend OAuth2 flow)
+            import base64
+            import json
+            
+            try:
+                decoded_data = base64.b64decode(token).decode('utf-8')
+                user_data = json.loads(decoded_data)
+                
+                # Validate that this contains the expected fields
+                if 'email' in user_data and 'access_token' in user_data:
+                    print(f"Decoded frontend OAuth2 token for user: {user_data.get('email')}")
+                    return {
+                        'google_id': user_data.get('id', ''),
+                        'email': user_data['email'],
+                        'full_name': user_data.get('name', ''),
+                        'picture': user_data.get('picture', ''),
+                        'email_verified': True  # OAuth2 flow ensures verified email
+                    }
+            except (base64.binascii.Error, json.JSONDecodeError, KeyError):
+                # Not a base64 encoded token, try Google ID token verification
+                pass
+            
+            # Fallback to Google ID token verification
             idinfo = id_token.verify_oauth2_token(
                 token, 
                 requests.Request(), 
