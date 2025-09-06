@@ -150,18 +150,6 @@ routes:
       - auth
       - protected
 
-  - name: auth-me
-    service: authify-service
-    paths:
-      - /api/v1/auth/me
-    methods:
-      - GET
-    strip_path: false
-    preserve_host: false
-    tags:
-      - auth
-      - protected
-
   - name: auth-verify-token
     service: authify-service
     paths:
@@ -173,20 +161,6 @@ routes:
     tags:
       - auth
       - internal
-
-  # User management routes
-  - name: users-me
-    service: authify-service
-    paths:
-      - /api/v1/users/me
-    methods:
-      - GET
-      - PUT
-    strip_path: false
-    preserve_host: false
-    tags:
-      - users
-      - protected
 
   - name: users-admin
     service: authify-service
@@ -323,6 +297,42 @@ routes:
       - health
       - public
 
+  - name: auth-google-token
+    service: authify-service
+    paths:
+      - /api/v1/auth/google/token
+    methods:
+      - POST
+    strip_path: false
+    preserve_host: false
+    tags:
+      - auth
+      - public
+
+  - name: auth-google
+    service: authify-service
+    paths:
+      -/api/v1/auth/google
+    methods:
+      - GET
+    strip_path: false
+    preserve_host: false
+    tags:
+      - auth
+      - public
+
+  - name: auth-google-callback
+    service: authify-service
+    paths:
+      - /api/v1/auth/google/callback
+    methods:
+      -GET
+    strip_path: false
+    preserve_host: false
+    tags:
+      - auth
+      - public
+
 # Consumers - API clients
 consumers:
   - username: frontend-client
@@ -349,6 +359,7 @@ plugins:
   - name: cors
     config:
       origins:
+        - "http://localhost:3000"
         - "http://localhost:12000"
         - "http://localhost:12001"
         - "https://work-1-qivpqxdxprbfynjb.prod-runtime.all-hands.dev"

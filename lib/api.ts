@@ -1,5 +1,5 @@
 // API client for communicating with User Service via API Gateway
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 export interface LoginCredentials {
   email: string;
@@ -182,7 +182,7 @@ class ApiClient {
   }
 
   async getCurrentUser(): Promise<User> {
-    return this.request<User>('/api/v1/users/me');
+    return this.requestWithRetry<User>('/api/v1/users/me');
   }
 
   async refreshToken(): Promise<AuthTokens> {
@@ -211,14 +211,14 @@ class ApiClient {
 
   // User management endpoints
   async updateProfile(userData: Partial<User>): Promise<User> {
-    return this.request<User>('/api/v1/users/me', {
+    return this.requestWithRetry<User>('/api/v1/users/me', {
       method: 'PUT',
       body: JSON.stringify(userData),
     });
   }
 
   async changePassword(currentPassword: string, newPassword: string): Promise<void> {
-    await this.request('/api/v1/users/me', {
+    await this.requestWithRetry('/api/v1/users/me', {
       method: 'PUT',
       body: JSON.stringify({ 
         password: newPassword 

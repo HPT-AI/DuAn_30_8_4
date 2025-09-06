@@ -203,18 +203,17 @@ def google_callback(
     try:
         google_service = GoogleOAuthService()
         user_info = google_service.exchange_code_for_token(code, state)
-        
+
         if not user_info:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Failed to get user info from Google"
             )
-        
+
         user_service = UserService(db)
-        
-        # Check if user exists
+
         existing_user = user_service.get_user_by_email(user_info['email'])
-        
+
         if existing_user:
             # User exists, log them in
             user = existing_user
@@ -222,19 +221,17 @@ def google_callback(
             # Create new user
             user_create = UserCreate(
                 email=user_info['email'],
-                password="",  # No password for OAuth users
+                password="",
                 full_name=user_info['full_name'],
                 role="USER",
                 is_active=True,
                 is_verified=user_info['email_verified']
             )
             user = user_service.create_oauth_user(user_create, provider="google")
-        
-        # Create tokens
+
         access_token = create_access_token(subject=user.id)
         refresh_token = create_refresh_token(subject=user.id)
-        
-        # Return JSON response for API call
+
         return {
             "access_token": access_token,
             "refresh_token": refresh_token,
@@ -248,20 +245,15 @@ def google_callback(
                 "is_verified": user.is_verified
             }
         }
-        
-        # Redirect to frontend with tokens (you might want to handle this differently)
-        frontend_url = "http://localhost:3000"
-        return RedirectResponse(
-            url=f"{frontend_url}?access_token={access_token}&refresh_token={refresh_token}"
-        )
-        
+
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"OAuth callback failed: {str(e)}"
         )
-
-
+# token
 @router.post("/google/token", response_model=Token)
 def google_token_login(
     request: GoogleTokenRequest,

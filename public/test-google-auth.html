@@ -1,41 +1,232 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Google Auth</title>
+    <title>Test Google OAuth</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .result {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .error {
+            background: #ffeaea;
+            border: 1px solid #f44336;
+            color: #d32f2f;
+        }
+        pre {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        button {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #3367d6;
+        }
+    </style>
 </head>
 <body>
-    <h1>Test Google OAuth</h1>
-    <div id="g_id_onload"
-         data-client_id="742067877936-jb5q9nbb5u4b8jarehergboqmdc84e59.apps.googleusercontent.com"
-         data-callback="handleCredentialResponse">
+    <h1>🔐 Test Google OAuth với Backend</h1>
+    
+    <div class="container">
+        <h2>Bước 1: Đăng nhập với Google</h2>
+        <div id="g_id_onload"
+             data-client_id="742067877936-jb5q9nbb5u4b8jarehergboqmdc84e59.apps.googleusercontent.com"
+             data-callback="handleCredentialResponse">
+        </div>
+        <div class="g_id_signin" data-type="standard"></div>
+        <button onclick="manualGoogleSignIn()">Đăng nhập thủ công</button>
+        <p><strong>Lưu ý:</strong> Đảm bảo rằng Google OAuth Client ID đã được cấu hình với authorized JavaScript origins bao gồm <code>http://localhost:12000</code> (hiện tại có thể chỉ có localhost:3000)</p>
+        <p><strong>Hướng dẫn:</strong> Nếu gặp lỗi "Not a valid origin for the client", bạn cần thêm <code>http://localhost:12000</code> vào <a href="https://console.cloud.google.com/apis/credentials" target="_blank">Google Cloud Console > APIs & Credentials</a></p>
     </div>
-    <div class="g_id_signin" data-type="standard"></div>
-    
-    <div id="result"></div>
-    
+
+    <div class="container">
+        <h2>Bước 2: Gửi ID Token đến Backend</h2>
+        <button onclick="sendTokenToBackend()" id="sendTokenBtn" disabled>Gửi Token đến Backend</button>
+        <div id="tokenResult"></div>
+    </div>
+
+    <div class="container">
+        <h2>Bước 3: Test API với Access Token</h2>
+        <button onclick="testProtectedAPI()" id="testAPIBtn" disabled>Test /api/v1/users/me</button>
+        <div id="apiResult"></div>
+    </div>
+
+    <div class="container">
+        <h2>Debug Info</h2>
+        <div id="debugInfo"></div>
+    </div>
+
     <script>
-        function handleCredentialResponse(response) {
-            console.log("Encoded JWT ID token: " + response.credential);
-            document.getElementById('result').innerHTML = '<p>Success! Token received: ' + response.credential.substring(0, 50) + '...</p>';
-        }
-        
-        window.onload = function() {
-            console.log('Page loaded');
-            console.log('Google object:', window.google);
+        let currentIdToken = null;
+        let currentAccessToken = null;
+        const BACKEND_URL = 'http://localhost:8001';
+        const GOOGLE_CLIENT_ID = '742067877936-jb5q9nbb5u4b8jarehergboqmdc84e59.apps.googleusercontent.com';
+
+        // Khởi tạo Google Identity Services
+        function initializeGoogleAuth() {
+            google.accounts.id.initialize({
+                client_id: GOOGLE_CLIENT_ID,
+                callback: handleCredentialResponse
+            });
             
-            // Test network connectivity
-            fetch('https://accounts.google.com/gsi/client')
-                .then(response => {
-                    console.log('GSI script fetch status:', response.status);
-                    document.getElementById('result').innerHTML += '<p>GSI script accessible: ' + response.status + '</p>';
-                })
-                .catch(error => {
-                    console.error('GSI script fetch error:', error);
-                    document.getElementById('result').innerHTML += '<p>GSI script error: ' + error.message + '</p>';
+            google.accounts.id.renderButton(
+                document.querySelector('.g_id_signin'),
+                { theme: 'outline', size: 'large' }
+            );
+        }
+
+        // Xử lý response từ Google
+        function handleCredentialResponse(response) {
+            console.log('Google credential response:', response);
+            currentIdToken = response.credential;
+            
+            // Decode JWT để hiển thị thông tin
+            const payload = parseJwt(response.credential);
+            
+            document.getElementById('debugInfo').innerHTML = `
+                <h3>✅ Nhận được ID Token từ Google</h3>
+                <p><strong>User:</strong> ${payload.name} (${payload.email})</p>
+                <p><strong>Token length:</strong> ${response.credential.length} characters</p>
+                <pre>${JSON.stringify(payload, null, 2)}</pre>
+            `;
+            
+            document.getElementById('sendTokenBtn').disabled = false;
+        }
+
+        // Đăng nhập thủ công
+        function manualGoogleSignIn() {
+            google.accounts.id.prompt();
+        }
+
+        // Gửi ID token đến backend
+        async function sendTokenToBackend() {
+            if (!currentIdToken) {
+                alert('Vui lòng đăng nhập với Google trước!');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/v1/auth/google/token`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        token: currentIdToken
+                    })
                 });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    currentAccessToken = data.access_token;
+                    document.getElementById('tokenResult').innerHTML = `
+                        <div class="result">
+                            <h3>✅ Backend trả về JWT tokens thành công!</h3>
+                            <p><strong>Access Token:</strong> ${data.access_token.substring(0, 50)}...</p>
+                            <p><strong>Refresh Token:</strong> ${data.refresh_token.substring(0, 50)}...</p>
+                            <p><strong>Token Type:</strong> ${data.token_type}</p>
+                        </div>
+                    `;
+                    document.getElementById('testAPIBtn').disabled = false;
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${data.detail || 'Unknown error'}`);
+                }
+            } catch (error) {
+                console.error('Backend error:', error);
+                document.getElementById('tokenResult').innerHTML = `
+                    <div class="result error">
+                        <h3>❌ Lỗi khi gửi token đến backend</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Test protected API
+        async function testProtectedAPI() {
+            if (!currentAccessToken) {
+                alert('Vui lòng lấy access token từ backend trước!');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/v1/users/me`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${currentAccessToken}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('apiResult').innerHTML = `
+                        <div class="result">
+                            <h3>✅ API /users/me thành công!</h3>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${data.detail || 'Unknown error'}`);
+                }
+            } catch (error) {
+                console.error('API error:', error);
+                document.getElementById('apiResult').innerHTML = `
+                    <div class="result error">
+                        <h3>❌ Lỗi khi gọi API /users/me</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Utility function để decode JWT
+        function parseJwt(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+                return JSON.parse(jsonPayload);
+            } catch (error) {
+                console.error('Error parsing JWT:', error);
+                return {};
+            }
+        }
+
+        // Khởi tạo khi trang load
+        window.onload = function() {
+            // Đợi Google script load xong
+            setTimeout(initializeGoogleAuth, 1000);
         };
     </script>
 </body>

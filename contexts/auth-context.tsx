@@ -16,7 +16,7 @@ interface User {
 interface AuthContextType {
   user: User | null
   login: (credentials: LoginCredentials) => Promise<void>
-  loginWithGoogle: (token: string) => Promise<void>
+  loginWithGoogle: (tokens: any) => Promise<void>
   register: (userData: RegisterData) => Promise<void>
   logout: () => void
   isLoading: boolean
@@ -71,14 +71,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false)
   }
 
-  const loginWithGoogle = async (token: string) => {
+  const loginWithGoogle = async (tokens: any) => {
     console.log('[AUTH-CONTEXT] Starting loginWithGoogle...');
-    console.log('[AUTH-CONTEXT] Token received:', token ? 'Yes' : 'No');
+    console.log('[AUTH-CONTEXT] Tokens received:', tokens ? 'Yes' : 'No');
     setIsLoading(true)
     try {
-      console.log('[AUTH-CONTEXT] Calling apiClient.loginWithGoogle...');
-      await apiClient.loginWithGoogle(token)
-      console.log('[AUTH-CONTEXT] apiClient.loginWithGoogle successful, getting current user...');
+      console.log('[AUTH-CONTEXT] Setting tokens directly...');
+      // Store tokens directly since we already have them from the OAuth callback
+      apiClient.setAccessToken(tokens.access_token);
+      apiClient.setRefreshToken(tokens.refresh_token);
+      
+      console.log('[AUTH-CONTEXT] Getting current user...');
       const currentUser = await apiClient.getCurrentUser()
       console.log('[AUTH-CONTEXT] Current user retrieved:', currentUser);
       setUser(mapApiUserToUser(currentUser))

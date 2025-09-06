@@ -54,7 +54,7 @@ export default function GoogleCallbackPage() {
         if (window.opener) {
           window.opener.postMessage({
             type: 'GOOGLE_OAUTH_SUCCESS',
-            token: data.access_token
+            tokens: data
           }, window.location.origin)
         }
         window.close()

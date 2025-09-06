@@ -57,9 +57,9 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
         const result = await signInWithGoogle()
         console.log("[LOGIN-MODAL] signInWithGoogle result:", result)
         
-        if (result.success && result.token) {
+        if (result.success && result.tokens) {
           console.log("[LOGIN-MODAL] Google sign-in successful, calling loginWithGoogle...")
-          await loginWithGoogle(result.token)
+          await loginWithGoogle(result.tokens)
           console.log("[LOGIN-MODAL] loginWithGoogle completed, closing modal...")
           onOpenChange(false)
         } else {
