@@ -7,8 +7,8 @@ A modern Next.js application for construction project management with admin dash
 ### Option 1: Docker (Recommended)
 ```bash
 # Clone the repository
-git clone https://github.com/HPT-AI/DuAn_30_8.git
-cd DuAn_30_8
+git clone https://github.com/HPT-AI/DuAn_30_8_2.git
+cd DuAn_30_8_2
 
 # Run with Docker Compose
 docker compose up -d
