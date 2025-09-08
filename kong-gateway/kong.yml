@@ -312,7 +312,7 @@ routes:
   - name: auth-google
     service: authify-service
     paths:
-      -/api/v1/auth/google
+      - /api/v1/auth/google
     methods:
       - GET
     strip_path: false
@@ -326,12 +326,25 @@ routes:
     paths:
       - /api/v1/auth/google/callback
     methods:
-      -GET
+      - GET
     strip_path: false
     preserve_host: false
     tags:
       - auth
       - public
+
+  - name: users-me
+    service: authify-service
+    paths:
+      - /api/v1/users/me
+    methods:
+      - GET
+      - PUT
+    strip_path: false
+    preserve_host: false
+    tags:
+      - users
+      - protected
 
 # Consumers - API clients
 consumers:
@@ -362,8 +375,8 @@ plugins:
         - "http://localhost:3000"
         - "http://localhost:12000"
         - "http://localhost:12001"
-        - "https://work-1-qivpqxdxprbfynjb.prod-runtime.all-hands.dev"
-        - "https://work-2-qivpqxdxprbfynjb.prod-runtime.all-hands.dev"
+        - "https://work-1-ronzwqiudyvspcyo.prod-runtime.all-hands.dev"
+        - "https://work-2-ronzwqiudyvspcyo.prod-runtime.all-hands.dev"
       methods:
         - GET
         - POST

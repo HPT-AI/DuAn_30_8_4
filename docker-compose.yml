@@ -13,9 +13,9 @@ services:
       - HOSTNAME=0.0.0.0
       - NEXT_TELEMETRY_DISABLED=1
       - API_GATEWAY_URL=http://kong-gateway:8000
-      - NEXT_PUBLIC_API_URL=http://localhost:3001
+      - NEXT_PUBLIC_API_URL=http://localhost:8080
       # OAuth Configuration
-      - NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-google-client-id-here
+      - NEXT_PUBLIC_GOOGLE_CLIENT_ID=742067877936-jb5q9nbb5u4b8jarehergboqmdc84e59.apps.googleusercontent.com
       - NEXT_PUBLIC_FACEBOOK_APP_ID=your-facebook-app-id-here
       - NEXTAUTH_URL=http://localhost:12000
       - NEXTAUTH_SECRET=your-nextauth-secret-here
@@ -136,11 +136,11 @@ services:
       - JWT_SECRET_KEY=super-secret-jwt-key-for-development-only-change-in-production
       - REDIS_URL=redis://redis:6379/0
       # OAuth Configuration
-      - GOOGLE_CLIENT_ID=your-google-client-id-here
-      - GOOGLE_CLIENT_SECRET=your-google-client-secret-here
+      - GOOGLE_CLIENT_ID=742067877936-jb5q9nbb5u4b8jarehergboqmdc84e59.apps.googleusercontent.com
+      - GOOGLE_CLIENT_SECRET=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cJz
       - FACEBOOK_APP_ID=your-facebook-app-id-here
       - FACEBOOK_CLIENT_SECRET=your-facebook-client-secret-here
-      - OAUTH_REDIRECT_URI=http://localhost:12000/api/auth/callback
+      - OAUTH_REDIRECT_URI=http://localhost:8080/api/v1/auth/google/callback
     depends_on:
       - redis
     networks:
