@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
 
   try {
     // Call backend API
-    const backendUrl = `http://localhost:8000/api/v1/auth/google/callback?` + new URLSearchParams({
+    const backendUrl = `http://localhost:12001/api/v1/auth/google/callback?` + new URLSearchParams({
       code,
       state: state || ''
     })

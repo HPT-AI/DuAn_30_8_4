@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Google OAuth - ConstructVN</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #0f172a;
+            color: white;
+        }
+        .container {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid #334155;
+        }
+        .button {
+            background: linear-gradient(to right, #06b6d4, #3b82f6);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+        }
+        .button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .result {
+            background: #374151;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .error {
+            background: #7f1d1d;
+            border: 1px solid #dc2626;
+        }
+        .success {
+            background: #14532d;
+            border: 1px solid #16a34a;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .status.checking { background: #1e40af; }
+        .status.ready { background: #166534; }
+        .status.error { background: #991b1b; }
+        .google-icon {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Test Google OAuth Integration</h1>
+        <p>Test tính năng đăng nhập Google cho ConstructVN</p>
+        
+        <div id="status" class="status checking">🔄 Đang kiểm tra kết nối...</div>
+        
+        <div>
+            <h2>Backend API Tests</h2>
+            <button class="button" onclick="testBackendHealth()">
+                ⚡ Test Backend Health
+            </button>
+            <button class="button" onclick="testGoogleAuthEndpoint()">
+                🔗 Test Google Auth Endpoint
+            </button>
+            <button class="button" onclick="testGoogleLoginFlow()">
+                <svg class="google-icon" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Test Google Login
+            </button>
+        </div>
+
+        <div>
+            <h2>Frontend Tests</h2>
+            <button class="button" onclick="testFrontendConnection()">
+                🌐 Test Frontend Connection
+            </button>
+            <button class="button" onclick="openMainApp()">
+                🚀 Open Main App
+            </button>
+        </div>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:12001';
+        const FRONTEND_URL = 'http://localhost:12000';
+        const resultsDiv = document.getElementById('results');
+        const statusDiv = document.getElementById('status');
+
+        function addResult(title, content, isError = false) {
+            const div = document.createElement('div');
+            div.className = `result ${isError ? 'error' : 'success'}`;
+            div.innerHTML = `<strong>${title}</strong>\n${content}`;
+            resultsDiv.appendChild(div);
+            resultsDiv.scrollTop = resultsDiv.scrollHeight;
+        }
+
+        function updateStatus(message, type = 'checking') {
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+        }
+
+        async function testBackendHealth() {
+            try {
+                updateStatus('🔄 Đang kiểm tra Backend...', 'checking');
+                const response = await fetch(`${API_BASE_URL}/health`);
+                const data = await response.json();
+                addResult('✅ Backend Health Check', JSON.stringify(data, null, 2));
+                updateStatus('✅ Backend đang hoạt động', 'ready');
+            } catch (error) {
+                addResult('❌ Backend Health Check Failed', error.message, true);
+                updateStatus('❌ Backend không kết nối được', 'error');
+            }
+        }
+
+        async function testGoogleAuthEndpoint() {
+            try {
+                updateStatus('🔄 Đang test Google Auth endpoint...', 'checking');
+                const response = await fetch(`${API_BASE_URL}/api/v1/auth/google`);
+                const data = await response.json();
+                addResult('✅ Google Auth Endpoint', JSON.stringify(data, null, 2));
+                updateStatus('✅ Google Auth endpoint hoạt động', 'ready');
+            } catch (error) {
+                addResult('❌ Google Auth Endpoint Failed', error.message, true);
+                updateStatus('❌ Google Auth endpoint lỗi', 'error');
+            }
+        }
+
+        async function testGoogleLoginFlow() {
+            try {
+                updateStatus('🔄 Đang khởi tạo Google Login...', 'checking');
+                
+                // Step 1: Get Google authorization URL
+                const authResponse = await fetch(`${API_BASE_URL}/api/v1/auth/google`);
+                const authData = await authResponse.json();
+                
+                if (authData.authorization_url) {
+                    addResult('✅ Google Authorization URL Generated', 
+                        `URL: ${authData.authorization_url}\n\n🔗 Click link bên dưới để test đăng nhập Google:`);
+                    
+                    // Create clickable link
+                    const linkContainer = document.createElement('div');
+                    linkContainer.style.cssText = 'margin: 20px 0; padding: 20px; background: #1e40af; border-radius: 8px; text-align: center;';
+                    
+                    const link = document.createElement('a');
+                    link.href = authData.authorization_url;
+                    link.target = '_blank';
+                    link.textContent = '🔗 Đăng nhập với Google (Mở tab mới)';
+                    link.style.cssText = 'display: inline-block; background: #dc2626; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; transition: all 0.2s;';
+                    link.onmouseover = () => link.style.background = '#b91c1c';
+                    link.onmouseout = () => link.style.background = '#dc2626';
+                    
+                    const instruction = document.createElement('p');
+                    instruction.textContent = '⚠️ Sau khi đăng nhập thành công, bạn sẽ được redirect về callback URL';
+                    instruction.style.cssText = 'margin-top: 10px; color: #fbbf24; font-size: 14px;';
+                    
+                    linkContainer.appendChild(link);
+                    linkContainer.appendChild(instruction);
+                    resultsDiv.appendChild(linkContainer);
+                    
+                    updateStatus('✅ Google Login URL sẵn sàng - Click link để test', 'ready');
+                } else {
+                    addResult('❌ Google Login Failed', 'No authorization URL received', true);
+                    updateStatus('❌ Không tạo được Google Login URL', 'error');
+                }
+            } catch (error) {
+                addResult('❌ Google Login Failed', error.message, true);
+                updateStatus('❌ Google Login lỗi', 'error');
+            }
+        }
+
+        async function testFrontendConnection() {
+            try {
+                updateStatus('🔄 Đang kiểm tra Frontend...', 'checking');
+                const response = await fetch(FRONTEND_URL);
+                if (response.ok) {
+                    addResult('✅ Frontend Connection', `Frontend đang chạy tại: ${FRONTEND_URL}`);
+                    updateStatus('✅ Frontend đang hoạt động', 'ready');
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                addResult('❌ Frontend Connection Failed', error.message, true);
+                updateStatus('❌ Frontend không kết nối được', 'error');
+            }
+        }
+
+        function openMainApp() {
+            window.open(FRONTEND_URL, '_blank');
+            addResult('🚀 Main App Opened', `Đã mở ứng dụng chính tại: ${FRONTEND_URL}`);
+        }
+
+        // Auto-run tests on page load
+        window.onload = async function() {
+            updateStatus('🔄 Đang khởi tạo tests...', 'checking');
+            await testBackendHealth();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await testFrontendConnection();
+            updateStatus('✅ Sẵn sàng test Google OAuth', 'ready');
+        };
+    </script>
+</body>
+</html>

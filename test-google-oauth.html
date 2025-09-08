@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Google OAuth</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .button {
+            background-color: #4285f4;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .button:hover {
+            background-color: #357ae8;
+        }
+        .result {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            white-space: pre-wrap;
+        }
+        .error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        .success {
+            background-color: #e8f5e8;
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 Test Google OAuth Integration</h1>
+    
+    <div>
+        <h2>Backend API Tests</h2>
+        <button class="button" onclick="testBackendHealth()">Test Backend Health</button>
+        <button class="button" onclick="testGoogleAuthEndpoint()">Test Google Auth Endpoint</button>
+        <button class="button" onclick="testGoogleLogin()">Test Google Login Flow</button>
+    </div>
+
+    <div id="results"></div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:12001';
+        const resultsDiv = document.getElementById('results');
+
+        function addResult(title, content, isError = false) {
+            const div = document.createElement('div');
+            div.className = `result ${isError ? 'error' : 'success'}`;
+            div.innerHTML = `<strong>${title}</strong>\n${content}`;
+            resultsDiv.appendChild(div);
+        }
+
+        async function testBackendHealth() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/health`);
+                const data = await response.json();
+                addResult('✅ Backend Health Check', JSON.stringify(data, null, 2));
+            } catch (error) {
+                addResult('❌ Backend Health Check Failed', error.message, true);
+            }
+        }
+
+        async function testGoogleAuthEndpoint() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/v1/auth/google`);
+                const data = await response.json();
+                addResult('✅ Google Auth Endpoint', JSON.stringify(data, null, 2));
+            } catch (error) {
+                addResult('❌ Google Auth Endpoint Failed', error.message, true);
+            }
+        }
+
+        async function testGoogleLogin() {
+            try {
+                // Step 1: Get Google authorization URL
+                const authResponse = await fetch(`${API_BASE_URL}/api/v1/auth/google`);
+                const authData = await authResponse.json();
+                
+                if (authData.authorization_url) {
+                    addResult('✅ Google Authorization URL Generated', 
+                        `URL: ${authData.authorization_url}\n\nClick the link below to test:\n`);
+                    
+                    // Create clickable link
+                    const link = document.createElement('a');
+                    link.href = authData.authorization_url;
+                    link.target = '_blank';
+                    link.textContent = '🔗 Open Google OAuth (New Tab)';
+                    link.style.cssText = 'display: inline-block; background: #4285f4; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; margin: 10px 0;';
+                    resultsDiv.appendChild(link);
+                } else {
+                    addResult('❌ Google Login Failed', 'No authorization URL received', true);
+                }
+            } catch (error) {
+                addResult('❌ Google Login Failed', error.message, true);
+            }
+        }
+
+        // Auto-run health check on page load
+        window.onload = function() {
+            testBackendHealth();
+        };
+    </script>
+</body>
+</html>
