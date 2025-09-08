@@ -84,21 +84,35 @@ class GoogleAuthService {
                                 name: userInfo.name,
                                 hasId: !!userInfo.id
                             });
-                            
-                            // Create a simple token with user info
-                            const userToken = btoa(JSON.stringify({
+
+                            // Send to backend API - sử dụng URL từ environment
+                            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001';
+                            const backendResponse = await fetch(`${apiUrl}/api/v1/auth/google/token`, {
+                                method: 'POST',
+                                headers: {
+                                'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
                                 email: userInfo.email,
                                 name: userInfo.name,
                                 picture: userInfo.picture,
                                 id: userInfo.id,
                                 access_token: response.access_token
-                            }));
-                            
+                                }),
+                            });
+
+                            if (!backendResponse.ok) {
+                                const errorData = await backendResponse.json();
+                                throw new Error(`Backend error: ${errorData.detail || backendResponse.statusText}`);
+                            }
+
+                            const backendData = await backendResponse.json();
                             console.log('[GOOGLE-AUTH-SERVICE] User token created successfully');
-                            resolve(userToken);
+                            resolve(backendData); // Trả về backend response (có access_token, refresh_token)
+                            
                         } catch (error) {
-                            console.error('[GOOGLE-AUTH-SERVICE] Error fetching user info:', error);
-                            reject(error as Error);
+                        console.error('[GOOGLE-AUTH-SERVICE] Error fetching user info:', error);
+                        reject(error as Error);
                         }
                     },
                     error_callback: (error: any) => {

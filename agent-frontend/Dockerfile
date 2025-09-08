@@ -12,8 +12,8 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 # Copy package files from project root
-COPY package.json pnpm-lock.yaml* ./
-RUN corepack enable pnpm && pnpm i --frozen-lockfile
+COPY package.json package-lock.json* ./
+RUN npm install
 
 # Rebuild the source code only when needed
 FROM base AS builder

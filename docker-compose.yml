@@ -3,7 +3,7 @@ services:
   nextjs-app:
     build:
       context: .
-      dockerfile: agent-frontend/Dockerfile
+      dockerfile: Dockerfile
     container_name: khuongcuoicung-app
     ports:
       - "12000:3000"
@@ -16,8 +16,8 @@ services:
       - NEXT_PUBLIC_API_URL=http://localhost:8080
       # OAuth Configuration
       - NEXT_PUBLIC_GOOGLE_CLIENT_ID=742067877936-jb5q9nbb5u4b8jarehergboqmdc84e59.apps.googleusercontent.com
-      - NEXT_PUBLIC_FACEBOOK_APP_ID=your-facebook-app-id-here
-      - NEXTAUTH_URL=http://localhost:12000
+      - NEXT_PUBLIC_FACEBOOK_APP_ID=2006311436822303
+      - NEXTAUTH_URL=http://localhost:3000
       - NEXTAUTH_SECRET=your-nextauth-secret-here
     depends_on:
       kong-gateway:
