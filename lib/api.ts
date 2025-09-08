@@ -124,16 +124,36 @@ class ApiClient {
 
   // Authentication endpoints
   async login(credentials: LoginCredentials): Promise<AuthTokens> {
-    const tokens = await this.request<AuthTokens>('/api/v1/auth/login', {
-      method: 'POST',
-      body: JSON.stringify(credentials),
-    });
+    console.log('🌐 [API-CLIENT] Starting login request with credentials:', { email: credentials.email });
+    console.log('🌐 [API-CLIENT] API endpoint:', this.baseURL + '/api/v1/auth/login');
+    
+    try {
+      console.log('🌐 [API-CLIENT] Sending POST request to backend...');
+      const tokens = await this.request<AuthTokens>('/api/v1/auth/login', {
+        method: 'POST',
+        body: JSON.stringify(credentials),
+      });
+      console.log('🌐 [API-CLIENT] Login response received:', {
+        hasAccessToken: !!tokens.access_token,
+        hasRefreshToken: !!tokens.refresh_token,
+        tokenType: tokens.token_type
+      });
 
-    // Store tokens
-    this.setAccessToken(tokens.access_token);
-    this.setRefreshToken(tokens.refresh_token);
+      // Store tokens
+      console.log('🌐 [API-CLIENT] Storing tokens...');
+      this.setAccessToken(tokens.access_token);
+      this.setRefreshToken(tokens.refresh_token);
+      console.log('🌐 [API-CLIENT] Tokens stored successfully');
 
-    return tokens;
+      return tokens;
+    } catch (error) {
+      console.error('🌐 [API-CLIENT] Login error:', error);
+      console.error('🌐 [API-CLIENT] Error details:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : 'No stack trace'
+      });
+      throw error;
+    }
   }
 
   async loginWithGoogle(token: string): Promise<AuthTokens> {
@@ -182,7 +202,18 @@ class ApiClient {
   }
 
   async getCurrentUser(): Promise<User> {
-    return this.requestWithRetry<User>('/api/v1/users/me');
+    console.log('🌐 [API-CLIENT] Getting current user...');
+    console.log('🌐 [API-CLIENT] API endpoint:', this.baseURL + '/api/v1/users/me');
+    console.log('🌐 [API-CLIENT] Access token available:', !!this.accessToken);
+    
+    try {
+      const user = await this.requestWithRetry<User>('/api/v1/users/me');
+      console.log('🌐 [API-CLIENT] Current user retrieved:', user);
+      return user;
+    } catch (error) {
+      console.error('🌐 [API-CLIENT] getCurrentUser error:', error);
+      throw error;
+    }
   }
 
   async refreshToken(): Promise<AuthTokens> {

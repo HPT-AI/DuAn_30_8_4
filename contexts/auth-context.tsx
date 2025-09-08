@@ -45,11 +45,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const currentUser = await apiClient.getCurrentUser()
-        setUser(mapApiUserToUser(currentUser))
+        // Only check for current user if we have a token
+        const hasToken = typeof window !== 'undefined' && localStorage.getItem('access_token')
+        if (hasToken) {
+          console.log('🔐 [AUTH DEBUG] Token found, checking current user...')
+          const currentUser = await apiClient.getCurrentUser()
+          setUser(mapApiUserToUser(currentUser))
+        } else {
+          console.log('🔐 [AUTH DEBUG] No token found, user remains null')
+          setUser(null)
+        }
       } catch (error) {
         // No valid session, user remains null
-        console.log('No valid session found:', error)
+        console.log('🔐 [AUTH DEBUG] No valid session found:', error)
         setUser(null)
       } finally {
         setIsLoading(false)
@@ -60,12 +68,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const login = async (credentials: LoginCredentials) => {
+    console.log("🔐 [AUTH DEBUG] Starting login process with credentials:", { email: credentials.email })
     setIsLoading(true)
     try {
-      await apiClient.login(credentials)
+      console.log("🔐 [AUTH DEBUG] Calling apiClient.login...")
+      const response = await apiClient.login(credentials)
+      console.log("🔐 [AUTH DEBUG] Login response received:", response)
+      console.log("🔐 [AUTH DEBUG] Getting current user...")
       const currentUser = await apiClient.getCurrentUser()
-      setUser(mapApiUserToUser(currentUser))
+      console.log("🔐 [AUTH DEBUG] Current user received:", currentUser)
+      const mappedUser = mapApiUserToUser(currentUser)
+      console.log("🔐 [AUTH DEBUG] Setting user:", mappedUser)
+      setUser(mappedUser)
+      console.log("🔐 [AUTH DEBUG] Login completed successfully")
     } catch (error) {
+      console.error("🔐 [AUTH DEBUG] Login failed with error:", error)
       setIsLoading(false)
       throw error
     }
@@ -73,23 +90,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const loginWithGoogle = async (googleToken: string) => {
-    console.log('[AUTH-CONTEXT] Starting loginWithGoogle...');
-    console.log('[AUTH-CONTEXT] Google token received:', googleToken ? 'Yes' : 'No');
+    console.log("🔐 [GOOGLE AUTH DEBUG] Starting Google login with token:", googleToken?.substring(0, 20) + "...")
     setIsLoading(true)
     try {
-      console.log('[AUTH-CONTEXT] Calling backend to exchange Google token...');
+      console.log("🔐 [GOOGLE AUTH DEBUG] Calling apiClient.loginWithGoogle...")
       // Exchange Google token for JWT tokens via backend
       const tokens = await apiClient.loginWithGoogle(googleToken);
-      console.log('[AUTH-CONTEXT] JWT tokens received from backend');
+      console.log("🔐 [GOOGLE AUTH DEBUG] JWT tokens received from backend:", tokens);
       
-      console.log('[AUTH-CONTEXT] Getting current user...');
+      console.log("🔐 [GOOGLE AUTH DEBUG] Getting current user...");
       const currentUser = await apiClient.getCurrentUser()
-      console.log('[AUTH-CONTEXT] Current user retrieved:', currentUser);
-      setUser(mapApiUserToUser(currentUser))
-      console.log('[AUTH-CONTEXT] User set successfully');
+      console.log("🔐 [GOOGLE AUTH DEBUG] Current user retrieved:", currentUser);
+      const mappedUser = mapApiUserToUser(currentUser)
+      console.log("🔐 [GOOGLE AUTH DEBUG] Setting user:", mappedUser);
+      setUser(mappedUser)
+      console.log("🔐 [GOOGLE AUTH DEBUG] Google login completed successfully");
     } catch (error) {
-      console.error('[AUTH-CONTEXT] loginWithGoogle error:', error);
-      console.error('[AUTH-CONTEXT] Error details:', {
+      console.error("🔐 [GOOGLE AUTH DEBUG] Google login failed with error:", error);
+      console.error("🔐 [GOOGLE AUTH DEBUG] Error details:", {
         message: error instanceof Error ? error.message : 'Unknown error',
         stack: error instanceof Error ? error.stack : 'No stack trace'
       });

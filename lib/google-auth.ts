@@ -121,7 +121,18 @@ class GoogleAuthService {
 // Global instance
 const googleAuthService = new GoogleAuthService();
 
+// Export the service as default
 export default googleAuthService;
+
+// Export convenience function for backward compatibility
+export const signInWithGoogle = async () => {
+    try {
+        const token = await googleAuthService.signInWithPopup();
+        return { success: true, token };
+    } catch (error) {
+        return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
+};
 
 // Type declarations for Google Identity Services
 declare global {
