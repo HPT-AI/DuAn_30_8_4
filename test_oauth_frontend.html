@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAuth Integration Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .google-btn {
+            background-color: #4285f4;
+            color: white;
+        }
+        .google-btn:hover {
+            background-color: #357ae8;
+        }
+        .facebook-btn {
+            background-color: #1877f2;
+            color: white;
+        }
+        .facebook-btn:hover {
+            background-color: #166fe5;
+        }
+        .test-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        .test-btn:hover {
+            background-color: #218838;
+        }
+        .log {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .error {
+            color: #dc3545;
+        }
+        .success {
+            color: #28a745;
+        }
+        .info {
+            color: #17a2b8;
+        }
+        .warning {
+            color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 OAuth Integration Test</h1>
+        <p>Test Google và Facebook OAuth integration trước khi tích hợp vào ứng dụng chính.</p>
+        
+        <div>
+            <h3>🧪 Backend Tests</h3>
+            <button class="button test-btn" onclick="testBackendEndpoints()">Test Backend Endpoints</button>
+        </div>
+        
+        <div>
+            <h3>🔍 Google OAuth Test</h3>
+            <button class="button google-btn" onclick="testGoogleAuth()">Test Google Login</button>
+        </div>
+        
+        <div>
+            <h3>📘 Facebook OAuth Test</h3>
+            <button class="button facebook-btn" onclick="testFacebookAuth()">Test Facebook Login</button>
+        </div>
+        
+        <div>
+            <h3>📋 Test Logs</h3>
+            <div id="log" class="log">
+                <div class="info">Ready to test OAuth integration...</div>
+            </div>
+        </div>
+        
+        <div>
+            <h3>⚙️ Configuration</h3>
+            <p><strong>Backend URL:</strong> <span id="backend-url">http://localhost:8001</span></p>
+            <p><strong>Google Client ID:</strong> <span id="google-client-id">Not configured</span></p>
+            <p><strong>Facebook App ID:</strong> <span id="facebook-app-id">Not configured</span></p>
+        </div>
+    </div>
+
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
+    <!-- Facebook SDK -->
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+
+    <script>
+        // Configuration
+        const BACKEND_URL = 'http://localhost:8001';
+        const GOOGLE_CLIENT_ID = 'your_google_client_id_here'; // Replace with actual client ID
+        const FACEBOOK_APP_ID = 'your_facebook_app_id_here'; // Replace with actual app ID
+        
+        // Update configuration display
+        document.getElementById('backend-url').textContent = BACKEND_URL;
+        document.getElementById('google-client-id').textContent = GOOGLE_CLIENT_ID !== 'your_google_client_id_here' ? GOOGLE_CLIENT_ID : 'Not configured';
+        document.getElementById('facebook-app-id').textContent = FACEBOOK_APP_ID !== 'your_facebook_app_id_here' ? FACEBOOK_APP_ID : 'Not configured';
+        
+        // Logging function
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = type;
+            logEntry.innerHTML = `[${timestamp}] ${message}`;
+            logDiv.appendChild(logEntry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        // Test backend endpoints
+        async function testBackendEndpoints() {
+            log('🧪 Testing backend endpoints...', 'info');
+            
+            try {
+                // Test health endpoint
+                const healthResponse = await fetch(`${BACKEND_URL}/health`);
+                if (healthResponse.ok) {
+                    log('✅ Backend health check passed', 'success');
+                } else {
+                    log('❌ Backend health check failed', 'error');
+                    return;
+                }
+                
+                // Test Google OAuth endpoint
+                const googleResponse = await fetch(`${BACKEND_URL}/api/v1/auth/google`);
+                if (googleResponse.ok) {
+                    log('✅ Google OAuth endpoint accessible', 'success');
+                } else {
+                    log('❌ Google OAuth endpoint failed', 'error');
+                }
+                
+                // Test Facebook OAuth endpoint
+                const facebookResponse = await fetch(`${BACKEND_URL}/api/v1/auth/facebook`);
+                if (facebookResponse.ok) {
+                    log('✅ Facebook OAuth endpoint accessible', 'success');
+                } else {
+                    log('❌ Facebook OAuth endpoint failed', 'error');
+                }
+                
+            } catch (error) {
+                log(`❌ Backend test error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Test Google OAuth
+        function testGoogleAuth() {
+            log('🔍 Testing Google OAuth...', 'info');
+            
+            if (GOOGLE_CLIENT_ID === 'your_google_client_id_here') {
+                log('⚠️ Google Client ID not configured', 'warning');
+                return;
+            }
+            
+            try {
+                // Initialize Google Identity Services
+                google.accounts.id.initialize({
+                    client_id: GOOGLE_CLIENT_ID,
+                    callback: handleGoogleResponse,
+                    auto_select: false,
+                    cancel_on_tap_outside: false
+                });
+                
+                // Trigger the One Tap flow
+                google.accounts.id.prompt((notification) => {
+                    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+                        log('⚠️ Google One Tap not available, creating manual button...', 'warning');
+                        
+                        // Create a temporary button for popup trigger
+                        const tempDiv = document.createElement('div');
+                        tempDiv.style.display = 'none';
+                        document.body.appendChild(tempDiv);
+                        
+                        google.accounts.id.renderButton(tempDiv, {
+                            theme: 'outline',
+                            size: 'large',
+                            type: 'standard'
+                        });
+                        
+                        // Trigger click programmatically
+                        const button = tempDiv.querySelector('div[role="button"]');
+                        if (button) {
+                            button.click();
+                        }
+                        
+                        // Clean up
+                        setTimeout(() => {
+                            document.body.removeChild(tempDiv);
+                        }, 100);
+                    }
+                });
+                
+            } catch (error) {
+                log(`❌ Google OAuth error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Handle Google OAuth response
+        async function handleGoogleResponse(response) {
+            log('🔍 Google OAuth response received', 'info');
+            
+            try {
+                // Send ID token to backend
+                const backendResponse = await fetch(`${BACKEND_URL}/api/v1/auth/google/token`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        token: response.credential
+                    }),
+                });
+                
+                if (backendResponse.ok) {
+                    const data = await backendResponse.json();
+                    log('✅ Google authentication successful!', 'success');
+                    log(`Access token received: ${data.access_token.substring(0, 20)}...`, 'success');
+                } else {
+                    const errorData = await backendResponse.json();
+                    log(`❌ Backend authentication failed: ${errorData.detail}`, 'error');
+                }
+                
+            } catch (error) {
+                log(`❌ Error processing Google token: ${error.message}`, 'error');
+            }
+        }
+        
+        // Test Facebook OAuth
+        function testFacebookAuth() {
+            log('📘 Testing Facebook OAuth...', 'info');
+            
+            if (FACEBOOK_APP_ID === 'your_facebook_app_id_here') {
+                log('⚠️ Facebook App ID not configured', 'warning');
+                return;
+            }
+            
+            try {
+                // Initialize Facebook SDK
+                FB.init({
+                    appId: FACEBOOK_APP_ID,
+                    cookie: true,
+                    xfbml: true,
+                    version: 'v18.0'
+                });
+                
+                // Trigger Facebook login
+                FB.login(function(response) {
+                    handleFacebookResponse(response);
+                }, {scope: 'email,public_profile'});
+                
+            } catch (error) {
+                log(`❌ Facebook OAuth error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Handle Facebook OAuth response
+        async function handleFacebookResponse(response) {
+            log('📘 Facebook OAuth response received', 'info');
+            
+            if (response.status === 'connected') {
+                const accessToken = response.authResponse.accessToken;
+                log('📘 Facebook access token received', 'info');
+                
+                try {
+                    // Send access token to backend
+                    const backendResponse = await fetch(`${BACKEND_URL}/api/v1/auth/facebook/token`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            token: accessToken
+                        }),
+                    });
+                    
+                    if (backendResponse.ok) {
+                        const data = await backendResponse.json();
+                        log('✅ Facebook authentication successful!', 'success');
+                        log(`Access token received: ${data.access_token.substring(0, 20)}...`, 'success');
+                    } else {
+                        const errorData = await backendResponse.json();
+                        log(`❌ Backend authentication failed: ${errorData.detail}`, 'error');
+                    }
+                    
+                } catch (error) {
+                    log(`❌ Error processing Facebook token: ${error.message}`, 'error');
+                }
+            } else {
+                log('❌ Facebook login failed or was cancelled', 'error');
+            }
+        }
+        
+        // Initialize on page load
+        window.onload = function() {
+            log('🚀 OAuth Integration Test Page loaded', 'info');
+            log('💡 Configure GOOGLE_CLIENT_ID and FACEBOOK_APP_ID in this file to test', 'warning');
+        };
+    </script>
+</body>
+</html>

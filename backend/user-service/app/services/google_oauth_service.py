@@ -46,40 +46,31 @@ class GoogleOAuthService:
         Verify Google ID token and return user info
         """
         try:
-            # First try to decode as base64 (from our frontend OAuth2 flow)
-            import base64
-            import json
+            print(f"[GOOGLE-OAUTH] Verifying Google ID token...")
+            print(f"[GOOGLE-OAUTH] Token length: {len(token)}")
+            print(f"[GOOGLE-OAUTH] Client ID: {self.client_id}")
             
-            try:
-                decoded_data = base64.b64decode(token).decode('utf-8')
-                user_data = json.loads(decoded_data)
-                
-                # Validate that this contains the expected fields
-                if 'email' in user_data and 'access_token' in user_data:
-                    print(f"Decoded frontend OAuth2 token for user: {user_data.get('email')}")
-                    return {
-                        'google_id': user_data.get('id', ''),
-                        'email': user_data['email'],
-                        'full_name': user_data.get('name', ''),
-                        'picture': user_data.get('picture', ''),
-                        'email_verified': True  # OAuth2 flow ensures verified email
-                    }
-            except (base64.binascii.Error, json.JSONDecodeError, KeyError):
-                # Not a base64 encoded token, try Google ID token verification
-                pass
-            
-            # Fallback to Google ID token verification
+            # Verify Google ID token using Google's library
             idinfo = id_token.verify_oauth2_token(
                 token, 
                 requests.Request(), 
                 self.client_id
             )
             
+            print(f"[GOOGLE-OAUTH] Token verification successful")
+            print(f"[GOOGLE-OAUTH] Token issuer: {idinfo.get('iss')}")
+            print(f"[GOOGLE-OAUTH] Token audience: {idinfo.get('aud')}")
+            print(f"[GOOGLE-OAUTH] User email: {idinfo.get('email')}")
+            
             # Check if token is from Google
             if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
-                raise ValueError('Wrong issuer.')
+                raise ValueError(f'Wrong issuer: {idinfo["iss"]}')
             
-            return {
+            # Check if token is for our client
+            if idinfo['aud'] != self.client_id:
+                raise ValueError(f'Wrong audience: {idinfo["aud"]}')
+            
+            user_info = {
                 'google_id': idinfo['sub'],
                 'email': idinfo['email'],
                 'full_name': idinfo.get('name', ''),
@@ -87,8 +78,14 @@ class GoogleOAuthService:
                 'email_verified': idinfo.get('email_verified', False)
             }
             
+            print(f"[GOOGLE-OAUTH] Extracted user info: {user_info}")
+            return user_info
+            
         except ValueError as e:
-            print(f"Token verification failed: {e}")
+            print(f"[GOOGLE-OAUTH] Token verification failed: {e}")
+            return None
+        except Exception as e:
+            print(f"[GOOGLE-OAUTH] Unexpected error during token verification: {e}")
             return None
     
     def exchange_code_for_token(self, code: str, state: Optional[str] = None) -> Optional[Dict[str, Any]]:

@@ -190,6 +190,40 @@ class ApiClient {
     }
   }
 
+  async loginWithFacebook(token: string): Promise<AuthTokens> {
+    console.log('[API-CLIENT] Starting loginWithFacebook...');
+    console.log('[API-CLIENT] Token received:', token ? 'Yes (length: ' + token.length + ')' : 'No');
+    console.log('[API-CLIENT] API endpoint:', this.baseURL + '/api/v1/auth/facebook/token');
+    
+    try {
+      console.log('[API-CLIENT] Sending POST request to backend...');
+      const tokens = await this.request<AuthTokens>('/api/v1/auth/facebook/token', {
+        method: 'POST',
+        body: JSON.stringify({ token }),
+      });
+      console.log('[API-CLIENT] Backend response received:', {
+        hasAccessToken: !!tokens.access_token,
+        hasRefreshToken: !!tokens.refresh_token,
+        tokenType: tokens.token_type
+      });
+
+      // Store tokens
+      console.log('[API-CLIENT] Storing tokens...');
+      this.setAccessToken(tokens.access_token);
+      this.setRefreshToken(tokens.refresh_token);
+      console.log('[API-CLIENT] Tokens stored successfully');
+
+      return tokens;
+    } catch (error) {
+      console.error('[API-CLIENT] loginWithFacebook error:', error);
+      console.error('[API-CLIENT] Error details:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : 'No stack trace'
+      });
+      throw error;
+    }
+  }
+
   async register(userData: RegisterData): Promise<User> {
     return this.request<User>('/api/v1/auth/register', {
       method: 'POST',

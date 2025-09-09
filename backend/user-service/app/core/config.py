@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     GOOGLE_CLIENT_ID: Optional[str] = None
     GOOGLE_CLIENT_SECRET: Optional[str] = None
     FACEBOOK_APP_ID: Optional[str] = None
-    FACEBOOK_CLIENT_SECRET: Optional[str] = None
+    FACEBOOK_APP_SECRET: Optional[str] = None
     OAUTH_REDIRECT_URI: str = "http://localhost:8080/api/v1/auth/google/callback"
     
     # Email (for future use)

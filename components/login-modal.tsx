@@ -89,11 +89,45 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
     }
   }
 
+  const handleFacebookLogin = async () => {
+    console.log('📘 [LOGIN-MODAL] Starting Facebook login process...');
+    try {
+      console.log('📘 [LOGIN-MODAL] Clearing previous errors...');
+      setError("")
+      setIsLoading(true)
+      
+      console.log('📘 [LOGIN-MODAL] Importing Facebook Auth library...');
+      const facebookAuthService = (await import("@/lib/facebook-auth")).default
+      
+      console.log('📘 [LOGIN-MODAL] Calling signInWithPopup()...');
+      const facebookToken = await facebookAuthService.signInWithPopup()
+      console.log('📘 [LOGIN-MODAL] Facebook token received:', facebookToken?.substring(0, 20) + '...');
+      
+      if (facebookToken) {
+        console.log('📘 [LOGIN-MODAL] Calling loginWithFacebook with token...');
+        await loginWithFacebook(facebookToken)
+        console.log('📘 [LOGIN-MODAL] Facebook login successful, closing modal...');
+        onOpenChange(false)
+      } else {
+        console.error('📘 [LOGIN-MODAL] No Facebook token received');
+        setError("Facebook sign in failed - no token received")
+      }
+    } catch (err) {
+      console.error('📘 [LOGIN-MODAL] Facebook login failed with error:', err);
+      const errorMessage = err instanceof Error ? err.message : "Facebook login failed";
+      console.error('📘 [LOGIN-MODAL] Setting error message:', errorMessage);
+      setError(errorMessage)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const handleSocialLogin = async (provider: "google" | "facebook") => {
     if (provider === "google") {
       await handleGoogleLogin()
+    } else if (provider === "facebook") {
+      await handleFacebookLogin()
     } else {
-      // Facebook login not implemented yet
       setError(`${provider} login not implemented yet. Please use email login.`)
     }
   }

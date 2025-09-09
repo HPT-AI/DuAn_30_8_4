@@ -56,73 +56,88 @@ class GoogleAuthService {
 
         return new Promise((resolve, reject) => {
             try {
-                // Use OAuth2 popup flow
-                const client = window.google.accounts.oauth2.initTokenClient({
+                // Use Google Identity Services for ID token (recommended approach)
+                window.google.accounts.id.initialize({
                     client_id: this.clientId,
-                    scope: 'openid email profile',
                     callback: async (response: any) => {
-                        console.log('[GOOGLE-AUTH-SERVICE] OAuth2 response received');
+                        console.log('[GOOGLE-AUTH-SERVICE] ID token response received');
                         
                         if (response.error) {
-                            console.error('[GOOGLE-AUTH-SERVICE] OAuth2 error:', response.error);
+                            console.error('[GOOGLE-AUTH-SERVICE] ID token error:', response.error);
                             reject(new Error(response.error));
                             return;
                         }
 
                         try {
-                            // Get user info using the access token
-                            console.log('[GOOGLE-AUTH-SERVICE] Fetching user info...');
-                            const userInfoResponse = await fetch(`https://www.googleapis.com/oauth2/v2/userinfo?access_token=${response.access_token}`);
+                            console.log('[GOOGLE-AUTH-SERVICE] Sending ID token to backend...');
                             
-                            if (!userInfoResponse.ok) {
-                                throw new Error(`Failed to fetch user info: ${userInfoResponse.status}`);
-                            }
-                            
-                            const userInfo = await userInfoResponse.json();
-                            console.log('[GOOGLE-AUTH-SERVICE] User info received:', {
-                                email: userInfo.email,
-                                name: userInfo.name,
-                                hasId: !!userInfo.id
-                            });
-
-                            // Send to backend API - sử dụng URL từ environment
+                            // Send ID token directly to backend
                             const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001';
                             const backendResponse = await fetch(`${apiUrl}/api/v1/auth/google/token`, {
                                 method: 'POST',
                                 headers: {
-                                'Content-Type': 'application/json',
+                                    'Content-Type': 'application/json',
                                 },
                                 body: JSON.stringify({
-                                email: userInfo.email,
-                                name: userInfo.name,
-                                picture: userInfo.picture,
-                                id: userInfo.id,
-                                access_token: response.access_token
+                                    token: response.credential // This is the ID token
                                 }),
                             });
 
                             if (!backendResponse.ok) {
-                                const errorData = await backendResponse.json();
-                                throw new Error(`Backend error: ${errorData.detail || backendResponse.statusText}`);
+                                const errorText = await backendResponse.text();
+                                let errorMessage = `HTTP ${backendResponse.status}`;
+                                try {
+                                    const errorData = JSON.parse(errorText);
+                                    errorMessage = errorData.detail || errorMessage;
+                                } catch {
+                                    errorMessage = errorText || errorMessage;
+                                }
+                                throw new Error(`Backend error: ${errorMessage}`);
                             }
 
                             const backendData = await backendResponse.json();
-                            console.log('[GOOGLE-AUTH-SERVICE] User token created successfully');
+                            console.log('[GOOGLE-AUTH-SERVICE] Backend authentication successful');
                             resolve(backendData); // Trả về backend response (có access_token, refresh_token)
                             
                         } catch (error) {
-                        console.error('[GOOGLE-AUTH-SERVICE] Error fetching user info:', error);
-                        reject(error as Error);
+                            console.error('[GOOGLE-AUTH-SERVICE] Error processing ID token:', error);
+                            reject(error as Error);
                         }
                     },
-                    error_callback: (error: any) => {
-                        console.error('[GOOGLE-AUTH-SERVICE] OAuth2 error callback:', error);
-                        reject(new Error(error.message || 'OAuth2 authentication failed'));
-                    }
+                    auto_select: false,
+                    cancel_on_tap_outside: false
                 });
 
-                console.log('[GOOGLE-AUTH-SERVICE] Requesting access token...');
-                client.requestAccessToken();
+                // Trigger the One Tap flow or popup
+                console.log('[GOOGLE-AUTH-SERVICE] Triggering Google Sign-In popup...');
+                window.google.accounts.id.prompt((notification: any) => {
+                    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+                        // Fallback to popup if One Tap is not available
+                        console.log('[GOOGLE-AUTH-SERVICE] One Tap not available, using popup...');
+                        
+                        // Create a temporary button for popup trigger
+                        const tempDiv = document.createElement('div');
+                        tempDiv.style.display = 'none';
+                        document.body.appendChild(tempDiv);
+                        
+                        window.google.accounts.id.renderButton(tempDiv, {
+                            theme: 'outline',
+                            size: 'large',
+                            type: 'standard'
+                        });
+                        
+                        // Trigger click programmatically
+                        const button = tempDiv.querySelector('div[role="button"]') as HTMLElement;
+                        if (button) {
+                            button.click();
+                        }
+                        
+                        // Clean up
+                        setTimeout(() => {
+                            document.body.removeChild(tempDiv);
+                        }, 100);
+                    }
+                });
                 
             } catch (e) {
                 console.error('[GOOGLE-AUTH-SERVICE] Error in signInWithPopup:', e);

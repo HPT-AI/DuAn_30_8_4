@@ -17,6 +17,7 @@ interface AuthContextType {
   user: User | null
   login: (credentials: LoginCredentials) => Promise<void>
   loginWithGoogle: (googleToken: string) => Promise<void>
+  loginWithFacebook: (facebookToken: string) => Promise<void>
   register: (userData: RegisterData) => Promise<void>
   logout: () => void
   isLoading: boolean
@@ -117,6 +118,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false)
   }
 
+  const loginWithFacebook = async (facebookToken: string) => {
+    console.log("🔐 [FACEBOOK AUTH DEBUG] Starting Facebook login with token:", facebookToken?.substring(0, 20) + "...")
+    setIsLoading(true)
+    try {
+      console.log("🔐 [FACEBOOK AUTH DEBUG] Calling apiClient.loginWithFacebook...")
+      // Exchange Facebook token for JWT tokens via backend
+      const tokens = await apiClient.loginWithFacebook(facebookToken);
+      console.log("🔐 [FACEBOOK AUTH DEBUG] JWT tokens received from backend:", tokens);
+      
+      console.log("🔐 [FACEBOOK AUTH DEBUG] Getting current user...");
+      const currentUser = await apiClient.getCurrentUser()
+      console.log("🔐 [FACEBOOK AUTH DEBUG] Current user retrieved:", currentUser);
+      const mappedUser = mapApiUserToUser(currentUser)
+      console.log("🔐 [FACEBOOK AUTH DEBUG] Setting user:", mappedUser);
+      setUser(mappedUser)
+      console.log("🔐 [FACEBOOK AUTH DEBUG] Facebook login completed successfully");
+    } catch (error) {
+      console.error("🔐 [FACEBOOK AUTH DEBUG] Facebook login failed with error:", error);
+      console.error("🔐 [FACEBOOK AUTH DEBUG] Error details:", {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : 'No stack trace'
+      });
+      setIsLoading(false)
+      throw error
+    }
+    setIsLoading(false)
+  }
+
   const register = async (userData: RegisterData) => {
     setIsLoading(true)
     try {
@@ -180,6 +209,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         user, 
         login, 
         loginWithGoogle, 
+        loginWithFacebook,
         register, 
         logout, 
         isLoading, 
